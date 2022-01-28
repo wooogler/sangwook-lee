@@ -1,11 +1,11 @@
 import { graphql, useStaticQuery } from 'gatsby';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
-import { InfoQuery, Query } from 'graphql-types';
 import React from 'react';
 import PageLayout from '../components/PageLayout';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import PubItem from '../components/PubItem';
+import { InfoQuery } from 'graphql-types';
 
 type Props = {
   data: InfoQuery;
