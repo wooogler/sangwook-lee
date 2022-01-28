@@ -7,7 +7,7 @@ type Props = {
 
 function PageLayout({ children }: Props) {
   return (
-    <div className='max-w-4xl mx-auto my-10 flex'>
+    <div className='max-w-4xl mx-auto my-16 flex'>
       <div className='w-48 flex flex-col'>
         <div className='text-2xl font-bold'>Sangwook Lee</div>
         <div className='my-2'>HCI, Online community, VR/AR, Mobile System</div>

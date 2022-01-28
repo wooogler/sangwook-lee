@@ -3,6 +3,7 @@ import { PublicationIndexQuery } from 'graphql-types';
 import React from 'react';
 import PageLayout from '../components/PageLayout';
 import Highlighter from 'react-highlight-words';
+import PubItem from '../components/PubItem';
 
 type Props = {
   data: PublicationIndexQuery;
@@ -14,15 +15,7 @@ function PublicationPage({ data }: Props) {
       <div className='text-2xl'>Posters</div>
       <hr className='mb-4' />
       {data.allMdx.nodes.map((node) => (
-        <div key={node.id}>
-          <div className='font-bold text-lg'>{node.frontmatter.title}</div>
-          <Highlighter
-            highlightTag='strong'
-            searchWords={['Sangwook Lee']}
-            textToHighlight={node.frontmatter.author}
-          />
-          <div>{node.frontmatter.conference}</div>
-        </div>
+        <PubItem pub={node} />
       ))}
     </PageLayout>
   );

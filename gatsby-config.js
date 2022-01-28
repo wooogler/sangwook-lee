@@ -21,7 +21,21 @@ module.exports = {
         icon: 'src/images/icon.png',
       },
     },
-    'gatsby-plugin-mdx',
+    {
+      resolve: `gatsby-plugin-mdx`,
+      options: {
+        gatsbyRemarkPlugins: [
+          {
+            resolve: `gatsby-remark-images`,
+            options: {
+              maxWidth: 1035,
+              sizeByPixelDensity: true,
+            },
+          },
+          `gatsby-remark-external-links`,
+        ],
+      },
+    },
     'gatsby-plugin-sharp',
     'gatsby-transformer-sharp',
     {
@@ -44,14 +58,21 @@ module.exports = {
       resolve: 'gatsby-source-filesystem',
       options: {
         name: `blog`,
-        path: `${__dirname}/blog`,
+        path: `${__dirname}/contents/blog`,
       },
     },
     {
       resolve: 'gatsby-source-filesystem',
       options: {
         name: `publication`,
-        path: `${__dirname}/publication`,
+        path: `${__dirname}/contents/publication`,
+      },
+    },
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: `info`,
+        path: `${__dirname}/contents/info`,
       },
     },
   ],
