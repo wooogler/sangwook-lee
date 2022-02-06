@@ -1,4 +1,5 @@
-import { Link, PageProps } from 'gatsby';
+import { graphql, Link, PageProps } from 'gatsby';
+import { StaticImage } from 'gatsby-plugin-image';
 import React, { ReactNode } from 'react';
 
 type Props = {
@@ -8,7 +9,12 @@ type Props = {
 function PageLayout({ children }: Props) {
   return (
     <div className='max-w-4xl mx-auto my-16 flex'>
-      <div className='w-48 flex flex-col'>
+      <div className='w-48 flex flex-col mr-4'>
+        <StaticImage
+          src='../images/profile.jpg'
+          alt="Sangwook's profile image"
+          className='mb-4'
+        />
         <div className='text-2xl font-bold'>Sangwook Lee</div>
         <div className='my-2'>HCI, Online community, VR/AR, Mobile System</div>
         <div className='flex flex-col'>
@@ -26,7 +32,7 @@ function PageLayout({ children }: Props) {
           </Link>
         </div>
       </div>
-      <div className='flex-1'>{children}</div>
+      <div className='flex flex-1 flex-col'>{children}</div>
     </div>
   );
 }

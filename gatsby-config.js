@@ -32,6 +32,24 @@ module.exports = {
               sizeByPixelDensity: true,
             },
           },
+          {
+            resolve: `gatsby-remark-classes`,
+            options: {
+              classMap: {
+                'heading[depth=1]': 'text-4xl font-bold',
+                'heading[depth=2]': 'text-2xl font-bold',
+                'heading[depth=3]': 'text-xl font-bold',
+                paragraph: 'text-base',
+              },
+            },
+          },
+          {
+            resolve: 'gatsby-remark-embed-youtube',
+            options: {
+              width: 800,
+              height: 400,
+            },
+          },
           `gatsby-remark-external-links`,
         ],
       },

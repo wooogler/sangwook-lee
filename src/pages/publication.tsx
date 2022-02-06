@@ -2,7 +2,6 @@ import { graphql, PageProps } from 'gatsby';
 import { PublicationIndexQuery } from 'graphql-types';
 import React from 'react';
 import PageLayout from '../components/PageLayout';
-import Highlighter from 'react-highlight-words';
 import PubItem from '../components/PubItem';
 
 type Props = {
@@ -15,7 +14,12 @@ function PublicationPage({ data }: Props) {
       <div className='text-2xl'>Posters</div>
       <hr className='mb-4' />
       {data.allMdx.nodes.map((node) => (
-        <PubItem pub={node} />
+        <PubItem
+          slug={node.slug}
+          title={node.frontmatter.title}
+          author={node.frontmatter.author}
+          conference={node.frontmatter.conference}
+        />
       ))}
     </PageLayout>
   );
@@ -26,6 +30,7 @@ export const query = graphql`
     allMdx(filter: { fileAbsolutePath: { regex: "/publication/" } }) {
       nodes {
         id
+        slug
         frontmatter {
           title
           author

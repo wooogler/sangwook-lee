@@ -362,6 +362,10 @@ export type MdxFrontmatter = {
   publication_url?: Maybe<Scalars['String']>;
   publication_date?: Maybe<Scalars['Date']>;
   conference?: Maybe<Scalars['String']>;
+  thumbnail?: Maybe<File>;
+  paper_pdf?: Maybe<File>;
+  poster_pdf?: Maybe<File>;
+  github_url?: Maybe<Scalars['String']>;
 };
 
 
@@ -412,6 +416,7 @@ export type Mdx = Node & {
   tableOfContents?: Maybe<Scalars['JSON']>;
   timeToRead?: Maybe<Scalars['Int']>;
   wordCount?: Maybe<MdxWordCount>;
+  gatsbyPath?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   parent?: Maybe<Node>;
   children: Array<Node>;
@@ -432,6 +437,11 @@ export type MdxHeadingsArgs = {
 
 export type MdxTableOfContentsArgs = {
   maxDepth?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type MdxGatsbyPathArgs = {
+  filePath?: InputMaybe<Scalars['String']>;
 };
 
 export type ImageFormat =
@@ -683,6 +693,109 @@ export type ImageSharpResize = {
   originalName?: Maybe<Scalars['String']>;
 };
 
+export type StaticImage = Node & {
+  id: Scalars['ID'];
+  parent?: Maybe<Node>;
+  children: Array<Node>;
+  internal: Internal;
+  sourceInstanceName?: Maybe<Scalars['String']>;
+  relativePath?: Maybe<Scalars['String']>;
+  extension?: Maybe<Scalars['String']>;
+  prettySize?: Maybe<Scalars['String']>;
+  modifiedTime?: Maybe<Scalars['Date']>;
+  accessTime?: Maybe<Scalars['Date']>;
+  changeTime?: Maybe<Scalars['Date']>;
+  birthTime?: Maybe<Scalars['Date']>;
+  root?: Maybe<Scalars['String']>;
+  dir?: Maybe<Scalars['String']>;
+  base?: Maybe<Scalars['String']>;
+  ext?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  absolutePath?: Maybe<Scalars['String']>;
+  relativeDirectory?: Maybe<Scalars['String']>;
+  dev?: Maybe<Scalars['Int']>;
+  mode?: Maybe<Scalars['Int']>;
+  nlink?: Maybe<Scalars['Int']>;
+  uid?: Maybe<Scalars['Int']>;
+  rdev?: Maybe<Scalars['Int']>;
+  blksize?: Maybe<Scalars['Int']>;
+  ino?: Maybe<Scalars['Int']>;
+  size?: Maybe<Scalars['Int']>;
+  blocks?: Maybe<Scalars['Int']>;
+  atimeMs?: Maybe<Scalars['Float']>;
+  mtimeMs?: Maybe<Scalars['Float']>;
+  ctimeMs?: Maybe<Scalars['Float']>;
+  birthtimeMs?: Maybe<Scalars['Float']>;
+  atime?: Maybe<Scalars['Date']>;
+  mtime?: Maybe<Scalars['Date']>;
+  ctime?: Maybe<Scalars['Date']>;
+  birthtime?: Maybe<Scalars['Date']>;
+};
+
+
+export type StaticImageModifiedTimeArgs = {
+  formatString?: InputMaybe<Scalars['String']>;
+  fromNow?: InputMaybe<Scalars['Boolean']>;
+  difference?: InputMaybe<Scalars['String']>;
+  locale?: InputMaybe<Scalars['String']>;
+};
+
+
+export type StaticImageAccessTimeArgs = {
+  formatString?: InputMaybe<Scalars['String']>;
+  fromNow?: InputMaybe<Scalars['Boolean']>;
+  difference?: InputMaybe<Scalars['String']>;
+  locale?: InputMaybe<Scalars['String']>;
+};
+
+
+export type StaticImageChangeTimeArgs = {
+  formatString?: InputMaybe<Scalars['String']>;
+  fromNow?: InputMaybe<Scalars['Boolean']>;
+  difference?: InputMaybe<Scalars['String']>;
+  locale?: InputMaybe<Scalars['String']>;
+};
+
+
+export type StaticImageBirthTimeArgs = {
+  formatString?: InputMaybe<Scalars['String']>;
+  fromNow?: InputMaybe<Scalars['Boolean']>;
+  difference?: InputMaybe<Scalars['String']>;
+  locale?: InputMaybe<Scalars['String']>;
+};
+
+
+export type StaticImageAtimeArgs = {
+  formatString?: InputMaybe<Scalars['String']>;
+  fromNow?: InputMaybe<Scalars['Boolean']>;
+  difference?: InputMaybe<Scalars['String']>;
+  locale?: InputMaybe<Scalars['String']>;
+};
+
+
+export type StaticImageMtimeArgs = {
+  formatString?: InputMaybe<Scalars['String']>;
+  fromNow?: InputMaybe<Scalars['Boolean']>;
+  difference?: InputMaybe<Scalars['String']>;
+  locale?: InputMaybe<Scalars['String']>;
+};
+
+
+export type StaticImageCtimeArgs = {
+  formatString?: InputMaybe<Scalars['String']>;
+  fromNow?: InputMaybe<Scalars['Boolean']>;
+  difference?: InputMaybe<Scalars['String']>;
+  locale?: InputMaybe<Scalars['String']>;
+};
+
+
+export type StaticImageBirthtimeArgs = {
+  formatString?: InputMaybe<Scalars['String']>;
+  fromNow?: InputMaybe<Scalars['Boolean']>;
+  difference?: InputMaybe<Scalars['String']>;
+  locale?: InputMaybe<Scalars['String']>;
+};
+
 export type Query = {
   file?: Maybe<File>;
   allFile: FileConnection;
@@ -702,6 +815,8 @@ export type Query = {
   allMdx: MdxConnection;
   imageSharp?: Maybe<ImageSharp>;
   allImageSharp: ImageSharpConnection;
+  staticImage?: Maybe<StaticImage>;
+  allStaticImage: StaticImageConnection;
 };
 
 
@@ -930,6 +1045,7 @@ export type QueryMdxArgs = {
   tableOfContents?: InputMaybe<JsonQueryOperatorInput>;
   timeToRead?: InputMaybe<IntQueryOperatorInput>;
   wordCount?: InputMaybe<MdxWordCountFilterInput>;
+  gatsbyPath?: InputMaybe<StringQueryOperatorInput>;
   id?: InputMaybe<StringQueryOperatorInput>;
   parent?: InputMaybe<NodeFilterInput>;
   children?: InputMaybe<NodeFilterListInput>;
@@ -961,6 +1077,54 @@ export type QueryImageSharpArgs = {
 export type QueryAllImageSharpArgs = {
   filter?: InputMaybe<ImageSharpFilterInput>;
   sort?: InputMaybe<ImageSharpSortInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryStaticImageArgs = {
+  id?: InputMaybe<StringQueryOperatorInput>;
+  parent?: InputMaybe<NodeFilterInput>;
+  children?: InputMaybe<NodeFilterListInput>;
+  internal?: InputMaybe<InternalFilterInput>;
+  sourceInstanceName?: InputMaybe<StringQueryOperatorInput>;
+  relativePath?: InputMaybe<StringQueryOperatorInput>;
+  extension?: InputMaybe<StringQueryOperatorInput>;
+  prettySize?: InputMaybe<StringQueryOperatorInput>;
+  modifiedTime?: InputMaybe<DateQueryOperatorInput>;
+  accessTime?: InputMaybe<DateQueryOperatorInput>;
+  changeTime?: InputMaybe<DateQueryOperatorInput>;
+  birthTime?: InputMaybe<DateQueryOperatorInput>;
+  root?: InputMaybe<StringQueryOperatorInput>;
+  dir?: InputMaybe<StringQueryOperatorInput>;
+  base?: InputMaybe<StringQueryOperatorInput>;
+  ext?: InputMaybe<StringQueryOperatorInput>;
+  name?: InputMaybe<StringQueryOperatorInput>;
+  absolutePath?: InputMaybe<StringQueryOperatorInput>;
+  relativeDirectory?: InputMaybe<StringQueryOperatorInput>;
+  dev?: InputMaybe<IntQueryOperatorInput>;
+  mode?: InputMaybe<IntQueryOperatorInput>;
+  nlink?: InputMaybe<IntQueryOperatorInput>;
+  uid?: InputMaybe<IntQueryOperatorInput>;
+  rdev?: InputMaybe<IntQueryOperatorInput>;
+  blksize?: InputMaybe<IntQueryOperatorInput>;
+  ino?: InputMaybe<IntQueryOperatorInput>;
+  size?: InputMaybe<IntQueryOperatorInput>;
+  blocks?: InputMaybe<IntQueryOperatorInput>;
+  atimeMs?: InputMaybe<FloatQueryOperatorInput>;
+  mtimeMs?: InputMaybe<FloatQueryOperatorInput>;
+  ctimeMs?: InputMaybe<FloatQueryOperatorInput>;
+  birthtimeMs?: InputMaybe<FloatQueryOperatorInput>;
+  atime?: InputMaybe<DateQueryOperatorInput>;
+  mtime?: InputMaybe<DateQueryOperatorInput>;
+  ctime?: InputMaybe<DateQueryOperatorInput>;
+  birthtime?: InputMaybe<DateQueryOperatorInput>;
+};
+
+
+export type QueryAllStaticImageArgs = {
+  filter?: InputMaybe<StaticImageFilterInput>;
+  sort?: InputMaybe<StaticImageSortInput>;
   skip?: InputMaybe<Scalars['Int']>;
   limit?: InputMaybe<Scalars['Int']>;
 };
@@ -1024,6 +1188,7 @@ export type MdxFilterInput = {
   tableOfContents?: InputMaybe<JsonQueryOperatorInput>;
   timeToRead?: InputMaybe<IntQueryOperatorInput>;
   wordCount?: InputMaybe<MdxWordCountFilterInput>;
+  gatsbyPath?: InputMaybe<StringQueryOperatorInput>;
   id?: InputMaybe<StringQueryOperatorInput>;
   parent?: InputMaybe<NodeFilterInput>;
   children?: InputMaybe<NodeFilterListInput>;
@@ -1041,6 +1206,10 @@ export type MdxFrontmatterFilterInput = {
   publication_url?: InputMaybe<StringQueryOperatorInput>;
   publication_date?: InputMaybe<DateQueryOperatorInput>;
   conference?: InputMaybe<StringQueryOperatorInput>;
+  thumbnail?: InputMaybe<FileFilterInput>;
+  paper_pdf?: InputMaybe<FileFilterInput>;
+  poster_pdf?: InputMaybe<FileFilterInput>;
+  github_url?: InputMaybe<StringQueryOperatorInput>;
 };
 
 export type FileFilterInput = {
@@ -1340,6 +1509,121 @@ export type FileFieldsEnum =
   | 'childrenMdx___frontmatter___publication_url'
   | 'childrenMdx___frontmatter___publication_date'
   | 'childrenMdx___frontmatter___conference'
+  | 'childrenMdx___frontmatter___thumbnail___sourceInstanceName'
+  | 'childrenMdx___frontmatter___thumbnail___absolutePath'
+  | 'childrenMdx___frontmatter___thumbnail___relativePath'
+  | 'childrenMdx___frontmatter___thumbnail___extension'
+  | 'childrenMdx___frontmatter___thumbnail___size'
+  | 'childrenMdx___frontmatter___thumbnail___prettySize'
+  | 'childrenMdx___frontmatter___thumbnail___modifiedTime'
+  | 'childrenMdx___frontmatter___thumbnail___accessTime'
+  | 'childrenMdx___frontmatter___thumbnail___changeTime'
+  | 'childrenMdx___frontmatter___thumbnail___birthTime'
+  | 'childrenMdx___frontmatter___thumbnail___root'
+  | 'childrenMdx___frontmatter___thumbnail___dir'
+  | 'childrenMdx___frontmatter___thumbnail___base'
+  | 'childrenMdx___frontmatter___thumbnail___ext'
+  | 'childrenMdx___frontmatter___thumbnail___name'
+  | 'childrenMdx___frontmatter___thumbnail___relativeDirectory'
+  | 'childrenMdx___frontmatter___thumbnail___dev'
+  | 'childrenMdx___frontmatter___thumbnail___mode'
+  | 'childrenMdx___frontmatter___thumbnail___nlink'
+  | 'childrenMdx___frontmatter___thumbnail___uid'
+  | 'childrenMdx___frontmatter___thumbnail___gid'
+  | 'childrenMdx___frontmatter___thumbnail___rdev'
+  | 'childrenMdx___frontmatter___thumbnail___ino'
+  | 'childrenMdx___frontmatter___thumbnail___atimeMs'
+  | 'childrenMdx___frontmatter___thumbnail___mtimeMs'
+  | 'childrenMdx___frontmatter___thumbnail___ctimeMs'
+  | 'childrenMdx___frontmatter___thumbnail___atime'
+  | 'childrenMdx___frontmatter___thumbnail___mtime'
+  | 'childrenMdx___frontmatter___thumbnail___ctime'
+  | 'childrenMdx___frontmatter___thumbnail___birthtime'
+  | 'childrenMdx___frontmatter___thumbnail___birthtimeMs'
+  | 'childrenMdx___frontmatter___thumbnail___blksize'
+  | 'childrenMdx___frontmatter___thumbnail___blocks'
+  | 'childrenMdx___frontmatter___thumbnail___publicURL'
+  | 'childrenMdx___frontmatter___thumbnail___childrenMdx'
+  | 'childrenMdx___frontmatter___thumbnail___childrenImageSharp'
+  | 'childrenMdx___frontmatter___thumbnail___id'
+  | 'childrenMdx___frontmatter___thumbnail___children'
+  | 'childrenMdx___frontmatter___paper_pdf___sourceInstanceName'
+  | 'childrenMdx___frontmatter___paper_pdf___absolutePath'
+  | 'childrenMdx___frontmatter___paper_pdf___relativePath'
+  | 'childrenMdx___frontmatter___paper_pdf___extension'
+  | 'childrenMdx___frontmatter___paper_pdf___size'
+  | 'childrenMdx___frontmatter___paper_pdf___prettySize'
+  | 'childrenMdx___frontmatter___paper_pdf___modifiedTime'
+  | 'childrenMdx___frontmatter___paper_pdf___accessTime'
+  | 'childrenMdx___frontmatter___paper_pdf___changeTime'
+  | 'childrenMdx___frontmatter___paper_pdf___birthTime'
+  | 'childrenMdx___frontmatter___paper_pdf___root'
+  | 'childrenMdx___frontmatter___paper_pdf___dir'
+  | 'childrenMdx___frontmatter___paper_pdf___base'
+  | 'childrenMdx___frontmatter___paper_pdf___ext'
+  | 'childrenMdx___frontmatter___paper_pdf___name'
+  | 'childrenMdx___frontmatter___paper_pdf___relativeDirectory'
+  | 'childrenMdx___frontmatter___paper_pdf___dev'
+  | 'childrenMdx___frontmatter___paper_pdf___mode'
+  | 'childrenMdx___frontmatter___paper_pdf___nlink'
+  | 'childrenMdx___frontmatter___paper_pdf___uid'
+  | 'childrenMdx___frontmatter___paper_pdf___gid'
+  | 'childrenMdx___frontmatter___paper_pdf___rdev'
+  | 'childrenMdx___frontmatter___paper_pdf___ino'
+  | 'childrenMdx___frontmatter___paper_pdf___atimeMs'
+  | 'childrenMdx___frontmatter___paper_pdf___mtimeMs'
+  | 'childrenMdx___frontmatter___paper_pdf___ctimeMs'
+  | 'childrenMdx___frontmatter___paper_pdf___atime'
+  | 'childrenMdx___frontmatter___paper_pdf___mtime'
+  | 'childrenMdx___frontmatter___paper_pdf___ctime'
+  | 'childrenMdx___frontmatter___paper_pdf___birthtime'
+  | 'childrenMdx___frontmatter___paper_pdf___birthtimeMs'
+  | 'childrenMdx___frontmatter___paper_pdf___blksize'
+  | 'childrenMdx___frontmatter___paper_pdf___blocks'
+  | 'childrenMdx___frontmatter___paper_pdf___publicURL'
+  | 'childrenMdx___frontmatter___paper_pdf___childrenMdx'
+  | 'childrenMdx___frontmatter___paper_pdf___childrenImageSharp'
+  | 'childrenMdx___frontmatter___paper_pdf___id'
+  | 'childrenMdx___frontmatter___paper_pdf___children'
+  | 'childrenMdx___frontmatter___poster_pdf___sourceInstanceName'
+  | 'childrenMdx___frontmatter___poster_pdf___absolutePath'
+  | 'childrenMdx___frontmatter___poster_pdf___relativePath'
+  | 'childrenMdx___frontmatter___poster_pdf___extension'
+  | 'childrenMdx___frontmatter___poster_pdf___size'
+  | 'childrenMdx___frontmatter___poster_pdf___prettySize'
+  | 'childrenMdx___frontmatter___poster_pdf___modifiedTime'
+  | 'childrenMdx___frontmatter___poster_pdf___accessTime'
+  | 'childrenMdx___frontmatter___poster_pdf___changeTime'
+  | 'childrenMdx___frontmatter___poster_pdf___birthTime'
+  | 'childrenMdx___frontmatter___poster_pdf___root'
+  | 'childrenMdx___frontmatter___poster_pdf___dir'
+  | 'childrenMdx___frontmatter___poster_pdf___base'
+  | 'childrenMdx___frontmatter___poster_pdf___ext'
+  | 'childrenMdx___frontmatter___poster_pdf___name'
+  | 'childrenMdx___frontmatter___poster_pdf___relativeDirectory'
+  | 'childrenMdx___frontmatter___poster_pdf___dev'
+  | 'childrenMdx___frontmatter___poster_pdf___mode'
+  | 'childrenMdx___frontmatter___poster_pdf___nlink'
+  | 'childrenMdx___frontmatter___poster_pdf___uid'
+  | 'childrenMdx___frontmatter___poster_pdf___gid'
+  | 'childrenMdx___frontmatter___poster_pdf___rdev'
+  | 'childrenMdx___frontmatter___poster_pdf___ino'
+  | 'childrenMdx___frontmatter___poster_pdf___atimeMs'
+  | 'childrenMdx___frontmatter___poster_pdf___mtimeMs'
+  | 'childrenMdx___frontmatter___poster_pdf___ctimeMs'
+  | 'childrenMdx___frontmatter___poster_pdf___atime'
+  | 'childrenMdx___frontmatter___poster_pdf___mtime'
+  | 'childrenMdx___frontmatter___poster_pdf___ctime'
+  | 'childrenMdx___frontmatter___poster_pdf___birthtime'
+  | 'childrenMdx___frontmatter___poster_pdf___birthtimeMs'
+  | 'childrenMdx___frontmatter___poster_pdf___blksize'
+  | 'childrenMdx___frontmatter___poster_pdf___blocks'
+  | 'childrenMdx___frontmatter___poster_pdf___publicURL'
+  | 'childrenMdx___frontmatter___poster_pdf___childrenMdx'
+  | 'childrenMdx___frontmatter___poster_pdf___childrenImageSharp'
+  | 'childrenMdx___frontmatter___poster_pdf___id'
+  | 'childrenMdx___frontmatter___poster_pdf___children'
+  | 'childrenMdx___frontmatter___github_url'
   | 'childrenMdx___slug'
   | 'childrenMdx___body'
   | 'childrenMdx___excerpt'
@@ -1353,6 +1637,7 @@ export type FileFieldsEnum =
   | 'childrenMdx___wordCount___paragraphs'
   | 'childrenMdx___wordCount___sentences'
   | 'childrenMdx___wordCount___words'
+  | 'childrenMdx___gatsbyPath'
   | 'childrenMdx___id'
   | 'childrenMdx___parent___id'
   | 'childrenMdx___parent___parent___id'
@@ -1440,6 +1725,121 @@ export type FileFieldsEnum =
   | 'childMdx___frontmatter___publication_url'
   | 'childMdx___frontmatter___publication_date'
   | 'childMdx___frontmatter___conference'
+  | 'childMdx___frontmatter___thumbnail___sourceInstanceName'
+  | 'childMdx___frontmatter___thumbnail___absolutePath'
+  | 'childMdx___frontmatter___thumbnail___relativePath'
+  | 'childMdx___frontmatter___thumbnail___extension'
+  | 'childMdx___frontmatter___thumbnail___size'
+  | 'childMdx___frontmatter___thumbnail___prettySize'
+  | 'childMdx___frontmatter___thumbnail___modifiedTime'
+  | 'childMdx___frontmatter___thumbnail___accessTime'
+  | 'childMdx___frontmatter___thumbnail___changeTime'
+  | 'childMdx___frontmatter___thumbnail___birthTime'
+  | 'childMdx___frontmatter___thumbnail___root'
+  | 'childMdx___frontmatter___thumbnail___dir'
+  | 'childMdx___frontmatter___thumbnail___base'
+  | 'childMdx___frontmatter___thumbnail___ext'
+  | 'childMdx___frontmatter___thumbnail___name'
+  | 'childMdx___frontmatter___thumbnail___relativeDirectory'
+  | 'childMdx___frontmatter___thumbnail___dev'
+  | 'childMdx___frontmatter___thumbnail___mode'
+  | 'childMdx___frontmatter___thumbnail___nlink'
+  | 'childMdx___frontmatter___thumbnail___uid'
+  | 'childMdx___frontmatter___thumbnail___gid'
+  | 'childMdx___frontmatter___thumbnail___rdev'
+  | 'childMdx___frontmatter___thumbnail___ino'
+  | 'childMdx___frontmatter___thumbnail___atimeMs'
+  | 'childMdx___frontmatter___thumbnail___mtimeMs'
+  | 'childMdx___frontmatter___thumbnail___ctimeMs'
+  | 'childMdx___frontmatter___thumbnail___atime'
+  | 'childMdx___frontmatter___thumbnail___mtime'
+  | 'childMdx___frontmatter___thumbnail___ctime'
+  | 'childMdx___frontmatter___thumbnail___birthtime'
+  | 'childMdx___frontmatter___thumbnail___birthtimeMs'
+  | 'childMdx___frontmatter___thumbnail___blksize'
+  | 'childMdx___frontmatter___thumbnail___blocks'
+  | 'childMdx___frontmatter___thumbnail___publicURL'
+  | 'childMdx___frontmatter___thumbnail___childrenMdx'
+  | 'childMdx___frontmatter___thumbnail___childrenImageSharp'
+  | 'childMdx___frontmatter___thumbnail___id'
+  | 'childMdx___frontmatter___thumbnail___children'
+  | 'childMdx___frontmatter___paper_pdf___sourceInstanceName'
+  | 'childMdx___frontmatter___paper_pdf___absolutePath'
+  | 'childMdx___frontmatter___paper_pdf___relativePath'
+  | 'childMdx___frontmatter___paper_pdf___extension'
+  | 'childMdx___frontmatter___paper_pdf___size'
+  | 'childMdx___frontmatter___paper_pdf___prettySize'
+  | 'childMdx___frontmatter___paper_pdf___modifiedTime'
+  | 'childMdx___frontmatter___paper_pdf___accessTime'
+  | 'childMdx___frontmatter___paper_pdf___changeTime'
+  | 'childMdx___frontmatter___paper_pdf___birthTime'
+  | 'childMdx___frontmatter___paper_pdf___root'
+  | 'childMdx___frontmatter___paper_pdf___dir'
+  | 'childMdx___frontmatter___paper_pdf___base'
+  | 'childMdx___frontmatter___paper_pdf___ext'
+  | 'childMdx___frontmatter___paper_pdf___name'
+  | 'childMdx___frontmatter___paper_pdf___relativeDirectory'
+  | 'childMdx___frontmatter___paper_pdf___dev'
+  | 'childMdx___frontmatter___paper_pdf___mode'
+  | 'childMdx___frontmatter___paper_pdf___nlink'
+  | 'childMdx___frontmatter___paper_pdf___uid'
+  | 'childMdx___frontmatter___paper_pdf___gid'
+  | 'childMdx___frontmatter___paper_pdf___rdev'
+  | 'childMdx___frontmatter___paper_pdf___ino'
+  | 'childMdx___frontmatter___paper_pdf___atimeMs'
+  | 'childMdx___frontmatter___paper_pdf___mtimeMs'
+  | 'childMdx___frontmatter___paper_pdf___ctimeMs'
+  | 'childMdx___frontmatter___paper_pdf___atime'
+  | 'childMdx___frontmatter___paper_pdf___mtime'
+  | 'childMdx___frontmatter___paper_pdf___ctime'
+  | 'childMdx___frontmatter___paper_pdf___birthtime'
+  | 'childMdx___frontmatter___paper_pdf___birthtimeMs'
+  | 'childMdx___frontmatter___paper_pdf___blksize'
+  | 'childMdx___frontmatter___paper_pdf___blocks'
+  | 'childMdx___frontmatter___paper_pdf___publicURL'
+  | 'childMdx___frontmatter___paper_pdf___childrenMdx'
+  | 'childMdx___frontmatter___paper_pdf___childrenImageSharp'
+  | 'childMdx___frontmatter___paper_pdf___id'
+  | 'childMdx___frontmatter___paper_pdf___children'
+  | 'childMdx___frontmatter___poster_pdf___sourceInstanceName'
+  | 'childMdx___frontmatter___poster_pdf___absolutePath'
+  | 'childMdx___frontmatter___poster_pdf___relativePath'
+  | 'childMdx___frontmatter___poster_pdf___extension'
+  | 'childMdx___frontmatter___poster_pdf___size'
+  | 'childMdx___frontmatter___poster_pdf___prettySize'
+  | 'childMdx___frontmatter___poster_pdf___modifiedTime'
+  | 'childMdx___frontmatter___poster_pdf___accessTime'
+  | 'childMdx___frontmatter___poster_pdf___changeTime'
+  | 'childMdx___frontmatter___poster_pdf___birthTime'
+  | 'childMdx___frontmatter___poster_pdf___root'
+  | 'childMdx___frontmatter___poster_pdf___dir'
+  | 'childMdx___frontmatter___poster_pdf___base'
+  | 'childMdx___frontmatter___poster_pdf___ext'
+  | 'childMdx___frontmatter___poster_pdf___name'
+  | 'childMdx___frontmatter___poster_pdf___relativeDirectory'
+  | 'childMdx___frontmatter___poster_pdf___dev'
+  | 'childMdx___frontmatter___poster_pdf___mode'
+  | 'childMdx___frontmatter___poster_pdf___nlink'
+  | 'childMdx___frontmatter___poster_pdf___uid'
+  | 'childMdx___frontmatter___poster_pdf___gid'
+  | 'childMdx___frontmatter___poster_pdf___rdev'
+  | 'childMdx___frontmatter___poster_pdf___ino'
+  | 'childMdx___frontmatter___poster_pdf___atimeMs'
+  | 'childMdx___frontmatter___poster_pdf___mtimeMs'
+  | 'childMdx___frontmatter___poster_pdf___ctimeMs'
+  | 'childMdx___frontmatter___poster_pdf___atime'
+  | 'childMdx___frontmatter___poster_pdf___mtime'
+  | 'childMdx___frontmatter___poster_pdf___ctime'
+  | 'childMdx___frontmatter___poster_pdf___birthtime'
+  | 'childMdx___frontmatter___poster_pdf___birthtimeMs'
+  | 'childMdx___frontmatter___poster_pdf___blksize'
+  | 'childMdx___frontmatter___poster_pdf___blocks'
+  | 'childMdx___frontmatter___poster_pdf___publicURL'
+  | 'childMdx___frontmatter___poster_pdf___childrenMdx'
+  | 'childMdx___frontmatter___poster_pdf___childrenImageSharp'
+  | 'childMdx___frontmatter___poster_pdf___id'
+  | 'childMdx___frontmatter___poster_pdf___children'
+  | 'childMdx___frontmatter___github_url'
   | 'childMdx___slug'
   | 'childMdx___body'
   | 'childMdx___excerpt'
@@ -1453,6 +1853,7 @@ export type FileFieldsEnum =
   | 'childMdx___wordCount___paragraphs'
   | 'childMdx___wordCount___sentences'
   | 'childMdx___wordCount___words'
+  | 'childMdx___gatsbyPath'
   | 'childMdx___id'
   | 'childMdx___parent___id'
   | 'childMdx___parent___parent___id'
@@ -3158,6 +3559,7 @@ export type MdxFieldsEnum =
   | 'frontmatter___hero_image___childrenMdx___mdxAST'
   | 'frontmatter___hero_image___childrenMdx___tableOfContents'
   | 'frontmatter___hero_image___childrenMdx___timeToRead'
+  | 'frontmatter___hero_image___childrenMdx___gatsbyPath'
   | 'frontmatter___hero_image___childrenMdx___id'
   | 'frontmatter___hero_image___childrenMdx___children'
   | 'frontmatter___hero_image___childMdx___rawBody'
@@ -3170,6 +3572,7 @@ export type MdxFieldsEnum =
   | 'frontmatter___hero_image___childMdx___mdxAST'
   | 'frontmatter___hero_image___childMdx___tableOfContents'
   | 'frontmatter___hero_image___childMdx___timeToRead'
+  | 'frontmatter___hero_image___childMdx___gatsbyPath'
   | 'frontmatter___hero_image___childMdx___id'
   | 'frontmatter___hero_image___childMdx___children'
   | 'frontmatter___hero_image___childrenImageSharp'
@@ -3200,6 +3603,253 @@ export type MdxFieldsEnum =
   | 'frontmatter___publication_url'
   | 'frontmatter___publication_date'
   | 'frontmatter___conference'
+  | 'frontmatter___thumbnail___sourceInstanceName'
+  | 'frontmatter___thumbnail___absolutePath'
+  | 'frontmatter___thumbnail___relativePath'
+  | 'frontmatter___thumbnail___extension'
+  | 'frontmatter___thumbnail___size'
+  | 'frontmatter___thumbnail___prettySize'
+  | 'frontmatter___thumbnail___modifiedTime'
+  | 'frontmatter___thumbnail___accessTime'
+  | 'frontmatter___thumbnail___changeTime'
+  | 'frontmatter___thumbnail___birthTime'
+  | 'frontmatter___thumbnail___root'
+  | 'frontmatter___thumbnail___dir'
+  | 'frontmatter___thumbnail___base'
+  | 'frontmatter___thumbnail___ext'
+  | 'frontmatter___thumbnail___name'
+  | 'frontmatter___thumbnail___relativeDirectory'
+  | 'frontmatter___thumbnail___dev'
+  | 'frontmatter___thumbnail___mode'
+  | 'frontmatter___thumbnail___nlink'
+  | 'frontmatter___thumbnail___uid'
+  | 'frontmatter___thumbnail___gid'
+  | 'frontmatter___thumbnail___rdev'
+  | 'frontmatter___thumbnail___ino'
+  | 'frontmatter___thumbnail___atimeMs'
+  | 'frontmatter___thumbnail___mtimeMs'
+  | 'frontmatter___thumbnail___ctimeMs'
+  | 'frontmatter___thumbnail___atime'
+  | 'frontmatter___thumbnail___mtime'
+  | 'frontmatter___thumbnail___ctime'
+  | 'frontmatter___thumbnail___birthtime'
+  | 'frontmatter___thumbnail___birthtimeMs'
+  | 'frontmatter___thumbnail___blksize'
+  | 'frontmatter___thumbnail___blocks'
+  | 'frontmatter___thumbnail___publicURL'
+  | 'frontmatter___thumbnail___childrenMdx'
+  | 'frontmatter___thumbnail___childrenMdx___rawBody'
+  | 'frontmatter___thumbnail___childrenMdx___fileAbsolutePath'
+  | 'frontmatter___thumbnail___childrenMdx___slug'
+  | 'frontmatter___thumbnail___childrenMdx___body'
+  | 'frontmatter___thumbnail___childrenMdx___excerpt'
+  | 'frontmatter___thumbnail___childrenMdx___headings'
+  | 'frontmatter___thumbnail___childrenMdx___html'
+  | 'frontmatter___thumbnail___childrenMdx___mdxAST'
+  | 'frontmatter___thumbnail___childrenMdx___tableOfContents'
+  | 'frontmatter___thumbnail___childrenMdx___timeToRead'
+  | 'frontmatter___thumbnail___childrenMdx___gatsbyPath'
+  | 'frontmatter___thumbnail___childrenMdx___id'
+  | 'frontmatter___thumbnail___childrenMdx___children'
+  | 'frontmatter___thumbnail___childMdx___rawBody'
+  | 'frontmatter___thumbnail___childMdx___fileAbsolutePath'
+  | 'frontmatter___thumbnail___childMdx___slug'
+  | 'frontmatter___thumbnail___childMdx___body'
+  | 'frontmatter___thumbnail___childMdx___excerpt'
+  | 'frontmatter___thumbnail___childMdx___headings'
+  | 'frontmatter___thumbnail___childMdx___html'
+  | 'frontmatter___thumbnail___childMdx___mdxAST'
+  | 'frontmatter___thumbnail___childMdx___tableOfContents'
+  | 'frontmatter___thumbnail___childMdx___timeToRead'
+  | 'frontmatter___thumbnail___childMdx___gatsbyPath'
+  | 'frontmatter___thumbnail___childMdx___id'
+  | 'frontmatter___thumbnail___childMdx___children'
+  | 'frontmatter___thumbnail___childrenImageSharp'
+  | 'frontmatter___thumbnail___childrenImageSharp___gatsbyImageData'
+  | 'frontmatter___thumbnail___childrenImageSharp___id'
+  | 'frontmatter___thumbnail___childrenImageSharp___children'
+  | 'frontmatter___thumbnail___childImageSharp___gatsbyImageData'
+  | 'frontmatter___thumbnail___childImageSharp___id'
+  | 'frontmatter___thumbnail___childImageSharp___children'
+  | 'frontmatter___thumbnail___id'
+  | 'frontmatter___thumbnail___parent___id'
+  | 'frontmatter___thumbnail___parent___children'
+  | 'frontmatter___thumbnail___children'
+  | 'frontmatter___thumbnail___children___id'
+  | 'frontmatter___thumbnail___children___children'
+  | 'frontmatter___thumbnail___internal___content'
+  | 'frontmatter___thumbnail___internal___contentDigest'
+  | 'frontmatter___thumbnail___internal___description'
+  | 'frontmatter___thumbnail___internal___fieldOwners'
+  | 'frontmatter___thumbnail___internal___ignoreType'
+  | 'frontmatter___thumbnail___internal___mediaType'
+  | 'frontmatter___thumbnail___internal___owner'
+  | 'frontmatter___thumbnail___internal___type'
+  | 'frontmatter___paper_pdf___sourceInstanceName'
+  | 'frontmatter___paper_pdf___absolutePath'
+  | 'frontmatter___paper_pdf___relativePath'
+  | 'frontmatter___paper_pdf___extension'
+  | 'frontmatter___paper_pdf___size'
+  | 'frontmatter___paper_pdf___prettySize'
+  | 'frontmatter___paper_pdf___modifiedTime'
+  | 'frontmatter___paper_pdf___accessTime'
+  | 'frontmatter___paper_pdf___changeTime'
+  | 'frontmatter___paper_pdf___birthTime'
+  | 'frontmatter___paper_pdf___root'
+  | 'frontmatter___paper_pdf___dir'
+  | 'frontmatter___paper_pdf___base'
+  | 'frontmatter___paper_pdf___ext'
+  | 'frontmatter___paper_pdf___name'
+  | 'frontmatter___paper_pdf___relativeDirectory'
+  | 'frontmatter___paper_pdf___dev'
+  | 'frontmatter___paper_pdf___mode'
+  | 'frontmatter___paper_pdf___nlink'
+  | 'frontmatter___paper_pdf___uid'
+  | 'frontmatter___paper_pdf___gid'
+  | 'frontmatter___paper_pdf___rdev'
+  | 'frontmatter___paper_pdf___ino'
+  | 'frontmatter___paper_pdf___atimeMs'
+  | 'frontmatter___paper_pdf___mtimeMs'
+  | 'frontmatter___paper_pdf___ctimeMs'
+  | 'frontmatter___paper_pdf___atime'
+  | 'frontmatter___paper_pdf___mtime'
+  | 'frontmatter___paper_pdf___ctime'
+  | 'frontmatter___paper_pdf___birthtime'
+  | 'frontmatter___paper_pdf___birthtimeMs'
+  | 'frontmatter___paper_pdf___blksize'
+  | 'frontmatter___paper_pdf___blocks'
+  | 'frontmatter___paper_pdf___publicURL'
+  | 'frontmatter___paper_pdf___childrenMdx'
+  | 'frontmatter___paper_pdf___childrenMdx___rawBody'
+  | 'frontmatter___paper_pdf___childrenMdx___fileAbsolutePath'
+  | 'frontmatter___paper_pdf___childrenMdx___slug'
+  | 'frontmatter___paper_pdf___childrenMdx___body'
+  | 'frontmatter___paper_pdf___childrenMdx___excerpt'
+  | 'frontmatter___paper_pdf___childrenMdx___headings'
+  | 'frontmatter___paper_pdf___childrenMdx___html'
+  | 'frontmatter___paper_pdf___childrenMdx___mdxAST'
+  | 'frontmatter___paper_pdf___childrenMdx___tableOfContents'
+  | 'frontmatter___paper_pdf___childrenMdx___timeToRead'
+  | 'frontmatter___paper_pdf___childrenMdx___gatsbyPath'
+  | 'frontmatter___paper_pdf___childrenMdx___id'
+  | 'frontmatter___paper_pdf___childrenMdx___children'
+  | 'frontmatter___paper_pdf___childMdx___rawBody'
+  | 'frontmatter___paper_pdf___childMdx___fileAbsolutePath'
+  | 'frontmatter___paper_pdf___childMdx___slug'
+  | 'frontmatter___paper_pdf___childMdx___body'
+  | 'frontmatter___paper_pdf___childMdx___excerpt'
+  | 'frontmatter___paper_pdf___childMdx___headings'
+  | 'frontmatter___paper_pdf___childMdx___html'
+  | 'frontmatter___paper_pdf___childMdx___mdxAST'
+  | 'frontmatter___paper_pdf___childMdx___tableOfContents'
+  | 'frontmatter___paper_pdf___childMdx___timeToRead'
+  | 'frontmatter___paper_pdf___childMdx___gatsbyPath'
+  | 'frontmatter___paper_pdf___childMdx___id'
+  | 'frontmatter___paper_pdf___childMdx___children'
+  | 'frontmatter___paper_pdf___childrenImageSharp'
+  | 'frontmatter___paper_pdf___childrenImageSharp___gatsbyImageData'
+  | 'frontmatter___paper_pdf___childrenImageSharp___id'
+  | 'frontmatter___paper_pdf___childrenImageSharp___children'
+  | 'frontmatter___paper_pdf___childImageSharp___gatsbyImageData'
+  | 'frontmatter___paper_pdf___childImageSharp___id'
+  | 'frontmatter___paper_pdf___childImageSharp___children'
+  | 'frontmatter___paper_pdf___id'
+  | 'frontmatter___paper_pdf___parent___id'
+  | 'frontmatter___paper_pdf___parent___children'
+  | 'frontmatter___paper_pdf___children'
+  | 'frontmatter___paper_pdf___children___id'
+  | 'frontmatter___paper_pdf___children___children'
+  | 'frontmatter___paper_pdf___internal___content'
+  | 'frontmatter___paper_pdf___internal___contentDigest'
+  | 'frontmatter___paper_pdf___internal___description'
+  | 'frontmatter___paper_pdf___internal___fieldOwners'
+  | 'frontmatter___paper_pdf___internal___ignoreType'
+  | 'frontmatter___paper_pdf___internal___mediaType'
+  | 'frontmatter___paper_pdf___internal___owner'
+  | 'frontmatter___paper_pdf___internal___type'
+  | 'frontmatter___poster_pdf___sourceInstanceName'
+  | 'frontmatter___poster_pdf___absolutePath'
+  | 'frontmatter___poster_pdf___relativePath'
+  | 'frontmatter___poster_pdf___extension'
+  | 'frontmatter___poster_pdf___size'
+  | 'frontmatter___poster_pdf___prettySize'
+  | 'frontmatter___poster_pdf___modifiedTime'
+  | 'frontmatter___poster_pdf___accessTime'
+  | 'frontmatter___poster_pdf___changeTime'
+  | 'frontmatter___poster_pdf___birthTime'
+  | 'frontmatter___poster_pdf___root'
+  | 'frontmatter___poster_pdf___dir'
+  | 'frontmatter___poster_pdf___base'
+  | 'frontmatter___poster_pdf___ext'
+  | 'frontmatter___poster_pdf___name'
+  | 'frontmatter___poster_pdf___relativeDirectory'
+  | 'frontmatter___poster_pdf___dev'
+  | 'frontmatter___poster_pdf___mode'
+  | 'frontmatter___poster_pdf___nlink'
+  | 'frontmatter___poster_pdf___uid'
+  | 'frontmatter___poster_pdf___gid'
+  | 'frontmatter___poster_pdf___rdev'
+  | 'frontmatter___poster_pdf___ino'
+  | 'frontmatter___poster_pdf___atimeMs'
+  | 'frontmatter___poster_pdf___mtimeMs'
+  | 'frontmatter___poster_pdf___ctimeMs'
+  | 'frontmatter___poster_pdf___atime'
+  | 'frontmatter___poster_pdf___mtime'
+  | 'frontmatter___poster_pdf___ctime'
+  | 'frontmatter___poster_pdf___birthtime'
+  | 'frontmatter___poster_pdf___birthtimeMs'
+  | 'frontmatter___poster_pdf___blksize'
+  | 'frontmatter___poster_pdf___blocks'
+  | 'frontmatter___poster_pdf___publicURL'
+  | 'frontmatter___poster_pdf___childrenMdx'
+  | 'frontmatter___poster_pdf___childrenMdx___rawBody'
+  | 'frontmatter___poster_pdf___childrenMdx___fileAbsolutePath'
+  | 'frontmatter___poster_pdf___childrenMdx___slug'
+  | 'frontmatter___poster_pdf___childrenMdx___body'
+  | 'frontmatter___poster_pdf___childrenMdx___excerpt'
+  | 'frontmatter___poster_pdf___childrenMdx___headings'
+  | 'frontmatter___poster_pdf___childrenMdx___html'
+  | 'frontmatter___poster_pdf___childrenMdx___mdxAST'
+  | 'frontmatter___poster_pdf___childrenMdx___tableOfContents'
+  | 'frontmatter___poster_pdf___childrenMdx___timeToRead'
+  | 'frontmatter___poster_pdf___childrenMdx___gatsbyPath'
+  | 'frontmatter___poster_pdf___childrenMdx___id'
+  | 'frontmatter___poster_pdf___childrenMdx___children'
+  | 'frontmatter___poster_pdf___childMdx___rawBody'
+  | 'frontmatter___poster_pdf___childMdx___fileAbsolutePath'
+  | 'frontmatter___poster_pdf___childMdx___slug'
+  | 'frontmatter___poster_pdf___childMdx___body'
+  | 'frontmatter___poster_pdf___childMdx___excerpt'
+  | 'frontmatter___poster_pdf___childMdx___headings'
+  | 'frontmatter___poster_pdf___childMdx___html'
+  | 'frontmatter___poster_pdf___childMdx___mdxAST'
+  | 'frontmatter___poster_pdf___childMdx___tableOfContents'
+  | 'frontmatter___poster_pdf___childMdx___timeToRead'
+  | 'frontmatter___poster_pdf___childMdx___gatsbyPath'
+  | 'frontmatter___poster_pdf___childMdx___id'
+  | 'frontmatter___poster_pdf___childMdx___children'
+  | 'frontmatter___poster_pdf___childrenImageSharp'
+  | 'frontmatter___poster_pdf___childrenImageSharp___gatsbyImageData'
+  | 'frontmatter___poster_pdf___childrenImageSharp___id'
+  | 'frontmatter___poster_pdf___childrenImageSharp___children'
+  | 'frontmatter___poster_pdf___childImageSharp___gatsbyImageData'
+  | 'frontmatter___poster_pdf___childImageSharp___id'
+  | 'frontmatter___poster_pdf___childImageSharp___children'
+  | 'frontmatter___poster_pdf___id'
+  | 'frontmatter___poster_pdf___parent___id'
+  | 'frontmatter___poster_pdf___parent___children'
+  | 'frontmatter___poster_pdf___children'
+  | 'frontmatter___poster_pdf___children___id'
+  | 'frontmatter___poster_pdf___children___children'
+  | 'frontmatter___poster_pdf___internal___content'
+  | 'frontmatter___poster_pdf___internal___contentDigest'
+  | 'frontmatter___poster_pdf___internal___description'
+  | 'frontmatter___poster_pdf___internal___fieldOwners'
+  | 'frontmatter___poster_pdf___internal___ignoreType'
+  | 'frontmatter___poster_pdf___internal___mediaType'
+  | 'frontmatter___poster_pdf___internal___owner'
+  | 'frontmatter___poster_pdf___internal___type'
+  | 'frontmatter___github_url'
   | 'slug'
   | 'body'
   | 'excerpt'
@@ -3213,6 +3863,7 @@ export type MdxFieldsEnum =
   | 'wordCount___paragraphs'
   | 'wordCount___sentences'
   | 'wordCount___words'
+  | 'gatsbyPath'
   | 'id'
   | 'parent___id'
   | 'parent___parent___id'
@@ -3557,15 +4208,272 @@ export type ImageSharpSortInput = {
   order?: InputMaybe<Array<InputMaybe<SortOrderEnum>>>;
 };
 
+export type StaticImageConnection = {
+  totalCount: Scalars['Int'];
+  edges: Array<StaticImageEdge>;
+  nodes: Array<StaticImage>;
+  pageInfo: PageInfo;
+  distinct: Array<Scalars['String']>;
+  max?: Maybe<Scalars['Float']>;
+  min?: Maybe<Scalars['Float']>;
+  sum?: Maybe<Scalars['Float']>;
+  group: Array<StaticImageGroupConnection>;
+};
+
+
+export type StaticImageConnectionDistinctArgs = {
+  field: StaticImageFieldsEnum;
+};
+
+
+export type StaticImageConnectionMaxArgs = {
+  field: StaticImageFieldsEnum;
+};
+
+
+export type StaticImageConnectionMinArgs = {
+  field: StaticImageFieldsEnum;
+};
+
+
+export type StaticImageConnectionSumArgs = {
+  field: StaticImageFieldsEnum;
+};
+
+
+export type StaticImageConnectionGroupArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  field: StaticImageFieldsEnum;
+};
+
+export type StaticImageEdge = {
+  next?: Maybe<StaticImage>;
+  node: StaticImage;
+  previous?: Maybe<StaticImage>;
+};
+
+export type StaticImageFieldsEnum =
+  | 'id'
+  | 'parent___id'
+  | 'parent___parent___id'
+  | 'parent___parent___parent___id'
+  | 'parent___parent___parent___children'
+  | 'parent___parent___children'
+  | 'parent___parent___children___id'
+  | 'parent___parent___children___children'
+  | 'parent___parent___internal___content'
+  | 'parent___parent___internal___contentDigest'
+  | 'parent___parent___internal___description'
+  | 'parent___parent___internal___fieldOwners'
+  | 'parent___parent___internal___ignoreType'
+  | 'parent___parent___internal___mediaType'
+  | 'parent___parent___internal___owner'
+  | 'parent___parent___internal___type'
+  | 'parent___children'
+  | 'parent___children___id'
+  | 'parent___children___parent___id'
+  | 'parent___children___parent___children'
+  | 'parent___children___children'
+  | 'parent___children___children___id'
+  | 'parent___children___children___children'
+  | 'parent___children___internal___content'
+  | 'parent___children___internal___contentDigest'
+  | 'parent___children___internal___description'
+  | 'parent___children___internal___fieldOwners'
+  | 'parent___children___internal___ignoreType'
+  | 'parent___children___internal___mediaType'
+  | 'parent___children___internal___owner'
+  | 'parent___children___internal___type'
+  | 'parent___internal___content'
+  | 'parent___internal___contentDigest'
+  | 'parent___internal___description'
+  | 'parent___internal___fieldOwners'
+  | 'parent___internal___ignoreType'
+  | 'parent___internal___mediaType'
+  | 'parent___internal___owner'
+  | 'parent___internal___type'
+  | 'children'
+  | 'children___id'
+  | 'children___parent___id'
+  | 'children___parent___parent___id'
+  | 'children___parent___parent___children'
+  | 'children___parent___children'
+  | 'children___parent___children___id'
+  | 'children___parent___children___children'
+  | 'children___parent___internal___content'
+  | 'children___parent___internal___contentDigest'
+  | 'children___parent___internal___description'
+  | 'children___parent___internal___fieldOwners'
+  | 'children___parent___internal___ignoreType'
+  | 'children___parent___internal___mediaType'
+  | 'children___parent___internal___owner'
+  | 'children___parent___internal___type'
+  | 'children___children'
+  | 'children___children___id'
+  | 'children___children___parent___id'
+  | 'children___children___parent___children'
+  | 'children___children___children'
+  | 'children___children___children___id'
+  | 'children___children___children___children'
+  | 'children___children___internal___content'
+  | 'children___children___internal___contentDigest'
+  | 'children___children___internal___description'
+  | 'children___children___internal___fieldOwners'
+  | 'children___children___internal___ignoreType'
+  | 'children___children___internal___mediaType'
+  | 'children___children___internal___owner'
+  | 'children___children___internal___type'
+  | 'children___internal___content'
+  | 'children___internal___contentDigest'
+  | 'children___internal___description'
+  | 'children___internal___fieldOwners'
+  | 'children___internal___ignoreType'
+  | 'children___internal___mediaType'
+  | 'children___internal___owner'
+  | 'children___internal___type'
+  | 'internal___content'
+  | 'internal___contentDigest'
+  | 'internal___description'
+  | 'internal___fieldOwners'
+  | 'internal___ignoreType'
+  | 'internal___mediaType'
+  | 'internal___owner'
+  | 'internal___type'
+  | 'sourceInstanceName'
+  | 'relativePath'
+  | 'extension'
+  | 'prettySize'
+  | 'modifiedTime'
+  | 'accessTime'
+  | 'changeTime'
+  | 'birthTime'
+  | 'root'
+  | 'dir'
+  | 'base'
+  | 'ext'
+  | 'name'
+  | 'absolutePath'
+  | 'relativeDirectory'
+  | 'dev'
+  | 'mode'
+  | 'nlink'
+  | 'uid'
+  | 'rdev'
+  | 'blksize'
+  | 'ino'
+  | 'size'
+  | 'blocks'
+  | 'atimeMs'
+  | 'mtimeMs'
+  | 'ctimeMs'
+  | 'birthtimeMs'
+  | 'atime'
+  | 'mtime'
+  | 'ctime'
+  | 'birthtime';
+
+export type StaticImageGroupConnection = {
+  totalCount: Scalars['Int'];
+  edges: Array<StaticImageEdge>;
+  nodes: Array<StaticImage>;
+  pageInfo: PageInfo;
+  distinct: Array<Scalars['String']>;
+  max?: Maybe<Scalars['Float']>;
+  min?: Maybe<Scalars['Float']>;
+  sum?: Maybe<Scalars['Float']>;
+  group: Array<StaticImageGroupConnection>;
+  field: Scalars['String'];
+  fieldValue?: Maybe<Scalars['String']>;
+};
+
+
+export type StaticImageGroupConnectionDistinctArgs = {
+  field: StaticImageFieldsEnum;
+};
+
+
+export type StaticImageGroupConnectionMaxArgs = {
+  field: StaticImageFieldsEnum;
+};
+
+
+export type StaticImageGroupConnectionMinArgs = {
+  field: StaticImageFieldsEnum;
+};
+
+
+export type StaticImageGroupConnectionSumArgs = {
+  field: StaticImageFieldsEnum;
+};
+
+
+export type StaticImageGroupConnectionGroupArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  field: StaticImageFieldsEnum;
+};
+
+export type StaticImageFilterInput = {
+  id?: InputMaybe<StringQueryOperatorInput>;
+  parent?: InputMaybe<NodeFilterInput>;
+  children?: InputMaybe<NodeFilterListInput>;
+  internal?: InputMaybe<InternalFilterInput>;
+  sourceInstanceName?: InputMaybe<StringQueryOperatorInput>;
+  relativePath?: InputMaybe<StringQueryOperatorInput>;
+  extension?: InputMaybe<StringQueryOperatorInput>;
+  prettySize?: InputMaybe<StringQueryOperatorInput>;
+  modifiedTime?: InputMaybe<DateQueryOperatorInput>;
+  accessTime?: InputMaybe<DateQueryOperatorInput>;
+  changeTime?: InputMaybe<DateQueryOperatorInput>;
+  birthTime?: InputMaybe<DateQueryOperatorInput>;
+  root?: InputMaybe<StringQueryOperatorInput>;
+  dir?: InputMaybe<StringQueryOperatorInput>;
+  base?: InputMaybe<StringQueryOperatorInput>;
+  ext?: InputMaybe<StringQueryOperatorInput>;
+  name?: InputMaybe<StringQueryOperatorInput>;
+  absolutePath?: InputMaybe<StringQueryOperatorInput>;
+  relativeDirectory?: InputMaybe<StringQueryOperatorInput>;
+  dev?: InputMaybe<IntQueryOperatorInput>;
+  mode?: InputMaybe<IntQueryOperatorInput>;
+  nlink?: InputMaybe<IntQueryOperatorInput>;
+  uid?: InputMaybe<IntQueryOperatorInput>;
+  rdev?: InputMaybe<IntQueryOperatorInput>;
+  blksize?: InputMaybe<IntQueryOperatorInput>;
+  ino?: InputMaybe<IntQueryOperatorInput>;
+  size?: InputMaybe<IntQueryOperatorInput>;
+  blocks?: InputMaybe<IntQueryOperatorInput>;
+  atimeMs?: InputMaybe<FloatQueryOperatorInput>;
+  mtimeMs?: InputMaybe<FloatQueryOperatorInput>;
+  ctimeMs?: InputMaybe<FloatQueryOperatorInput>;
+  birthtimeMs?: InputMaybe<FloatQueryOperatorInput>;
+  atime?: InputMaybe<DateQueryOperatorInput>;
+  mtime?: InputMaybe<DateQueryOperatorInput>;
+  ctime?: InputMaybe<DateQueryOperatorInput>;
+  birthtime?: InputMaybe<DateQueryOperatorInput>;
+};
+
+export type StaticImageSortInput = {
+  fields?: InputMaybe<Array<InputMaybe<StaticImageFieldsEnum>>>;
+  order?: InputMaybe<Array<InputMaybe<SortOrderEnum>>>;
+};
+
 export type InfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type InfoQuery = { intro?: { body: string, frontmatter?: { date?: any | null | undefined } | null | undefined } | null | undefined, recentPub: { nodes: Array<{ id: string, frontmatter?: { title: string, author?: string | null | undefined, conference?: string | null | undefined } | null | undefined }> } };
+export type InfoQuery = { intro?: { body: string, frontmatter?: { date?: any | null | undefined } | null | undefined } | null | undefined, recentPub: { nodes: Array<{ id: string, slug?: string | null | undefined, frontmatter?: { title: string, author?: string | null | undefined, conference?: string | null | undefined } | null | undefined }> } };
 
 export type PublicationIndexQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PublicationIndexQuery = { allMdx: { nodes: Array<{ id: string, frontmatter?: { title: string, author?: string | null | undefined, conference?: string | null | undefined } | null | undefined }> } };
+export type PublicationIndexQuery = { allMdx: { nodes: Array<{ id: string, slug?: string | null | undefined, frontmatter?: { title: string, author?: string | null | undefined, conference?: string | null | undefined } | null | undefined }> } };
+
+export type PublicationQueryVariables = Exact<{
+  id?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type PublicationQuery = { mdx?: { id: string, slug?: string | null | undefined, body: string, frontmatter?: { author?: string | null | undefined, conference?: string | null | undefined, publication_date?: any | null | undefined, publication_url?: string | null | undefined, title: string, github_url?: string | null | undefined, paper_pdf?: { publicURL?: string | null | undefined } | null | undefined, poster_pdf?: { publicURL?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined };
 
 export type GatsbyImageSharpFixedFragment = { base64?: string | null | undefined, width: number, height: number, src: string, srcSet: string };
 

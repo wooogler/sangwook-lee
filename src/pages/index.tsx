@@ -1,4 +1,4 @@
-import { graphql, useStaticQuery } from 'gatsby';
+import { graphql, Link, useStaticQuery } from 'gatsby';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
 import React from 'react';
 import PageLayout from '../components/PageLayout';
@@ -21,10 +21,22 @@ function IndexPage({ data }: Props) {
           Last Update: {dayjs(data.intro.frontmatter.date).format('ll')}
         </div>
       </div>
-      <div className='text-2xl mt-4 mb-2'>Recent Publications</div>
+      <div className='flex mt-4 mb-2 items-end'>
+        <div className='text-2xl'>Recent Publications</div>
+        <Link to='/publication' className='ml-2 hover:text-blue-500'>
+          (see all)
+        </Link>
+      </div>
+
       <div>
         {data.recentPub.nodes.map((node) => (
-          <PubItem pub={node} />
+          <PubItem
+            slug={node.slug}
+            title={node.frontmatter.title}
+            author={node.frontmatter.author}
+            conference={node.frontmatter.conference}
+            key={node.id}
+          />
         ))}
       </div>
     </PageLayout>
@@ -41,11 +53,12 @@ export const query = graphql`
     }
     recentPub: allMdx(
       filter: { fileAbsolutePath: { regex: "/publication/" } }
-      limit: 5
+      limit: 3
       sort: { fields: frontmatter___date, order: DESC }
     ) {
       nodes {
         id
+        slug
         frontmatter {
           title
           author

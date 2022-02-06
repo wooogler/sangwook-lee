@@ -1,27 +1,26 @@
+import { Link } from 'gatsby';
+import { PublicationIndexQuery, PublicationQuery } from 'graphql-types';
 import React from 'react';
-import Highlighter from 'react-highlight-words';
+import HighlightedText from './HighlightedText';
 
 type Props = {
-  pub: {
-    id: string;
-    frontmatter?: {
-      title: string;
-      author?: string;
-      conference?: string;
-    };
-  };
+  slug?: string;
+  title: string;
+  author: string;
+  conference: string;
 };
 
-function PubItem({ pub }: Props) {
+function PubItem({ slug, title, author, conference }: Props) {
   return (
-    <div key={pub.id}>
-      <div className='font-bold text-lg'>{pub.frontmatter.title}</div>
-      <Highlighter
-        highlightTag='strong'
-        searchWords={['Sangwook Lee']}
-        textToHighlight={pub.frontmatter.author}
-      />
-      <div>{pub.frontmatter.conference}</div>
+    <div className='flex flex-col'>
+      <Link
+        to={`/publication/${slug}`}
+        className='font-bold text-lg hover:text-blue-500'
+      >
+        {title}
+      </Link>
+      <HighlightedText text={author} query='Sangwook Lee' />
+      <div>{conference}</div>
     </div>
   );
 }
