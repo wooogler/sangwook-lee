@@ -5,6 +5,7 @@ import React from 'react';
 import PubItem from '../../components/PubItem';
 import PageLayout from '../../components/PageLayout';
 import HighlightedText from '../../components/HighlightedText';
+import { AiOutlineFilePdf, AiOutlineLink } from 'react-icons/ai';
 
 type Props = {
   data: PublicationQuery;
@@ -23,9 +24,23 @@ function PublicationPost({ data }: Props) {
     <PageLayout>
       <div className='text-3xl'>{title}</div>
       <HighlightedText text={author} query='Sangwook Lee' />
-      <a href={paper_pdf.publicURL} download>
-        Paper
-      </a>
+      <div className='flex'>
+        <a href={publication_url} className='flex items-center underline mr-2'>
+          <AiOutlineLink /> Link
+        </a>
+        {paper_pdf && (
+          <a
+            href={paper_pdf.publicURL}
+            download
+            className='flex items-center text-red-600 underline'
+            target='_blank'
+            rel='noreferrer noopener'
+          >
+            <AiOutlineFilePdf />
+            PDF
+          </a>
+        )}
+      </div>
       <div className='mb-2'>{conference}</div>
       <MDXRenderer>{data.mdx.body}</MDXRenderer>
     </PageLayout>
