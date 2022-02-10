@@ -16,12 +16,14 @@ function IndexPage({ data }: Props) {
   return (
     <PageLayout>
       <div className='prose'>
+        <div className='text-2xl mb-2'>Introduction</div>
         <MDXRenderer>{data.intro.body}</MDXRenderer>
         <div className='text-xs text-slate-600'>
           Last Update: {dayjs(data.intro.frontmatter.date).format('ll')}
         </div>
       </div>
-      <div className='flex mt-4 mb-2 items-end'>
+      <div className='border-t border-gray-400 mt-4'></div>
+      <div className='flex mt-4 mb-2 items-end prose'>
         <div className='text-2xl'>Recent Publications</div>
         <Link to='/publication' className='ml-2 hover:text-blue-500'>
           (see all)

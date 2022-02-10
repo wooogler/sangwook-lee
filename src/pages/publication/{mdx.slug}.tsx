@@ -6,6 +6,7 @@ import PubItem from '../../components/PubItem';
 import PageLayout from '../../components/PageLayout';
 import HighlightedText from '../../components/HighlightedText';
 import { AiOutlineFilePdf, AiOutlineLink } from 'react-icons/ai';
+import Utterances from '../../components/Utterances';
 
 type Props = {
   data: PublicationQuery;
@@ -25,7 +26,12 @@ function PublicationPost({ data }: Props) {
       <div className='text-3xl'>{title}</div>
       <HighlightedText text={author} query='Sangwook Lee' />
       <div className='flex'>
-        <a href={publication_url} className='flex items-center underline mr-2'>
+        <a
+          href={publication_url}
+          className='flex items-center underline mr-2'
+          target='_blank'
+          rel='noreferrer noopener'
+        >
           <AiOutlineLink /> Link
         </a>
         {paper_pdf && (
@@ -33,8 +39,6 @@ function PublicationPost({ data }: Props) {
             href={paper_pdf.publicURL}
             download
             className='flex items-center text-red-600 underline'
-            target='_blank'
-            rel='noreferrer noopener'
           >
             <AiOutlineFilePdf />
             PDF
@@ -43,6 +47,7 @@ function PublicationPost({ data }: Props) {
       </div>
       <div className='mb-2'>{conference}</div>
       <MDXRenderer>{data.mdx.body}</MDXRenderer>
+      <Utterances repo='wooogler/sangwook-lee' />
     </PageLayout>
   );
 }
