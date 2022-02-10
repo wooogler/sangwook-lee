@@ -6,7 +6,7 @@ type Props = {
 };
 
 function HighlightedText({ text, query }: Props) {
-  if (query !== '' && text.includes(query)) {
+  if (query !== '' && text && text.includes(query)) {
     const parts = text.split(new RegExp(`(${query})`, 'gi'));
 
     return (
