@@ -38,7 +38,7 @@ function PageLayout({ children }: Props) {
           >
             Publication
           </Link>
-          <Link
+          {/* <Link
             to='/research'
             activeClassName='text-blue-500'
             className='hover:text-blue-300 mr-2'
@@ -51,7 +51,7 @@ function PageLayout({ children }: Props) {
             className='hover:text-blue-300 mr-2'
           >
             Blog
-          </Link>
+          </Link> */}
         </div>
         <div className='justify-center w-full text-3xl mt-10 hidden md:flex'>
           <a
@@ -85,7 +85,7 @@ function PageLayout({ children }: Props) {
               sourceType: 'profile',
               screenName: 'leesang627',
             }}
-            options={{ height: '200' }}
+            options={{ height: '400' }}
           />
         </div>
       </div>

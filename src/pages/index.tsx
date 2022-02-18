@@ -43,10 +43,52 @@ function IndexPage({ data }: Props) {
       </div>
 
       <div className='border-t border-gray-200 mt-4'></div>
+      <div className='mt-4 mb-2 items-end prose'>
+        <div className='text-2xl'>Research Experiences</div>
+      </div>
+      <div className='text-gray-600'>
+        <div>
+          <div>
+            Research Intern at HCI+D Lab, Dept. of Communication, Seoul National
+            University, Korea (Jul. 2017 ~ Aug. 2017)
+          </div>
+          <div className='text-sm'>
+            Participate in a study about sexual harassment prevention system for
+            online games.
+          </div>
+        </div>
+        <div className='mt-4'>
+          <div>
+            Collaborator at Kixlab, School of Computing, KAIST, Korea (Sep. 2020
+            ~ Sep. 2021)
+          </div>
+          <div className='text-sm'>
+            Doing a research about a system that supports moderator to configure
+            the automated moderation bot.
+          </div>
+        </div>
+      </div>
+
+      <div className='border-t border-gray-200 mt-4'></div>
       <div className='flex mt-4 mb-2 items-end prose'>
         <div className='text-2xl'>Academic Services</div>
       </div>
-      <div>Student Volunteer: CSCW2020, CHI2021</div>
+      <div className='text-gray-600'>Student Volunteer: CSCW2020, CHI2021</div>
+
+      <div className='border-t border-gray-200 mt-4'></div>
+      <div className='mt-4 mb-2 items-end prose'>
+        <div className='text-2xl'>Education</div>
+      </div>
+      <div className='text-gray-600'>
+        <div>
+          <div>M.S. in School of Computing, KAIST</div>
+          <div className='text-sm'>Sep. 2021 - present</div>
+        </div>
+        <div className='mt-4'>
+          <div>B.S. in Convergence IT Engineering, POSTECH</div>
+          <div className='text-sm'>Mar. 2014 - Aug. 2020</div>
+        </div>
+      </div>
     </PageLayout>
   );
 }
