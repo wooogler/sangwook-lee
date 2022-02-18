@@ -11,16 +11,30 @@ type Props = {
 function PublicationPage({ data }: Props) {
   return (
     <PageLayout>
+      <div className='text-2xl mt-4'>Papers</div>
+      <hr className='mb-4' />
+      {data.allMdx.nodes
+        .filter((node) => node.frontmatter.format === 'paper')
+        .map((node) => (
+          <PubItem
+            slug={node.slug}
+            title={node.frontmatter.title}
+            author={node.frontmatter.author}
+            conference={node.frontmatter.conference}
+          />
+        ))}
       <div className='text-2xl'>Posters</div>
       <hr className='mb-4' />
-      {data.allMdx.nodes.map((node) => (
-        <PubItem
-          slug={node.slug}
-          title={node.frontmatter.title}
-          author={node.frontmatter.author}
-          conference={node.frontmatter.conference}
-        />
-      ))}
+      {data.allMdx.nodes
+        .filter((node) => node.frontmatter.format === 'poster')
+        .map((node) => (
+          <PubItem
+            slug={node.slug}
+            title={node.frontmatter.title}
+            author={node.frontmatter.author}
+            conference={node.frontmatter.conference}
+          />
+        ))}
     </PageLayout>
   );
 }
@@ -35,6 +49,7 @@ export const query = graphql`
           title
           author
           conference
+          format
         }
       }
     }

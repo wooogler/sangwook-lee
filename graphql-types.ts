@@ -366,6 +366,7 @@ export type MdxFrontmatter = {
   paper_pdf?: Maybe<File>;
   poster_pdf?: Maybe<File>;
   github_url?: Maybe<Scalars['String']>;
+  format?: Maybe<Scalars['String']>;
 };
 
 
@@ -1210,6 +1211,7 @@ export type MdxFrontmatterFilterInput = {
   paper_pdf?: InputMaybe<FileFilterInput>;
   poster_pdf?: InputMaybe<FileFilterInput>;
   github_url?: InputMaybe<StringQueryOperatorInput>;
+  format?: InputMaybe<StringQueryOperatorInput>;
 };
 
 export type FileFilterInput = {
@@ -1624,6 +1626,7 @@ export type FileFieldsEnum =
   | 'childrenMdx___frontmatter___poster_pdf___id'
   | 'childrenMdx___frontmatter___poster_pdf___children'
   | 'childrenMdx___frontmatter___github_url'
+  | 'childrenMdx___frontmatter___format'
   | 'childrenMdx___slug'
   | 'childrenMdx___body'
   | 'childrenMdx___excerpt'
@@ -1840,6 +1843,7 @@ export type FileFieldsEnum =
   | 'childMdx___frontmatter___poster_pdf___id'
   | 'childMdx___frontmatter___poster_pdf___children'
   | 'childMdx___frontmatter___github_url'
+  | 'childMdx___frontmatter___format'
   | 'childMdx___slug'
   | 'childMdx___body'
   | 'childMdx___excerpt'
@@ -3850,6 +3854,7 @@ export type MdxFieldsEnum =
   | 'frontmatter___poster_pdf___internal___owner'
   | 'frontmatter___poster_pdf___internal___type'
   | 'frontmatter___github_url'
+  | 'frontmatter___format'
   | 'slug'
   | 'body'
   | 'excerpt'
@@ -4466,7 +4471,7 @@ export type InfoQuery = { intro?: { body: string, frontmatter?: { date?: any | n
 export type PublicationIndexQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PublicationIndexQuery = { allMdx: { nodes: Array<{ id: string, slug?: string | null | undefined, frontmatter?: { title: string, author?: string | null | undefined, conference?: string | null | undefined } | null | undefined }> } };
+export type PublicationIndexQuery = { allMdx: { nodes: Array<{ id: string, slug?: string | null | undefined, frontmatter?: { title: string, author?: string | null | undefined, conference?: string | null | undefined, format?: string | null | undefined } | null | undefined }> } };
 
 export type PublicationQueryVariables = Exact<{
   id?: InputMaybe<Scalars['String']>;
