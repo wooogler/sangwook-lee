@@ -22,7 +22,7 @@ function IndexPage({ data }: Props) {
           Last Update: {dayjs(data.intro.frontmatter.date).format('ll')}
         </div>
       </div>
-      <div className='border-t border-gray-400 mt-4'></div>
+      <div className='border-t border-gray-200 mt-4'></div>
       <div className='flex mt-4 mb-2 items-end prose'>
         <div className='text-2xl'>Recent Publications</div>
         <Link to='/publication' className='ml-2 hover:text-blue-500'>
@@ -41,6 +41,12 @@ function IndexPage({ data }: Props) {
           />
         ))}
       </div>
+
+      <div className='border-t border-gray-200 mt-4'></div>
+      <div className='flex mt-4 mb-2 items-end prose'>
+        <div className='text-2xl'>Academic Services</div>
+      </div>
+      <div>Student Volunteer: CSCW2020, CHI2021</div>
     </PageLayout>
   );
 }

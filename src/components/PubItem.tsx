@@ -12,7 +12,7 @@ type Props = {
 
 function PubItem({ slug, title, author, conference }: Props) {
   return (
-    <div className='flex flex-col mb-4'>
+    <div className='flex flex-col mb-4 text-gray-600'>
       <Link
         to={`/publication/${slug}`}
         className='font-bold text-lg hover:text-blue-500'
