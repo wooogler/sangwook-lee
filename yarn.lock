@@ -6881,6 +6881,14 @@
     "@parcel/transformer-raw" "^2.3.2"
     "@parcel/transformer-react-refresh-wrap" "^2.3.2"
 
+"gatsby-plugin-google-gtag@^4.12.1":
+  "integrity" "sha512-dYf5zC+FPekohgXMnJYTkjz9J/IC3R3eHR6xjgLCEsMUxw7s0AApZxq7IUyCTTioGvLi3k/NPS9sBob7/60n9Q=="
+  "resolved" "https://registry.npmjs.org/gatsby-plugin-google-gtag/-/gatsby-plugin-google-gtag-4.12.1.tgz"
+  "version" "4.12.1"
+  dependencies:
+    "@babel/runtime" "^7.15.4"
+    "minimatch" "^3.1.2"
+
 "gatsby-plugin-graphql-codegen@^3.1.0":
   "integrity" "sha512-GLvIOTnzMB6rWGJNu6KM9kBM74oyKu73pfHia9cpthzaaZG1AKNmxXZXEPfvUDmSzjKktjpoKPRMHWDWPk3fVA=="
   "resolved" "https://registry.npmjs.org/gatsby-plugin-graphql-codegen/-/gatsby-plugin-graphql-codegen-3.1.1.tgz"
