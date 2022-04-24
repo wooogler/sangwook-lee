@@ -17,7 +17,7 @@ function PageLayout({ children }: Props) {
     <div className='max-w-md mx-auto my-16 flex flex-col md:flex-row md:max-w-4xl'>
       <div className='flex flex-col w-full mr-4 md:w-52'>
         <StaticImage
-          src='../images/profile.jpg'
+          src='../images/profile.png'
           alt="Sangwook's profile image"
           className='mb-4 w-40 hidden md:block'
         />
