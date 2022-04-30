@@ -98,13 +98,14 @@ export const query = graphql`
     intro: mdx(slug: { eq: "intro" }) {
       body
       frontmatter {
+        publication_date
         date
       }
     }
     recentPub: allMdx(
       filter: { fileAbsolutePath: { regex: "/publication/" } }
       limit: 3
-      sort: { fields: frontmatter___date, order: DESC }
+      sort: { fields: frontmatter___publication_date, order: DESC }
     ) {
       nodes {
         id

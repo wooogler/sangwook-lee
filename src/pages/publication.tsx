@@ -41,7 +41,10 @@ function PublicationPage({ data }: Props) {
 
 export const query = graphql`
   query PublicationIndex {
-    allMdx(filter: { fileAbsolutePath: { regex: "/publication/" } }) {
+    allMdx(
+      filter: { fileAbsolutePath: { regex: "/publication/" }}
+      sort: { fields: frontmatter___publication_date, order: DESC }
+    ) {
       nodes {
         id
         slug
