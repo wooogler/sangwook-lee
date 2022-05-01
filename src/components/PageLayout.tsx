@@ -1,5 +1,6 @@
-import { graphql, Link, PageProps } from 'gatsby';
+import { graphql, Link, PageProps, useStaticQuery } from 'gatsby';
 import { StaticImage } from 'gatsby-plugin-image';
+import { CvQuery } from 'graphql-types';
 import React, { ReactNode } from 'react';
 import {
   AiOutlineLinkedin,
@@ -13,6 +14,14 @@ type Props = {
 };
 
 function PageLayout({ children }: Props) {
+  const data = useStaticQuery<CvQuery>(graphql`
+    query cv{
+      file(name: {eq: "Sangwook_CV"}) {
+        publicURL
+      }
+    }
+  `)
+
   return (
     <div className='max-w-md mx-auto my-16 flex flex-col md:flex-row md:max-w-4xl'>
       <div className='flex flex-col w-full mr-4 md:w-52'>
@@ -38,6 +47,14 @@ function PageLayout({ children }: Props) {
           >
             Publication
           </Link>
+          <a 
+            href={data.file.publicURL} 
+            className='hover:text-blue-300 mr-2' 
+            target='_blank'
+            rel='noreferrer noopener'
+          >
+            Curriculum Vitae
+          </a>
           {/* <Link
             to='/research'
             activeClassName='text-blue-500'
