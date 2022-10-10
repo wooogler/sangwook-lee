@@ -1,23 +1,27 @@
 ---
-title: 'ModSandbox: Rapid Verification of Automated Moderation Rules in an Online Community'
-author: 'Sangwook Lee, Jean Y. Song, Jisoo Lee, Mina Kim, Juho Kim'
-publication_url: 'https://ieeexplore.ieee.org/abstract/document/7776394'
-publication_date: '2022-07-15'
-conference: 'Major Revision (ACM CSCW 2022)'
-thumbnail: ''
-paper_pdf: './modsandbox.pdf'
-github_url: 'https://github.com/wooogler/reddit_virtual_sandbox'
-format: 'paper'
+title: "ModSandbox: Rapid Verification of Automated Moderation Rules in an Online Community"
+author: "Jean Y. Song, Sangwook Lee, Jisoo Lee, Mina Kim, Juho Kim"
+publication_url: ""
+publication_date: "2023-07-15"
+conference: "Under Review, ACM CHI 2023"
+thumbnail: "./modsandbox_thumbnail.png"
+paper_pdf: "./chi23b-sub8131-i13.pdf"
+github_url: "https://github.com/wooogler/reddit_virtual_sandbox"
+format: "paper"
 ---
 
-`youtube:https://www.youtube.com/embed/2iMulKbHBhg`
+`youtube:https://www.youtube.com/embed/8EK2FsBKLAA`
+
+---
 
 ## Abstract
 
-Despite the common use of automated bots for online content moderation, human moderators still spend a lot of time monitoring and updating them to ensure they are working as intended. 
-We used Reddit as a case study and asked 102 moderators about their experience using AutoModerator, Reddit's built-in automated bot. 
-We learned that moderators feel frustrated by the lack of testing or debugging tools for AutoModerator. 
-Furthermore, we conducted interviews with six moderators---including the creator of AutoModerator---to understand their moderation processes. 
-Guided by the findings, we built ModSandbox, a novel sandbox system to support the rapid verification of automated rules through false positive/negative prediction and debugging support. 
-We explore the effectiveness of ModSandbox through a user study with ten active moderators. 
-Results show that ModSandbox can help them rapidly test automated rules without changing or affecting their actual community and reduce the total verification time from weeks to hours.
+Despite the common use of rule-based tools for online content moderation,
+human moderators still spend a lot of time monitoring them to ensure that they work as intended.
+Based on surveys and interviews with Reddit moderators who use AutoModerator,
+we identified the main challenges in reducing false positives and false negatives of automated rules:
+not being able to estimate the actual effect of a rule in advance and having difficulty figuring out how the rules should be updated.
+To address these issues, we built ModSandbox,
+a novel virtual sandbox system that detects possible false positives and false negatives of a rule to be improved and visualizes which part of the rule is causing issues.
+We conducted a user study with online content moderators,
+finding that ModSandbox can support quickly finding possible false positives and false negatives of automated rules and guide moderators to update those to reduce future errors.

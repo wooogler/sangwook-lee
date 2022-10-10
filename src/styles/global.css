@@ -5,3 +5,7 @@
 svg {
   vertical-align: baseline;
 }
+
+body {
+  font-family: "Open Sans", sans-serif;
+}

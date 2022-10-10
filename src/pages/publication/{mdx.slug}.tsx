@@ -1,12 +1,12 @@
-import { graphql } from 'gatsby';
-import { MDXRenderer } from 'gatsby-plugin-mdx';
-import { PublicationQuery } from 'graphql-types';
-import React from 'react';
-import PubItem from '../../components/PubItem';
-import PageLayout from '../../components/PageLayout';
-import HighlightedText from '../../components/HighlightedText';
-import { AiOutlineFilePdf, AiOutlineLink } from 'react-icons/ai';
-import Utterances from '../../components/Utterances';
+import { graphql } from "gatsby";
+import { MDXRenderer } from "gatsby-plugin-mdx";
+import { PublicationQuery } from "graphql-types";
+import React from "react";
+import PubItem from "../../components/PubItem";
+import PageLayout from "../../components/PageLayout";
+import HighlightedText from "../../components/HighlightedText";
+import { AiFillGithub, AiOutlineFilePdf, AiOutlineLink } from "react-icons/ai";
+import Utterances from "../../components/Utterances";
 
 type Props = {
   data: PublicationQuery;
@@ -20,34 +20,50 @@ function PublicationPost({ data }: Props) {
     publication_date,
     publication_url,
     paper_pdf,
+    github_url,
   } = data.mdx.frontmatter;
   return (
     <PageLayout>
-      <div className='text-3xl'>{title}</div>
-      <HighlightedText text={author} query='Sangwook Lee' />
-      <div className='flex'>
-        <a
-          href={publication_url}
-          className='flex items-center underline mr-2'
-          target='_blank'
-          rel='noreferrer noopener'
-        >
-          <AiOutlineLink /> Link
-        </a>
+      <div className="text-3xl">{title}</div>
+      <HighlightedText text={author} query="Sangwook Lee" />
+      <div className="flex">
+        {publication_url && (
+          <a
+            href={publication_url}
+            className="flex items-center underline mr-2"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            <AiOutlineLink /> Link
+          </a>
+        )}
+
         {paper_pdf && (
           <a
             href={paper_pdf.publicURL}
             download
-            className='flex items-center text-red-600 underline'
+            className="flex items-center text-red-600 underline mr-2"
           >
             <AiOutlineFilePdf />
             PDF
           </a>
         )}
+        {github_url && (
+          <a
+            href={github_url}
+            download
+            className="flex items-center text-purple-600 underline"
+          >
+            <AiFillGithub />
+            Code
+          </a>
+        )}
       </div>
-      <div className='mb-2'>{conference}</div>
+      <div className="mb-2">{conference}</div>
       <MDXRenderer>{data.mdx.body}</MDXRenderer>
-      <Utterances repo='wooogler/sangwook-lee' />
+      <div className="mt-2">
+        <Utterances repo="wooogler/sangwook-lee" />
+      </div>
     </PageLayout>
   );
 }

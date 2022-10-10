@@ -16,6 +16,7 @@
     "codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
+    "@fontsource/open-sans": "^4.5.12",
     "@graphql-codegen/cli": "^2.5.0",
     "@mdx-js/mdx": "^1.6.22",
     "@mdx-js/react": "^1.6.22",
