@@ -59,14 +59,14 @@ export type File = Node & {
   blocks?: Maybe<Scalars['Int']>;
   /** Copy file to static directory and return public url to it */
   publicURL?: Maybe<Scalars['String']>;
-  /** Returns all children nodes filtered by type Mdx */
-  childrenMdx?: Maybe<Array<Maybe<Mdx>>>;
-  /** Returns the first child node of type Mdx or null if there are no children of given type on this node */
-  childMdx?: Maybe<Mdx>;
   /** Returns all children nodes filtered by type ImageSharp */
   childrenImageSharp?: Maybe<Array<Maybe<ImageSharp>>>;
   /** Returns the first child node of type ImageSharp or null if there are no children of given type on this node */
   childImageSharp?: Maybe<ImageSharp>;
+  /** Returns all children nodes filtered by type Mdx */
+  childrenMdx?: Maybe<Array<Maybe<Mdx>>>;
+  /** Returns the first child node of type Mdx or null if there are no children of given type on this node */
+  childMdx?: Maybe<Mdx>;
   id: Scalars['ID'];
   parent?: Maybe<Node>;
   children: Array<Node>;
@@ -146,6 +146,7 @@ export type Internal = {
   mediaType?: Maybe<Scalars['String']>;
   owner: Scalars['String'];
   type: Scalars['String'];
+  contentFilePath?: Maybe<Scalars['String']>;
 };
 
 export type Directory = Node & {
@@ -247,10 +248,13 @@ export type DirectoryCtimeArgs = {
 export type Site = Node & {
   buildTime?: Maybe<Scalars['Date']>;
   siteMetadata?: Maybe<SiteSiteMetadata>;
+  port?: Maybe<Scalars['Int']>;
+  host?: Maybe<Scalars['String']>;
   polyfill?: Maybe<Scalars['Boolean']>;
   pathPrefix?: Maybe<Scalars['String']>;
   jsxRuntime?: Maybe<Scalars['String']>;
   trailingSlash?: Maybe<Scalars['String']>;
+  graphqlTypegen?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
   parent?: Maybe<Node>;
   children: Array<Node>;
@@ -349,100 +353,6 @@ export type GatsbyImagePlaceholder =
   | 'TRACED_SVG'
   | 'BLURRED'
   | 'NONE';
-
-export type MdxFrontmatter = {
-  title: Scalars['String'];
-  date?: Maybe<Scalars['Date']>;
-  hero_image?: Maybe<File>;
-  hero_image_alt?: Maybe<Scalars['String']>;
-  hero_image_credit_text?: Maybe<Scalars['String']>;
-  hero_image_credit_link?: Maybe<Scalars['String']>;
-  author?: Maybe<Scalars['String']>;
-  publication_url?: Maybe<Scalars['String']>;
-  publication_date?: Maybe<Scalars['Date']>;
-  conference?: Maybe<Scalars['String']>;
-  thumbnail?: Maybe<File>;
-  paper_pdf?: Maybe<File>;
-  poster_pdf?: Maybe<File>;
-  github_url?: Maybe<Scalars['String']>;
-  format?: Maybe<Scalars['String']>;
-};
-
-
-export type MdxFrontmatterDateArgs = {
-  formatString?: InputMaybe<Scalars['String']>;
-  fromNow?: InputMaybe<Scalars['Boolean']>;
-  difference?: InputMaybe<Scalars['String']>;
-  locale?: InputMaybe<Scalars['String']>;
-};
-
-
-export type MdxFrontmatterPublication_DateArgs = {
-  formatString?: InputMaybe<Scalars['String']>;
-  fromNow?: InputMaybe<Scalars['Boolean']>;
-  difference?: InputMaybe<Scalars['String']>;
-  locale?: InputMaybe<Scalars['String']>;
-};
-
-export type MdxHeadingMdx = {
-  value?: Maybe<Scalars['String']>;
-  depth?: Maybe<Scalars['Int']>;
-};
-
-export type HeadingsMdx =
-  | 'h1'
-  | 'h2'
-  | 'h3'
-  | 'h4'
-  | 'h5'
-  | 'h6';
-
-export type MdxWordCount = {
-  paragraphs?: Maybe<Scalars['Int']>;
-  sentences?: Maybe<Scalars['Int']>;
-  words?: Maybe<Scalars['Int']>;
-};
-
-export type Mdx = Node & {
-  rawBody: Scalars['String'];
-  fileAbsolutePath: Scalars['String'];
-  frontmatter?: Maybe<MdxFrontmatter>;
-  slug?: Maybe<Scalars['String']>;
-  body: Scalars['String'];
-  excerpt: Scalars['String'];
-  headings?: Maybe<Array<Maybe<MdxHeadingMdx>>>;
-  html?: Maybe<Scalars['String']>;
-  mdxAST?: Maybe<Scalars['JSON']>;
-  tableOfContents?: Maybe<Scalars['JSON']>;
-  timeToRead?: Maybe<Scalars['Int']>;
-  wordCount?: Maybe<MdxWordCount>;
-  gatsbyPath?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
-  parent?: Maybe<Node>;
-  children: Array<Node>;
-  internal: Internal;
-};
-
-
-export type MdxExcerptArgs = {
-  pruneLength?: InputMaybe<Scalars['Int']>;
-  truncate?: InputMaybe<Scalars['Boolean']>;
-};
-
-
-export type MdxHeadingsArgs = {
-  depth?: InputMaybe<HeadingsMdx>;
-};
-
-
-export type MdxTableOfContentsArgs = {
-  maxDepth?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type MdxGatsbyPathArgs = {
-  filePath?: InputMaybe<Scalars['String']>;
-};
 
 export type ImageFormat =
   | 'NO_CHANGE'
@@ -693,6 +603,64 @@ export type ImageSharpResize = {
   originalName?: Maybe<Scalars['String']>;
 };
 
+export type Mdx = Node & {
+  excerpt?: Maybe<Scalars['String']>;
+  tableOfContents?: Maybe<Scalars['JSON']>;
+  body?: Maybe<Scalars['String']>;
+  frontmatter?: Maybe<MdxFrontmatter>;
+  gatsbyPath?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  parent?: Maybe<Node>;
+  children: Array<Node>;
+  internal: Internal;
+};
+
+
+export type MdxExcerptArgs = {
+  pruneLength?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type MdxTableOfContentsArgs = {
+  maxDepth?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type MdxGatsbyPathArgs = {
+  filePath?: InputMaybe<Scalars['String']>;
+};
+
+export type MdxFrontmatter = {
+  title?: Maybe<Scalars['String']>;
+  author?: Maybe<Scalars['String']>;
+  publication_url?: Maybe<Scalars['String']>;
+  publication_date?: Maybe<Scalars['Date']>;
+  conference?: Maybe<Scalars['String']>;
+  thumbnail?: Maybe<File>;
+  paper_pdf?: Maybe<File>;
+  poster_pdf?: Maybe<File>;
+  github_url?: Maybe<Scalars['String']>;
+  format?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
+  date?: Maybe<Scalars['Date']>;
+};
+
+
+export type MdxFrontmatterPublication_DateArgs = {
+  formatString?: InputMaybe<Scalars['String']>;
+  fromNow?: InputMaybe<Scalars['Boolean']>;
+  difference?: InputMaybe<Scalars['String']>;
+  locale?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MdxFrontmatterDateArgs = {
+  formatString?: InputMaybe<Scalars['String']>;
+  fromNow?: InputMaybe<Scalars['Boolean']>;
+  difference?: InputMaybe<Scalars['String']>;
+  locale?: InputMaybe<Scalars['String']>;
+};
+
 export type Query = {
   file?: Maybe<File>;
   allFile: FileConnection;
@@ -708,10 +676,10 @@ export type Query = {
   allSitePlugin: SitePluginConnection;
   siteBuildMetadata?: Maybe<SiteBuildMetadata>;
   allSiteBuildMetadata: SiteBuildMetadataConnection;
-  mdx?: Maybe<Mdx>;
-  allMdx: MdxConnection;
   imageSharp?: Maybe<ImageSharp>;
   allImageSharp: ImageSharpConnection;
+  mdx?: Maybe<Mdx>;
+  allMdx: MdxConnection;
 };
 
 
@@ -750,10 +718,10 @@ export type QueryFileArgs = {
   blksize?: InputMaybe<IntQueryOperatorInput>;
   blocks?: InputMaybe<IntQueryOperatorInput>;
   publicURL?: InputMaybe<StringQueryOperatorInput>;
-  childrenMdx?: InputMaybe<MdxFilterListInput>;
-  childMdx?: InputMaybe<MdxFilterInput>;
   childrenImageSharp?: InputMaybe<ImageSharpFilterListInput>;
   childImageSharp?: InputMaybe<ImageSharpFilterInput>;
+  childrenMdx?: InputMaybe<MdxFilterListInput>;
+  childMdx?: InputMaybe<MdxFilterInput>;
   id?: InputMaybe<StringQueryOperatorInput>;
   parent?: InputMaybe<NodeFilterInput>;
   children?: InputMaybe<NodeFilterListInput>;
@@ -819,10 +787,13 @@ export type QueryAllDirectoryArgs = {
 export type QuerySiteArgs = {
   buildTime?: InputMaybe<DateQueryOperatorInput>;
   siteMetadata?: InputMaybe<SiteSiteMetadataFilterInput>;
+  port?: InputMaybe<IntQueryOperatorInput>;
+  host?: InputMaybe<StringQueryOperatorInput>;
   polyfill?: InputMaybe<BooleanQueryOperatorInput>;
   pathPrefix?: InputMaybe<StringQueryOperatorInput>;
   jsxRuntime?: InputMaybe<StringQueryOperatorInput>;
   trailingSlash?: InputMaybe<StringQueryOperatorInput>;
+  graphqlTypegen?: InputMaybe<BooleanQueryOperatorInput>;
   id?: InputMaybe<StringQueryOperatorInput>;
   parent?: InputMaybe<NodeFilterInput>;
   children?: InputMaybe<NodeFilterListInput>;
@@ -926,35 +897,6 @@ export type QueryAllSiteBuildMetadataArgs = {
 };
 
 
-export type QueryMdxArgs = {
-  rawBody?: InputMaybe<StringQueryOperatorInput>;
-  fileAbsolutePath?: InputMaybe<StringQueryOperatorInput>;
-  frontmatter?: InputMaybe<MdxFrontmatterFilterInput>;
-  slug?: InputMaybe<StringQueryOperatorInput>;
-  body?: InputMaybe<StringQueryOperatorInput>;
-  excerpt?: InputMaybe<StringQueryOperatorInput>;
-  headings?: InputMaybe<MdxHeadingMdxFilterListInput>;
-  html?: InputMaybe<StringQueryOperatorInput>;
-  mdxAST?: InputMaybe<JsonQueryOperatorInput>;
-  tableOfContents?: InputMaybe<JsonQueryOperatorInput>;
-  timeToRead?: InputMaybe<IntQueryOperatorInput>;
-  wordCount?: InputMaybe<MdxWordCountFilterInput>;
-  gatsbyPath?: InputMaybe<StringQueryOperatorInput>;
-  id?: InputMaybe<StringQueryOperatorInput>;
-  parent?: InputMaybe<NodeFilterInput>;
-  children?: InputMaybe<NodeFilterListInput>;
-  internal?: InputMaybe<InternalFilterInput>;
-};
-
-
-export type QueryAllMdxArgs = {
-  filter?: InputMaybe<MdxFilterInput>;
-  sort?: InputMaybe<MdxSortInput>;
-  skip?: InputMaybe<Scalars['Int']>;
-  limit?: InputMaybe<Scalars['Int']>;
-};
-
-
 export type QueryImageSharpArgs = {
   fixed?: InputMaybe<ImageSharpFixedFilterInput>;
   fluid?: InputMaybe<ImageSharpFluidFilterInput>;
@@ -971,6 +913,27 @@ export type QueryImageSharpArgs = {
 export type QueryAllImageSharpArgs = {
   filter?: InputMaybe<ImageSharpFilterInput>;
   sort?: InputMaybe<ImageSharpSortInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryMdxArgs = {
+  excerpt?: InputMaybe<StringQueryOperatorInput>;
+  tableOfContents?: InputMaybe<JsonQueryOperatorInput>;
+  body?: InputMaybe<StringQueryOperatorInput>;
+  frontmatter?: InputMaybe<MdxFrontmatterFilterInput>;
+  gatsbyPath?: InputMaybe<StringQueryOperatorInput>;
+  id?: InputMaybe<StringQueryOperatorInput>;
+  parent?: InputMaybe<NodeFilterInput>;
+  children?: InputMaybe<NodeFilterListInput>;
+  internal?: InputMaybe<InternalFilterInput>;
+};
+
+
+export type QueryAllMdxArgs = {
+  filter?: InputMaybe<MdxFilterInput>;
+  sort?: InputMaybe<MdxSortInput>;
   skip?: InputMaybe<Scalars['Int']>;
   limit?: InputMaybe<Scalars['Int']>;
 };
@@ -1015,93 +978,6 @@ export type FloatQueryOperatorInput = {
   lte?: InputMaybe<Scalars['Float']>;
   in?: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
   nin?: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
-};
-
-export type MdxFilterListInput = {
-  elemMatch?: InputMaybe<MdxFilterInput>;
-};
-
-export type MdxFilterInput = {
-  rawBody?: InputMaybe<StringQueryOperatorInput>;
-  fileAbsolutePath?: InputMaybe<StringQueryOperatorInput>;
-  frontmatter?: InputMaybe<MdxFrontmatterFilterInput>;
-  slug?: InputMaybe<StringQueryOperatorInput>;
-  body?: InputMaybe<StringQueryOperatorInput>;
-  excerpt?: InputMaybe<StringQueryOperatorInput>;
-  headings?: InputMaybe<MdxHeadingMdxFilterListInput>;
-  html?: InputMaybe<StringQueryOperatorInput>;
-  mdxAST?: InputMaybe<JsonQueryOperatorInput>;
-  tableOfContents?: InputMaybe<JsonQueryOperatorInput>;
-  timeToRead?: InputMaybe<IntQueryOperatorInput>;
-  wordCount?: InputMaybe<MdxWordCountFilterInput>;
-  gatsbyPath?: InputMaybe<StringQueryOperatorInput>;
-  id?: InputMaybe<StringQueryOperatorInput>;
-  parent?: InputMaybe<NodeFilterInput>;
-  children?: InputMaybe<NodeFilterListInput>;
-  internal?: InputMaybe<InternalFilterInput>;
-};
-
-export type MdxFrontmatterFilterInput = {
-  title?: InputMaybe<StringQueryOperatorInput>;
-  date?: InputMaybe<DateQueryOperatorInput>;
-  hero_image?: InputMaybe<FileFilterInput>;
-  hero_image_alt?: InputMaybe<StringQueryOperatorInput>;
-  hero_image_credit_text?: InputMaybe<StringQueryOperatorInput>;
-  hero_image_credit_link?: InputMaybe<StringQueryOperatorInput>;
-  author?: InputMaybe<StringQueryOperatorInput>;
-  publication_url?: InputMaybe<StringQueryOperatorInput>;
-  publication_date?: InputMaybe<DateQueryOperatorInput>;
-  conference?: InputMaybe<StringQueryOperatorInput>;
-  thumbnail?: InputMaybe<FileFilterInput>;
-  paper_pdf?: InputMaybe<FileFilterInput>;
-  poster_pdf?: InputMaybe<FileFilterInput>;
-  github_url?: InputMaybe<StringQueryOperatorInput>;
-  format?: InputMaybe<StringQueryOperatorInput>;
-};
-
-export type FileFilterInput = {
-  sourceInstanceName?: InputMaybe<StringQueryOperatorInput>;
-  absolutePath?: InputMaybe<StringQueryOperatorInput>;
-  relativePath?: InputMaybe<StringQueryOperatorInput>;
-  extension?: InputMaybe<StringQueryOperatorInput>;
-  size?: InputMaybe<IntQueryOperatorInput>;
-  prettySize?: InputMaybe<StringQueryOperatorInput>;
-  modifiedTime?: InputMaybe<DateQueryOperatorInput>;
-  accessTime?: InputMaybe<DateQueryOperatorInput>;
-  changeTime?: InputMaybe<DateQueryOperatorInput>;
-  birthTime?: InputMaybe<DateQueryOperatorInput>;
-  root?: InputMaybe<StringQueryOperatorInput>;
-  dir?: InputMaybe<StringQueryOperatorInput>;
-  base?: InputMaybe<StringQueryOperatorInput>;
-  ext?: InputMaybe<StringQueryOperatorInput>;
-  name?: InputMaybe<StringQueryOperatorInput>;
-  relativeDirectory?: InputMaybe<StringQueryOperatorInput>;
-  dev?: InputMaybe<IntQueryOperatorInput>;
-  mode?: InputMaybe<IntQueryOperatorInput>;
-  nlink?: InputMaybe<IntQueryOperatorInput>;
-  uid?: InputMaybe<IntQueryOperatorInput>;
-  gid?: InputMaybe<IntQueryOperatorInput>;
-  rdev?: InputMaybe<IntQueryOperatorInput>;
-  ino?: InputMaybe<FloatQueryOperatorInput>;
-  atimeMs?: InputMaybe<FloatQueryOperatorInput>;
-  mtimeMs?: InputMaybe<FloatQueryOperatorInput>;
-  ctimeMs?: InputMaybe<FloatQueryOperatorInput>;
-  atime?: InputMaybe<DateQueryOperatorInput>;
-  mtime?: InputMaybe<DateQueryOperatorInput>;
-  ctime?: InputMaybe<DateQueryOperatorInput>;
-  birthtime?: InputMaybe<DateQueryOperatorInput>;
-  birthtimeMs?: InputMaybe<FloatQueryOperatorInput>;
-  blksize?: InputMaybe<IntQueryOperatorInput>;
-  blocks?: InputMaybe<IntQueryOperatorInput>;
-  publicURL?: InputMaybe<StringQueryOperatorInput>;
-  childrenMdx?: InputMaybe<MdxFilterListInput>;
-  childMdx?: InputMaybe<MdxFilterInput>;
-  childrenImageSharp?: InputMaybe<ImageSharpFilterListInput>;
-  childImageSharp?: InputMaybe<ImageSharpFilterInput>;
-  id?: InputMaybe<StringQueryOperatorInput>;
-  parent?: InputMaybe<NodeFilterInput>;
-  children?: InputMaybe<NodeFilterListInput>;
-  internal?: InputMaybe<InternalFilterInput>;
 };
 
 export type ImageSharpFilterListInput = {
@@ -1192,6 +1068,7 @@ export type InternalFilterInput = {
   mediaType?: InputMaybe<StringQueryOperatorInput>;
   owner?: InputMaybe<StringQueryOperatorInput>;
   type?: InputMaybe<StringQueryOperatorInput>;
+  contentFilePath?: InputMaybe<StringQueryOperatorInput>;
 };
 
 export type BooleanQueryOperatorInput = {
@@ -1201,19 +1078,80 @@ export type BooleanQueryOperatorInput = {
   nin?: InputMaybe<Array<InputMaybe<Scalars['Boolean']>>>;
 };
 
-export type MdxHeadingMdxFilterListInput = {
-  elemMatch?: InputMaybe<MdxHeadingMdxFilterInput>;
+export type MdxFilterListInput = {
+  elemMatch?: InputMaybe<MdxFilterInput>;
 };
 
-export type MdxHeadingMdxFilterInput = {
-  value?: InputMaybe<StringQueryOperatorInput>;
-  depth?: InputMaybe<IntQueryOperatorInput>;
+export type MdxFilterInput = {
+  excerpt?: InputMaybe<StringQueryOperatorInput>;
+  tableOfContents?: InputMaybe<JsonQueryOperatorInput>;
+  body?: InputMaybe<StringQueryOperatorInput>;
+  frontmatter?: InputMaybe<MdxFrontmatterFilterInput>;
+  gatsbyPath?: InputMaybe<StringQueryOperatorInput>;
+  id?: InputMaybe<StringQueryOperatorInput>;
+  parent?: InputMaybe<NodeFilterInput>;
+  children?: InputMaybe<NodeFilterListInput>;
+  internal?: InputMaybe<InternalFilterInput>;
 };
 
-export type MdxWordCountFilterInput = {
-  paragraphs?: InputMaybe<IntQueryOperatorInput>;
-  sentences?: InputMaybe<IntQueryOperatorInput>;
-  words?: InputMaybe<IntQueryOperatorInput>;
+export type MdxFrontmatterFilterInput = {
+  title?: InputMaybe<StringQueryOperatorInput>;
+  author?: InputMaybe<StringQueryOperatorInput>;
+  publication_url?: InputMaybe<StringQueryOperatorInput>;
+  publication_date?: InputMaybe<DateQueryOperatorInput>;
+  conference?: InputMaybe<StringQueryOperatorInput>;
+  thumbnail?: InputMaybe<FileFilterInput>;
+  paper_pdf?: InputMaybe<FileFilterInput>;
+  poster_pdf?: InputMaybe<FileFilterInput>;
+  github_url?: InputMaybe<StringQueryOperatorInput>;
+  format?: InputMaybe<StringQueryOperatorInput>;
+  slug?: InputMaybe<StringQueryOperatorInput>;
+  date?: InputMaybe<DateQueryOperatorInput>;
+};
+
+export type FileFilterInput = {
+  sourceInstanceName?: InputMaybe<StringQueryOperatorInput>;
+  absolutePath?: InputMaybe<StringQueryOperatorInput>;
+  relativePath?: InputMaybe<StringQueryOperatorInput>;
+  extension?: InputMaybe<StringQueryOperatorInput>;
+  size?: InputMaybe<IntQueryOperatorInput>;
+  prettySize?: InputMaybe<StringQueryOperatorInput>;
+  modifiedTime?: InputMaybe<DateQueryOperatorInput>;
+  accessTime?: InputMaybe<DateQueryOperatorInput>;
+  changeTime?: InputMaybe<DateQueryOperatorInput>;
+  birthTime?: InputMaybe<DateQueryOperatorInput>;
+  root?: InputMaybe<StringQueryOperatorInput>;
+  dir?: InputMaybe<StringQueryOperatorInput>;
+  base?: InputMaybe<StringQueryOperatorInput>;
+  ext?: InputMaybe<StringQueryOperatorInput>;
+  name?: InputMaybe<StringQueryOperatorInput>;
+  relativeDirectory?: InputMaybe<StringQueryOperatorInput>;
+  dev?: InputMaybe<IntQueryOperatorInput>;
+  mode?: InputMaybe<IntQueryOperatorInput>;
+  nlink?: InputMaybe<IntQueryOperatorInput>;
+  uid?: InputMaybe<IntQueryOperatorInput>;
+  gid?: InputMaybe<IntQueryOperatorInput>;
+  rdev?: InputMaybe<IntQueryOperatorInput>;
+  ino?: InputMaybe<FloatQueryOperatorInput>;
+  atimeMs?: InputMaybe<FloatQueryOperatorInput>;
+  mtimeMs?: InputMaybe<FloatQueryOperatorInput>;
+  ctimeMs?: InputMaybe<FloatQueryOperatorInput>;
+  atime?: InputMaybe<DateQueryOperatorInput>;
+  mtime?: InputMaybe<DateQueryOperatorInput>;
+  ctime?: InputMaybe<DateQueryOperatorInput>;
+  birthtime?: InputMaybe<DateQueryOperatorInput>;
+  birthtimeMs?: InputMaybe<FloatQueryOperatorInput>;
+  blksize?: InputMaybe<IntQueryOperatorInput>;
+  blocks?: InputMaybe<IntQueryOperatorInput>;
+  publicURL?: InputMaybe<StringQueryOperatorInput>;
+  childrenImageSharp?: InputMaybe<ImageSharpFilterListInput>;
+  childImageSharp?: InputMaybe<ImageSharpFilterInput>;
+  childrenMdx?: InputMaybe<MdxFilterListInput>;
+  childMdx?: InputMaybe<MdxFilterInput>;
+  id?: InputMaybe<StringQueryOperatorInput>;
+  parent?: InputMaybe<NodeFilterInput>;
+  children?: InputMaybe<NodeFilterListInput>;
+  internal?: InputMaybe<InternalFilterInput>;
 };
 
 export type FileConnection = {
@@ -1306,441 +1244,6 @@ export type FileFieldsEnum =
   | 'blksize'
   | 'blocks'
   | 'publicURL'
-  | 'childrenMdx'
-  | 'childrenMdx___rawBody'
-  | 'childrenMdx___fileAbsolutePath'
-  | 'childrenMdx___frontmatter___title'
-  | 'childrenMdx___frontmatter___date'
-  | 'childrenMdx___frontmatter___hero_image___sourceInstanceName'
-  | 'childrenMdx___frontmatter___hero_image___absolutePath'
-  | 'childrenMdx___frontmatter___hero_image___relativePath'
-  | 'childrenMdx___frontmatter___hero_image___extension'
-  | 'childrenMdx___frontmatter___hero_image___size'
-  | 'childrenMdx___frontmatter___hero_image___prettySize'
-  | 'childrenMdx___frontmatter___hero_image___modifiedTime'
-  | 'childrenMdx___frontmatter___hero_image___accessTime'
-  | 'childrenMdx___frontmatter___hero_image___changeTime'
-  | 'childrenMdx___frontmatter___hero_image___birthTime'
-  | 'childrenMdx___frontmatter___hero_image___root'
-  | 'childrenMdx___frontmatter___hero_image___dir'
-  | 'childrenMdx___frontmatter___hero_image___base'
-  | 'childrenMdx___frontmatter___hero_image___ext'
-  | 'childrenMdx___frontmatter___hero_image___name'
-  | 'childrenMdx___frontmatter___hero_image___relativeDirectory'
-  | 'childrenMdx___frontmatter___hero_image___dev'
-  | 'childrenMdx___frontmatter___hero_image___mode'
-  | 'childrenMdx___frontmatter___hero_image___nlink'
-  | 'childrenMdx___frontmatter___hero_image___uid'
-  | 'childrenMdx___frontmatter___hero_image___gid'
-  | 'childrenMdx___frontmatter___hero_image___rdev'
-  | 'childrenMdx___frontmatter___hero_image___ino'
-  | 'childrenMdx___frontmatter___hero_image___atimeMs'
-  | 'childrenMdx___frontmatter___hero_image___mtimeMs'
-  | 'childrenMdx___frontmatter___hero_image___ctimeMs'
-  | 'childrenMdx___frontmatter___hero_image___atime'
-  | 'childrenMdx___frontmatter___hero_image___mtime'
-  | 'childrenMdx___frontmatter___hero_image___ctime'
-  | 'childrenMdx___frontmatter___hero_image___birthtime'
-  | 'childrenMdx___frontmatter___hero_image___birthtimeMs'
-  | 'childrenMdx___frontmatter___hero_image___blksize'
-  | 'childrenMdx___frontmatter___hero_image___blocks'
-  | 'childrenMdx___frontmatter___hero_image___publicURL'
-  | 'childrenMdx___frontmatter___hero_image___childrenMdx'
-  | 'childrenMdx___frontmatter___hero_image___childrenImageSharp'
-  | 'childrenMdx___frontmatter___hero_image___id'
-  | 'childrenMdx___frontmatter___hero_image___children'
-  | 'childrenMdx___frontmatter___hero_image_alt'
-  | 'childrenMdx___frontmatter___hero_image_credit_text'
-  | 'childrenMdx___frontmatter___hero_image_credit_link'
-  | 'childrenMdx___frontmatter___author'
-  | 'childrenMdx___frontmatter___publication_url'
-  | 'childrenMdx___frontmatter___publication_date'
-  | 'childrenMdx___frontmatter___conference'
-  | 'childrenMdx___frontmatter___thumbnail___sourceInstanceName'
-  | 'childrenMdx___frontmatter___thumbnail___absolutePath'
-  | 'childrenMdx___frontmatter___thumbnail___relativePath'
-  | 'childrenMdx___frontmatter___thumbnail___extension'
-  | 'childrenMdx___frontmatter___thumbnail___size'
-  | 'childrenMdx___frontmatter___thumbnail___prettySize'
-  | 'childrenMdx___frontmatter___thumbnail___modifiedTime'
-  | 'childrenMdx___frontmatter___thumbnail___accessTime'
-  | 'childrenMdx___frontmatter___thumbnail___changeTime'
-  | 'childrenMdx___frontmatter___thumbnail___birthTime'
-  | 'childrenMdx___frontmatter___thumbnail___root'
-  | 'childrenMdx___frontmatter___thumbnail___dir'
-  | 'childrenMdx___frontmatter___thumbnail___base'
-  | 'childrenMdx___frontmatter___thumbnail___ext'
-  | 'childrenMdx___frontmatter___thumbnail___name'
-  | 'childrenMdx___frontmatter___thumbnail___relativeDirectory'
-  | 'childrenMdx___frontmatter___thumbnail___dev'
-  | 'childrenMdx___frontmatter___thumbnail___mode'
-  | 'childrenMdx___frontmatter___thumbnail___nlink'
-  | 'childrenMdx___frontmatter___thumbnail___uid'
-  | 'childrenMdx___frontmatter___thumbnail___gid'
-  | 'childrenMdx___frontmatter___thumbnail___rdev'
-  | 'childrenMdx___frontmatter___thumbnail___ino'
-  | 'childrenMdx___frontmatter___thumbnail___atimeMs'
-  | 'childrenMdx___frontmatter___thumbnail___mtimeMs'
-  | 'childrenMdx___frontmatter___thumbnail___ctimeMs'
-  | 'childrenMdx___frontmatter___thumbnail___atime'
-  | 'childrenMdx___frontmatter___thumbnail___mtime'
-  | 'childrenMdx___frontmatter___thumbnail___ctime'
-  | 'childrenMdx___frontmatter___thumbnail___birthtime'
-  | 'childrenMdx___frontmatter___thumbnail___birthtimeMs'
-  | 'childrenMdx___frontmatter___thumbnail___blksize'
-  | 'childrenMdx___frontmatter___thumbnail___blocks'
-  | 'childrenMdx___frontmatter___thumbnail___publicURL'
-  | 'childrenMdx___frontmatter___thumbnail___childrenMdx'
-  | 'childrenMdx___frontmatter___thumbnail___childrenImageSharp'
-  | 'childrenMdx___frontmatter___thumbnail___id'
-  | 'childrenMdx___frontmatter___thumbnail___children'
-  | 'childrenMdx___frontmatter___paper_pdf___sourceInstanceName'
-  | 'childrenMdx___frontmatter___paper_pdf___absolutePath'
-  | 'childrenMdx___frontmatter___paper_pdf___relativePath'
-  | 'childrenMdx___frontmatter___paper_pdf___extension'
-  | 'childrenMdx___frontmatter___paper_pdf___size'
-  | 'childrenMdx___frontmatter___paper_pdf___prettySize'
-  | 'childrenMdx___frontmatter___paper_pdf___modifiedTime'
-  | 'childrenMdx___frontmatter___paper_pdf___accessTime'
-  | 'childrenMdx___frontmatter___paper_pdf___changeTime'
-  | 'childrenMdx___frontmatter___paper_pdf___birthTime'
-  | 'childrenMdx___frontmatter___paper_pdf___root'
-  | 'childrenMdx___frontmatter___paper_pdf___dir'
-  | 'childrenMdx___frontmatter___paper_pdf___base'
-  | 'childrenMdx___frontmatter___paper_pdf___ext'
-  | 'childrenMdx___frontmatter___paper_pdf___name'
-  | 'childrenMdx___frontmatter___paper_pdf___relativeDirectory'
-  | 'childrenMdx___frontmatter___paper_pdf___dev'
-  | 'childrenMdx___frontmatter___paper_pdf___mode'
-  | 'childrenMdx___frontmatter___paper_pdf___nlink'
-  | 'childrenMdx___frontmatter___paper_pdf___uid'
-  | 'childrenMdx___frontmatter___paper_pdf___gid'
-  | 'childrenMdx___frontmatter___paper_pdf___rdev'
-  | 'childrenMdx___frontmatter___paper_pdf___ino'
-  | 'childrenMdx___frontmatter___paper_pdf___atimeMs'
-  | 'childrenMdx___frontmatter___paper_pdf___mtimeMs'
-  | 'childrenMdx___frontmatter___paper_pdf___ctimeMs'
-  | 'childrenMdx___frontmatter___paper_pdf___atime'
-  | 'childrenMdx___frontmatter___paper_pdf___mtime'
-  | 'childrenMdx___frontmatter___paper_pdf___ctime'
-  | 'childrenMdx___frontmatter___paper_pdf___birthtime'
-  | 'childrenMdx___frontmatter___paper_pdf___birthtimeMs'
-  | 'childrenMdx___frontmatter___paper_pdf___blksize'
-  | 'childrenMdx___frontmatter___paper_pdf___blocks'
-  | 'childrenMdx___frontmatter___paper_pdf___publicURL'
-  | 'childrenMdx___frontmatter___paper_pdf___childrenMdx'
-  | 'childrenMdx___frontmatter___paper_pdf___childrenImageSharp'
-  | 'childrenMdx___frontmatter___paper_pdf___id'
-  | 'childrenMdx___frontmatter___paper_pdf___children'
-  | 'childrenMdx___frontmatter___poster_pdf___sourceInstanceName'
-  | 'childrenMdx___frontmatter___poster_pdf___absolutePath'
-  | 'childrenMdx___frontmatter___poster_pdf___relativePath'
-  | 'childrenMdx___frontmatter___poster_pdf___extension'
-  | 'childrenMdx___frontmatter___poster_pdf___size'
-  | 'childrenMdx___frontmatter___poster_pdf___prettySize'
-  | 'childrenMdx___frontmatter___poster_pdf___modifiedTime'
-  | 'childrenMdx___frontmatter___poster_pdf___accessTime'
-  | 'childrenMdx___frontmatter___poster_pdf___changeTime'
-  | 'childrenMdx___frontmatter___poster_pdf___birthTime'
-  | 'childrenMdx___frontmatter___poster_pdf___root'
-  | 'childrenMdx___frontmatter___poster_pdf___dir'
-  | 'childrenMdx___frontmatter___poster_pdf___base'
-  | 'childrenMdx___frontmatter___poster_pdf___ext'
-  | 'childrenMdx___frontmatter___poster_pdf___name'
-  | 'childrenMdx___frontmatter___poster_pdf___relativeDirectory'
-  | 'childrenMdx___frontmatter___poster_pdf___dev'
-  | 'childrenMdx___frontmatter___poster_pdf___mode'
-  | 'childrenMdx___frontmatter___poster_pdf___nlink'
-  | 'childrenMdx___frontmatter___poster_pdf___uid'
-  | 'childrenMdx___frontmatter___poster_pdf___gid'
-  | 'childrenMdx___frontmatter___poster_pdf___rdev'
-  | 'childrenMdx___frontmatter___poster_pdf___ino'
-  | 'childrenMdx___frontmatter___poster_pdf___atimeMs'
-  | 'childrenMdx___frontmatter___poster_pdf___mtimeMs'
-  | 'childrenMdx___frontmatter___poster_pdf___ctimeMs'
-  | 'childrenMdx___frontmatter___poster_pdf___atime'
-  | 'childrenMdx___frontmatter___poster_pdf___mtime'
-  | 'childrenMdx___frontmatter___poster_pdf___ctime'
-  | 'childrenMdx___frontmatter___poster_pdf___birthtime'
-  | 'childrenMdx___frontmatter___poster_pdf___birthtimeMs'
-  | 'childrenMdx___frontmatter___poster_pdf___blksize'
-  | 'childrenMdx___frontmatter___poster_pdf___blocks'
-  | 'childrenMdx___frontmatter___poster_pdf___publicURL'
-  | 'childrenMdx___frontmatter___poster_pdf___childrenMdx'
-  | 'childrenMdx___frontmatter___poster_pdf___childrenImageSharp'
-  | 'childrenMdx___frontmatter___poster_pdf___id'
-  | 'childrenMdx___frontmatter___poster_pdf___children'
-  | 'childrenMdx___frontmatter___github_url'
-  | 'childrenMdx___frontmatter___format'
-  | 'childrenMdx___slug'
-  | 'childrenMdx___body'
-  | 'childrenMdx___excerpt'
-  | 'childrenMdx___headings'
-  | 'childrenMdx___headings___value'
-  | 'childrenMdx___headings___depth'
-  | 'childrenMdx___html'
-  | 'childrenMdx___mdxAST'
-  | 'childrenMdx___tableOfContents'
-  | 'childrenMdx___timeToRead'
-  | 'childrenMdx___wordCount___paragraphs'
-  | 'childrenMdx___wordCount___sentences'
-  | 'childrenMdx___wordCount___words'
-  | 'childrenMdx___gatsbyPath'
-  | 'childrenMdx___id'
-  | 'childrenMdx___parent___id'
-  | 'childrenMdx___parent___parent___id'
-  | 'childrenMdx___parent___parent___children'
-  | 'childrenMdx___parent___children'
-  | 'childrenMdx___parent___children___id'
-  | 'childrenMdx___parent___children___children'
-  | 'childrenMdx___parent___internal___content'
-  | 'childrenMdx___parent___internal___contentDigest'
-  | 'childrenMdx___parent___internal___description'
-  | 'childrenMdx___parent___internal___fieldOwners'
-  | 'childrenMdx___parent___internal___ignoreType'
-  | 'childrenMdx___parent___internal___mediaType'
-  | 'childrenMdx___parent___internal___owner'
-  | 'childrenMdx___parent___internal___type'
-  | 'childrenMdx___children'
-  | 'childrenMdx___children___id'
-  | 'childrenMdx___children___parent___id'
-  | 'childrenMdx___children___parent___children'
-  | 'childrenMdx___children___children'
-  | 'childrenMdx___children___children___id'
-  | 'childrenMdx___children___children___children'
-  | 'childrenMdx___children___internal___content'
-  | 'childrenMdx___children___internal___contentDigest'
-  | 'childrenMdx___children___internal___description'
-  | 'childrenMdx___children___internal___fieldOwners'
-  | 'childrenMdx___children___internal___ignoreType'
-  | 'childrenMdx___children___internal___mediaType'
-  | 'childrenMdx___children___internal___owner'
-  | 'childrenMdx___children___internal___type'
-  | 'childrenMdx___internal___content'
-  | 'childrenMdx___internal___contentDigest'
-  | 'childrenMdx___internal___description'
-  | 'childrenMdx___internal___fieldOwners'
-  | 'childrenMdx___internal___ignoreType'
-  | 'childrenMdx___internal___mediaType'
-  | 'childrenMdx___internal___owner'
-  | 'childrenMdx___internal___type'
-  | 'childMdx___rawBody'
-  | 'childMdx___fileAbsolutePath'
-  | 'childMdx___frontmatter___title'
-  | 'childMdx___frontmatter___date'
-  | 'childMdx___frontmatter___hero_image___sourceInstanceName'
-  | 'childMdx___frontmatter___hero_image___absolutePath'
-  | 'childMdx___frontmatter___hero_image___relativePath'
-  | 'childMdx___frontmatter___hero_image___extension'
-  | 'childMdx___frontmatter___hero_image___size'
-  | 'childMdx___frontmatter___hero_image___prettySize'
-  | 'childMdx___frontmatter___hero_image___modifiedTime'
-  | 'childMdx___frontmatter___hero_image___accessTime'
-  | 'childMdx___frontmatter___hero_image___changeTime'
-  | 'childMdx___frontmatter___hero_image___birthTime'
-  | 'childMdx___frontmatter___hero_image___root'
-  | 'childMdx___frontmatter___hero_image___dir'
-  | 'childMdx___frontmatter___hero_image___base'
-  | 'childMdx___frontmatter___hero_image___ext'
-  | 'childMdx___frontmatter___hero_image___name'
-  | 'childMdx___frontmatter___hero_image___relativeDirectory'
-  | 'childMdx___frontmatter___hero_image___dev'
-  | 'childMdx___frontmatter___hero_image___mode'
-  | 'childMdx___frontmatter___hero_image___nlink'
-  | 'childMdx___frontmatter___hero_image___uid'
-  | 'childMdx___frontmatter___hero_image___gid'
-  | 'childMdx___frontmatter___hero_image___rdev'
-  | 'childMdx___frontmatter___hero_image___ino'
-  | 'childMdx___frontmatter___hero_image___atimeMs'
-  | 'childMdx___frontmatter___hero_image___mtimeMs'
-  | 'childMdx___frontmatter___hero_image___ctimeMs'
-  | 'childMdx___frontmatter___hero_image___atime'
-  | 'childMdx___frontmatter___hero_image___mtime'
-  | 'childMdx___frontmatter___hero_image___ctime'
-  | 'childMdx___frontmatter___hero_image___birthtime'
-  | 'childMdx___frontmatter___hero_image___birthtimeMs'
-  | 'childMdx___frontmatter___hero_image___blksize'
-  | 'childMdx___frontmatter___hero_image___blocks'
-  | 'childMdx___frontmatter___hero_image___publicURL'
-  | 'childMdx___frontmatter___hero_image___childrenMdx'
-  | 'childMdx___frontmatter___hero_image___childrenImageSharp'
-  | 'childMdx___frontmatter___hero_image___id'
-  | 'childMdx___frontmatter___hero_image___children'
-  | 'childMdx___frontmatter___hero_image_alt'
-  | 'childMdx___frontmatter___hero_image_credit_text'
-  | 'childMdx___frontmatter___hero_image_credit_link'
-  | 'childMdx___frontmatter___author'
-  | 'childMdx___frontmatter___publication_url'
-  | 'childMdx___frontmatter___publication_date'
-  | 'childMdx___frontmatter___conference'
-  | 'childMdx___frontmatter___thumbnail___sourceInstanceName'
-  | 'childMdx___frontmatter___thumbnail___absolutePath'
-  | 'childMdx___frontmatter___thumbnail___relativePath'
-  | 'childMdx___frontmatter___thumbnail___extension'
-  | 'childMdx___frontmatter___thumbnail___size'
-  | 'childMdx___frontmatter___thumbnail___prettySize'
-  | 'childMdx___frontmatter___thumbnail___modifiedTime'
-  | 'childMdx___frontmatter___thumbnail___accessTime'
-  | 'childMdx___frontmatter___thumbnail___changeTime'
-  | 'childMdx___frontmatter___thumbnail___birthTime'
-  | 'childMdx___frontmatter___thumbnail___root'
-  | 'childMdx___frontmatter___thumbnail___dir'
-  | 'childMdx___frontmatter___thumbnail___base'
-  | 'childMdx___frontmatter___thumbnail___ext'
-  | 'childMdx___frontmatter___thumbnail___name'
-  | 'childMdx___frontmatter___thumbnail___relativeDirectory'
-  | 'childMdx___frontmatter___thumbnail___dev'
-  | 'childMdx___frontmatter___thumbnail___mode'
-  | 'childMdx___frontmatter___thumbnail___nlink'
-  | 'childMdx___frontmatter___thumbnail___uid'
-  | 'childMdx___frontmatter___thumbnail___gid'
-  | 'childMdx___frontmatter___thumbnail___rdev'
-  | 'childMdx___frontmatter___thumbnail___ino'
-  | 'childMdx___frontmatter___thumbnail___atimeMs'
-  | 'childMdx___frontmatter___thumbnail___mtimeMs'
-  | 'childMdx___frontmatter___thumbnail___ctimeMs'
-  | 'childMdx___frontmatter___thumbnail___atime'
-  | 'childMdx___frontmatter___thumbnail___mtime'
-  | 'childMdx___frontmatter___thumbnail___ctime'
-  | 'childMdx___frontmatter___thumbnail___birthtime'
-  | 'childMdx___frontmatter___thumbnail___birthtimeMs'
-  | 'childMdx___frontmatter___thumbnail___blksize'
-  | 'childMdx___frontmatter___thumbnail___blocks'
-  | 'childMdx___frontmatter___thumbnail___publicURL'
-  | 'childMdx___frontmatter___thumbnail___childrenMdx'
-  | 'childMdx___frontmatter___thumbnail___childrenImageSharp'
-  | 'childMdx___frontmatter___thumbnail___id'
-  | 'childMdx___frontmatter___thumbnail___children'
-  | 'childMdx___frontmatter___paper_pdf___sourceInstanceName'
-  | 'childMdx___frontmatter___paper_pdf___absolutePath'
-  | 'childMdx___frontmatter___paper_pdf___relativePath'
-  | 'childMdx___frontmatter___paper_pdf___extension'
-  | 'childMdx___frontmatter___paper_pdf___size'
-  | 'childMdx___frontmatter___paper_pdf___prettySize'
-  | 'childMdx___frontmatter___paper_pdf___modifiedTime'
-  | 'childMdx___frontmatter___paper_pdf___accessTime'
-  | 'childMdx___frontmatter___paper_pdf___changeTime'
-  | 'childMdx___frontmatter___paper_pdf___birthTime'
-  | 'childMdx___frontmatter___paper_pdf___root'
-  | 'childMdx___frontmatter___paper_pdf___dir'
-  | 'childMdx___frontmatter___paper_pdf___base'
-  | 'childMdx___frontmatter___paper_pdf___ext'
-  | 'childMdx___frontmatter___paper_pdf___name'
-  | 'childMdx___frontmatter___paper_pdf___relativeDirectory'
-  | 'childMdx___frontmatter___paper_pdf___dev'
-  | 'childMdx___frontmatter___paper_pdf___mode'
-  | 'childMdx___frontmatter___paper_pdf___nlink'
-  | 'childMdx___frontmatter___paper_pdf___uid'
-  | 'childMdx___frontmatter___paper_pdf___gid'
-  | 'childMdx___frontmatter___paper_pdf___rdev'
-  | 'childMdx___frontmatter___paper_pdf___ino'
-  | 'childMdx___frontmatter___paper_pdf___atimeMs'
-  | 'childMdx___frontmatter___paper_pdf___mtimeMs'
-  | 'childMdx___frontmatter___paper_pdf___ctimeMs'
-  | 'childMdx___frontmatter___paper_pdf___atime'
-  | 'childMdx___frontmatter___paper_pdf___mtime'
-  | 'childMdx___frontmatter___paper_pdf___ctime'
-  | 'childMdx___frontmatter___paper_pdf___birthtime'
-  | 'childMdx___frontmatter___paper_pdf___birthtimeMs'
-  | 'childMdx___frontmatter___paper_pdf___blksize'
-  | 'childMdx___frontmatter___paper_pdf___blocks'
-  | 'childMdx___frontmatter___paper_pdf___publicURL'
-  | 'childMdx___frontmatter___paper_pdf___childrenMdx'
-  | 'childMdx___frontmatter___paper_pdf___childrenImageSharp'
-  | 'childMdx___frontmatter___paper_pdf___id'
-  | 'childMdx___frontmatter___paper_pdf___children'
-  | 'childMdx___frontmatter___poster_pdf___sourceInstanceName'
-  | 'childMdx___frontmatter___poster_pdf___absolutePath'
-  | 'childMdx___frontmatter___poster_pdf___relativePath'
-  | 'childMdx___frontmatter___poster_pdf___extension'
-  | 'childMdx___frontmatter___poster_pdf___size'
-  | 'childMdx___frontmatter___poster_pdf___prettySize'
-  | 'childMdx___frontmatter___poster_pdf___modifiedTime'
-  | 'childMdx___frontmatter___poster_pdf___accessTime'
-  | 'childMdx___frontmatter___poster_pdf___changeTime'
-  | 'childMdx___frontmatter___poster_pdf___birthTime'
-  | 'childMdx___frontmatter___poster_pdf___root'
-  | 'childMdx___frontmatter___poster_pdf___dir'
-  | 'childMdx___frontmatter___poster_pdf___base'
-  | 'childMdx___frontmatter___poster_pdf___ext'
-  | 'childMdx___frontmatter___poster_pdf___name'
-  | 'childMdx___frontmatter___poster_pdf___relativeDirectory'
-  | 'childMdx___frontmatter___poster_pdf___dev'
-  | 'childMdx___frontmatter___poster_pdf___mode'
-  | 'childMdx___frontmatter___poster_pdf___nlink'
-  | 'childMdx___frontmatter___poster_pdf___uid'
-  | 'childMdx___frontmatter___poster_pdf___gid'
-  | 'childMdx___frontmatter___poster_pdf___rdev'
-  | 'childMdx___frontmatter___poster_pdf___ino'
-  | 'childMdx___frontmatter___poster_pdf___atimeMs'
-  | 'childMdx___frontmatter___poster_pdf___mtimeMs'
-  | 'childMdx___frontmatter___poster_pdf___ctimeMs'
-  | 'childMdx___frontmatter___poster_pdf___atime'
-  | 'childMdx___frontmatter___poster_pdf___mtime'
-  | 'childMdx___frontmatter___poster_pdf___ctime'
-  | 'childMdx___frontmatter___poster_pdf___birthtime'
-  | 'childMdx___frontmatter___poster_pdf___birthtimeMs'
-  | 'childMdx___frontmatter___poster_pdf___blksize'
-  | 'childMdx___frontmatter___poster_pdf___blocks'
-  | 'childMdx___frontmatter___poster_pdf___publicURL'
-  | 'childMdx___frontmatter___poster_pdf___childrenMdx'
-  | 'childMdx___frontmatter___poster_pdf___childrenImageSharp'
-  | 'childMdx___frontmatter___poster_pdf___id'
-  | 'childMdx___frontmatter___poster_pdf___children'
-  | 'childMdx___frontmatter___github_url'
-  | 'childMdx___frontmatter___format'
-  | 'childMdx___slug'
-  | 'childMdx___body'
-  | 'childMdx___excerpt'
-  | 'childMdx___headings'
-  | 'childMdx___headings___value'
-  | 'childMdx___headings___depth'
-  | 'childMdx___html'
-  | 'childMdx___mdxAST'
-  | 'childMdx___tableOfContents'
-  | 'childMdx___timeToRead'
-  | 'childMdx___wordCount___paragraphs'
-  | 'childMdx___wordCount___sentences'
-  | 'childMdx___wordCount___words'
-  | 'childMdx___gatsbyPath'
-  | 'childMdx___id'
-  | 'childMdx___parent___id'
-  | 'childMdx___parent___parent___id'
-  | 'childMdx___parent___parent___children'
-  | 'childMdx___parent___children'
-  | 'childMdx___parent___children___id'
-  | 'childMdx___parent___children___children'
-  | 'childMdx___parent___internal___content'
-  | 'childMdx___parent___internal___contentDigest'
-  | 'childMdx___parent___internal___description'
-  | 'childMdx___parent___internal___fieldOwners'
-  | 'childMdx___parent___internal___ignoreType'
-  | 'childMdx___parent___internal___mediaType'
-  | 'childMdx___parent___internal___owner'
-  | 'childMdx___parent___internal___type'
-  | 'childMdx___children'
-  | 'childMdx___children___id'
-  | 'childMdx___children___parent___id'
-  | 'childMdx___children___parent___children'
-  | 'childMdx___children___children'
-  | 'childMdx___children___children___id'
-  | 'childMdx___children___children___children'
-  | 'childMdx___children___internal___content'
-  | 'childMdx___children___internal___contentDigest'
-  | 'childMdx___children___internal___description'
-  | 'childMdx___children___internal___fieldOwners'
-  | 'childMdx___children___internal___ignoreType'
-  | 'childMdx___children___internal___mediaType'
-  | 'childMdx___children___internal___owner'
-  | 'childMdx___children___internal___type'
-  | 'childMdx___internal___content'
-  | 'childMdx___internal___contentDigest'
-  | 'childMdx___internal___description'
-  | 'childMdx___internal___fieldOwners'
-  | 'childMdx___internal___ignoreType'
-  | 'childMdx___internal___mediaType'
-  | 'childMdx___internal___owner'
-  | 'childMdx___internal___type'
   | 'childrenImageSharp'
   | 'childrenImageSharp___fixed___base64'
   | 'childrenImageSharp___fixed___tracedSVG'
@@ -1789,6 +1292,7 @@ export type FileFieldsEnum =
   | 'childrenImageSharp___parent___internal___mediaType'
   | 'childrenImageSharp___parent___internal___owner'
   | 'childrenImageSharp___parent___internal___type'
+  | 'childrenImageSharp___parent___internal___contentFilePath'
   | 'childrenImageSharp___children'
   | 'childrenImageSharp___children___id'
   | 'childrenImageSharp___children___parent___id'
@@ -1804,6 +1308,7 @@ export type FileFieldsEnum =
   | 'childrenImageSharp___children___internal___mediaType'
   | 'childrenImageSharp___children___internal___owner'
   | 'childrenImageSharp___children___internal___type'
+  | 'childrenImageSharp___children___internal___contentFilePath'
   | 'childrenImageSharp___internal___content'
   | 'childrenImageSharp___internal___contentDigest'
   | 'childrenImageSharp___internal___description'
@@ -1812,6 +1317,7 @@ export type FileFieldsEnum =
   | 'childrenImageSharp___internal___mediaType'
   | 'childrenImageSharp___internal___owner'
   | 'childrenImageSharp___internal___type'
+  | 'childrenImageSharp___internal___contentFilePath'
   | 'childImageSharp___fixed___base64'
   | 'childImageSharp___fixed___tracedSVG'
   | 'childImageSharp___fixed___aspectRatio'
@@ -1859,6 +1365,7 @@ export type FileFieldsEnum =
   | 'childImageSharp___parent___internal___mediaType'
   | 'childImageSharp___parent___internal___owner'
   | 'childImageSharp___parent___internal___type'
+  | 'childImageSharp___parent___internal___contentFilePath'
   | 'childImageSharp___children'
   | 'childImageSharp___children___id'
   | 'childImageSharp___children___parent___id'
@@ -1874,6 +1381,7 @@ export type FileFieldsEnum =
   | 'childImageSharp___children___internal___mediaType'
   | 'childImageSharp___children___internal___owner'
   | 'childImageSharp___children___internal___type'
+  | 'childImageSharp___children___internal___contentFilePath'
   | 'childImageSharp___internal___content'
   | 'childImageSharp___internal___contentDigest'
   | 'childImageSharp___internal___description'
@@ -1882,6 +1390,344 @@ export type FileFieldsEnum =
   | 'childImageSharp___internal___mediaType'
   | 'childImageSharp___internal___owner'
   | 'childImageSharp___internal___type'
+  | 'childImageSharp___internal___contentFilePath'
+  | 'childrenMdx'
+  | 'childrenMdx___excerpt'
+  | 'childrenMdx___tableOfContents'
+  | 'childrenMdx___body'
+  | 'childrenMdx___frontmatter___title'
+  | 'childrenMdx___frontmatter___author'
+  | 'childrenMdx___frontmatter___publication_url'
+  | 'childrenMdx___frontmatter___publication_date'
+  | 'childrenMdx___frontmatter___conference'
+  | 'childrenMdx___frontmatter___thumbnail___sourceInstanceName'
+  | 'childrenMdx___frontmatter___thumbnail___absolutePath'
+  | 'childrenMdx___frontmatter___thumbnail___relativePath'
+  | 'childrenMdx___frontmatter___thumbnail___extension'
+  | 'childrenMdx___frontmatter___thumbnail___size'
+  | 'childrenMdx___frontmatter___thumbnail___prettySize'
+  | 'childrenMdx___frontmatter___thumbnail___modifiedTime'
+  | 'childrenMdx___frontmatter___thumbnail___accessTime'
+  | 'childrenMdx___frontmatter___thumbnail___changeTime'
+  | 'childrenMdx___frontmatter___thumbnail___birthTime'
+  | 'childrenMdx___frontmatter___thumbnail___root'
+  | 'childrenMdx___frontmatter___thumbnail___dir'
+  | 'childrenMdx___frontmatter___thumbnail___base'
+  | 'childrenMdx___frontmatter___thumbnail___ext'
+  | 'childrenMdx___frontmatter___thumbnail___name'
+  | 'childrenMdx___frontmatter___thumbnail___relativeDirectory'
+  | 'childrenMdx___frontmatter___thumbnail___dev'
+  | 'childrenMdx___frontmatter___thumbnail___mode'
+  | 'childrenMdx___frontmatter___thumbnail___nlink'
+  | 'childrenMdx___frontmatter___thumbnail___uid'
+  | 'childrenMdx___frontmatter___thumbnail___gid'
+  | 'childrenMdx___frontmatter___thumbnail___rdev'
+  | 'childrenMdx___frontmatter___thumbnail___ino'
+  | 'childrenMdx___frontmatter___thumbnail___atimeMs'
+  | 'childrenMdx___frontmatter___thumbnail___mtimeMs'
+  | 'childrenMdx___frontmatter___thumbnail___ctimeMs'
+  | 'childrenMdx___frontmatter___thumbnail___atime'
+  | 'childrenMdx___frontmatter___thumbnail___mtime'
+  | 'childrenMdx___frontmatter___thumbnail___ctime'
+  | 'childrenMdx___frontmatter___thumbnail___birthtime'
+  | 'childrenMdx___frontmatter___thumbnail___birthtimeMs'
+  | 'childrenMdx___frontmatter___thumbnail___blksize'
+  | 'childrenMdx___frontmatter___thumbnail___blocks'
+  | 'childrenMdx___frontmatter___thumbnail___publicURL'
+  | 'childrenMdx___frontmatter___thumbnail___childrenImageSharp'
+  | 'childrenMdx___frontmatter___thumbnail___childrenMdx'
+  | 'childrenMdx___frontmatter___thumbnail___id'
+  | 'childrenMdx___frontmatter___thumbnail___children'
+  | 'childrenMdx___frontmatter___paper_pdf___sourceInstanceName'
+  | 'childrenMdx___frontmatter___paper_pdf___absolutePath'
+  | 'childrenMdx___frontmatter___paper_pdf___relativePath'
+  | 'childrenMdx___frontmatter___paper_pdf___extension'
+  | 'childrenMdx___frontmatter___paper_pdf___size'
+  | 'childrenMdx___frontmatter___paper_pdf___prettySize'
+  | 'childrenMdx___frontmatter___paper_pdf___modifiedTime'
+  | 'childrenMdx___frontmatter___paper_pdf___accessTime'
+  | 'childrenMdx___frontmatter___paper_pdf___changeTime'
+  | 'childrenMdx___frontmatter___paper_pdf___birthTime'
+  | 'childrenMdx___frontmatter___paper_pdf___root'
+  | 'childrenMdx___frontmatter___paper_pdf___dir'
+  | 'childrenMdx___frontmatter___paper_pdf___base'
+  | 'childrenMdx___frontmatter___paper_pdf___ext'
+  | 'childrenMdx___frontmatter___paper_pdf___name'
+  | 'childrenMdx___frontmatter___paper_pdf___relativeDirectory'
+  | 'childrenMdx___frontmatter___paper_pdf___dev'
+  | 'childrenMdx___frontmatter___paper_pdf___mode'
+  | 'childrenMdx___frontmatter___paper_pdf___nlink'
+  | 'childrenMdx___frontmatter___paper_pdf___uid'
+  | 'childrenMdx___frontmatter___paper_pdf___gid'
+  | 'childrenMdx___frontmatter___paper_pdf___rdev'
+  | 'childrenMdx___frontmatter___paper_pdf___ino'
+  | 'childrenMdx___frontmatter___paper_pdf___atimeMs'
+  | 'childrenMdx___frontmatter___paper_pdf___mtimeMs'
+  | 'childrenMdx___frontmatter___paper_pdf___ctimeMs'
+  | 'childrenMdx___frontmatter___paper_pdf___atime'
+  | 'childrenMdx___frontmatter___paper_pdf___mtime'
+  | 'childrenMdx___frontmatter___paper_pdf___ctime'
+  | 'childrenMdx___frontmatter___paper_pdf___birthtime'
+  | 'childrenMdx___frontmatter___paper_pdf___birthtimeMs'
+  | 'childrenMdx___frontmatter___paper_pdf___blksize'
+  | 'childrenMdx___frontmatter___paper_pdf___blocks'
+  | 'childrenMdx___frontmatter___paper_pdf___publicURL'
+  | 'childrenMdx___frontmatter___paper_pdf___childrenImageSharp'
+  | 'childrenMdx___frontmatter___paper_pdf___childrenMdx'
+  | 'childrenMdx___frontmatter___paper_pdf___id'
+  | 'childrenMdx___frontmatter___paper_pdf___children'
+  | 'childrenMdx___frontmatter___poster_pdf___sourceInstanceName'
+  | 'childrenMdx___frontmatter___poster_pdf___absolutePath'
+  | 'childrenMdx___frontmatter___poster_pdf___relativePath'
+  | 'childrenMdx___frontmatter___poster_pdf___extension'
+  | 'childrenMdx___frontmatter___poster_pdf___size'
+  | 'childrenMdx___frontmatter___poster_pdf___prettySize'
+  | 'childrenMdx___frontmatter___poster_pdf___modifiedTime'
+  | 'childrenMdx___frontmatter___poster_pdf___accessTime'
+  | 'childrenMdx___frontmatter___poster_pdf___changeTime'
+  | 'childrenMdx___frontmatter___poster_pdf___birthTime'
+  | 'childrenMdx___frontmatter___poster_pdf___root'
+  | 'childrenMdx___frontmatter___poster_pdf___dir'
+  | 'childrenMdx___frontmatter___poster_pdf___base'
+  | 'childrenMdx___frontmatter___poster_pdf___ext'
+  | 'childrenMdx___frontmatter___poster_pdf___name'
+  | 'childrenMdx___frontmatter___poster_pdf___relativeDirectory'
+  | 'childrenMdx___frontmatter___poster_pdf___dev'
+  | 'childrenMdx___frontmatter___poster_pdf___mode'
+  | 'childrenMdx___frontmatter___poster_pdf___nlink'
+  | 'childrenMdx___frontmatter___poster_pdf___uid'
+  | 'childrenMdx___frontmatter___poster_pdf___gid'
+  | 'childrenMdx___frontmatter___poster_pdf___rdev'
+  | 'childrenMdx___frontmatter___poster_pdf___ino'
+  | 'childrenMdx___frontmatter___poster_pdf___atimeMs'
+  | 'childrenMdx___frontmatter___poster_pdf___mtimeMs'
+  | 'childrenMdx___frontmatter___poster_pdf___ctimeMs'
+  | 'childrenMdx___frontmatter___poster_pdf___atime'
+  | 'childrenMdx___frontmatter___poster_pdf___mtime'
+  | 'childrenMdx___frontmatter___poster_pdf___ctime'
+  | 'childrenMdx___frontmatter___poster_pdf___birthtime'
+  | 'childrenMdx___frontmatter___poster_pdf___birthtimeMs'
+  | 'childrenMdx___frontmatter___poster_pdf___blksize'
+  | 'childrenMdx___frontmatter___poster_pdf___blocks'
+  | 'childrenMdx___frontmatter___poster_pdf___publicURL'
+  | 'childrenMdx___frontmatter___poster_pdf___childrenImageSharp'
+  | 'childrenMdx___frontmatter___poster_pdf___childrenMdx'
+  | 'childrenMdx___frontmatter___poster_pdf___id'
+  | 'childrenMdx___frontmatter___poster_pdf___children'
+  | 'childrenMdx___frontmatter___github_url'
+  | 'childrenMdx___frontmatter___format'
+  | 'childrenMdx___frontmatter___slug'
+  | 'childrenMdx___frontmatter___date'
+  | 'childrenMdx___gatsbyPath'
+  | 'childrenMdx___id'
+  | 'childrenMdx___parent___id'
+  | 'childrenMdx___parent___parent___id'
+  | 'childrenMdx___parent___parent___children'
+  | 'childrenMdx___parent___children'
+  | 'childrenMdx___parent___children___id'
+  | 'childrenMdx___parent___children___children'
+  | 'childrenMdx___parent___internal___content'
+  | 'childrenMdx___parent___internal___contentDigest'
+  | 'childrenMdx___parent___internal___description'
+  | 'childrenMdx___parent___internal___fieldOwners'
+  | 'childrenMdx___parent___internal___ignoreType'
+  | 'childrenMdx___parent___internal___mediaType'
+  | 'childrenMdx___parent___internal___owner'
+  | 'childrenMdx___parent___internal___type'
+  | 'childrenMdx___parent___internal___contentFilePath'
+  | 'childrenMdx___children'
+  | 'childrenMdx___children___id'
+  | 'childrenMdx___children___parent___id'
+  | 'childrenMdx___children___parent___children'
+  | 'childrenMdx___children___children'
+  | 'childrenMdx___children___children___id'
+  | 'childrenMdx___children___children___children'
+  | 'childrenMdx___children___internal___content'
+  | 'childrenMdx___children___internal___contentDigest'
+  | 'childrenMdx___children___internal___description'
+  | 'childrenMdx___children___internal___fieldOwners'
+  | 'childrenMdx___children___internal___ignoreType'
+  | 'childrenMdx___children___internal___mediaType'
+  | 'childrenMdx___children___internal___owner'
+  | 'childrenMdx___children___internal___type'
+  | 'childrenMdx___children___internal___contentFilePath'
+  | 'childrenMdx___internal___content'
+  | 'childrenMdx___internal___contentDigest'
+  | 'childrenMdx___internal___description'
+  | 'childrenMdx___internal___fieldOwners'
+  | 'childrenMdx___internal___ignoreType'
+  | 'childrenMdx___internal___mediaType'
+  | 'childrenMdx___internal___owner'
+  | 'childrenMdx___internal___type'
+  | 'childrenMdx___internal___contentFilePath'
+  | 'childMdx___excerpt'
+  | 'childMdx___tableOfContents'
+  | 'childMdx___body'
+  | 'childMdx___frontmatter___title'
+  | 'childMdx___frontmatter___author'
+  | 'childMdx___frontmatter___publication_url'
+  | 'childMdx___frontmatter___publication_date'
+  | 'childMdx___frontmatter___conference'
+  | 'childMdx___frontmatter___thumbnail___sourceInstanceName'
+  | 'childMdx___frontmatter___thumbnail___absolutePath'
+  | 'childMdx___frontmatter___thumbnail___relativePath'
+  | 'childMdx___frontmatter___thumbnail___extension'
+  | 'childMdx___frontmatter___thumbnail___size'
+  | 'childMdx___frontmatter___thumbnail___prettySize'
+  | 'childMdx___frontmatter___thumbnail___modifiedTime'
+  | 'childMdx___frontmatter___thumbnail___accessTime'
+  | 'childMdx___frontmatter___thumbnail___changeTime'
+  | 'childMdx___frontmatter___thumbnail___birthTime'
+  | 'childMdx___frontmatter___thumbnail___root'
+  | 'childMdx___frontmatter___thumbnail___dir'
+  | 'childMdx___frontmatter___thumbnail___base'
+  | 'childMdx___frontmatter___thumbnail___ext'
+  | 'childMdx___frontmatter___thumbnail___name'
+  | 'childMdx___frontmatter___thumbnail___relativeDirectory'
+  | 'childMdx___frontmatter___thumbnail___dev'
+  | 'childMdx___frontmatter___thumbnail___mode'
+  | 'childMdx___frontmatter___thumbnail___nlink'
+  | 'childMdx___frontmatter___thumbnail___uid'
+  | 'childMdx___frontmatter___thumbnail___gid'
+  | 'childMdx___frontmatter___thumbnail___rdev'
+  | 'childMdx___frontmatter___thumbnail___ino'
+  | 'childMdx___frontmatter___thumbnail___atimeMs'
+  | 'childMdx___frontmatter___thumbnail___mtimeMs'
+  | 'childMdx___frontmatter___thumbnail___ctimeMs'
+  | 'childMdx___frontmatter___thumbnail___atime'
+  | 'childMdx___frontmatter___thumbnail___mtime'
+  | 'childMdx___frontmatter___thumbnail___ctime'
+  | 'childMdx___frontmatter___thumbnail___birthtime'
+  | 'childMdx___frontmatter___thumbnail___birthtimeMs'
+  | 'childMdx___frontmatter___thumbnail___blksize'
+  | 'childMdx___frontmatter___thumbnail___blocks'
+  | 'childMdx___frontmatter___thumbnail___publicURL'
+  | 'childMdx___frontmatter___thumbnail___childrenImageSharp'
+  | 'childMdx___frontmatter___thumbnail___childrenMdx'
+  | 'childMdx___frontmatter___thumbnail___id'
+  | 'childMdx___frontmatter___thumbnail___children'
+  | 'childMdx___frontmatter___paper_pdf___sourceInstanceName'
+  | 'childMdx___frontmatter___paper_pdf___absolutePath'
+  | 'childMdx___frontmatter___paper_pdf___relativePath'
+  | 'childMdx___frontmatter___paper_pdf___extension'
+  | 'childMdx___frontmatter___paper_pdf___size'
+  | 'childMdx___frontmatter___paper_pdf___prettySize'
+  | 'childMdx___frontmatter___paper_pdf___modifiedTime'
+  | 'childMdx___frontmatter___paper_pdf___accessTime'
+  | 'childMdx___frontmatter___paper_pdf___changeTime'
+  | 'childMdx___frontmatter___paper_pdf___birthTime'
+  | 'childMdx___frontmatter___paper_pdf___root'
+  | 'childMdx___frontmatter___paper_pdf___dir'
+  | 'childMdx___frontmatter___paper_pdf___base'
+  | 'childMdx___frontmatter___paper_pdf___ext'
+  | 'childMdx___frontmatter___paper_pdf___name'
+  | 'childMdx___frontmatter___paper_pdf___relativeDirectory'
+  | 'childMdx___frontmatter___paper_pdf___dev'
+  | 'childMdx___frontmatter___paper_pdf___mode'
+  | 'childMdx___frontmatter___paper_pdf___nlink'
+  | 'childMdx___frontmatter___paper_pdf___uid'
+  | 'childMdx___frontmatter___paper_pdf___gid'
+  | 'childMdx___frontmatter___paper_pdf___rdev'
+  | 'childMdx___frontmatter___paper_pdf___ino'
+  | 'childMdx___frontmatter___paper_pdf___atimeMs'
+  | 'childMdx___frontmatter___paper_pdf___mtimeMs'
+  | 'childMdx___frontmatter___paper_pdf___ctimeMs'
+  | 'childMdx___frontmatter___paper_pdf___atime'
+  | 'childMdx___frontmatter___paper_pdf___mtime'
+  | 'childMdx___frontmatter___paper_pdf___ctime'
+  | 'childMdx___frontmatter___paper_pdf___birthtime'
+  | 'childMdx___frontmatter___paper_pdf___birthtimeMs'
+  | 'childMdx___frontmatter___paper_pdf___blksize'
+  | 'childMdx___frontmatter___paper_pdf___blocks'
+  | 'childMdx___frontmatter___paper_pdf___publicURL'
+  | 'childMdx___frontmatter___paper_pdf___childrenImageSharp'
+  | 'childMdx___frontmatter___paper_pdf___childrenMdx'
+  | 'childMdx___frontmatter___paper_pdf___id'
+  | 'childMdx___frontmatter___paper_pdf___children'
+  | 'childMdx___frontmatter___poster_pdf___sourceInstanceName'
+  | 'childMdx___frontmatter___poster_pdf___absolutePath'
+  | 'childMdx___frontmatter___poster_pdf___relativePath'
+  | 'childMdx___frontmatter___poster_pdf___extension'
+  | 'childMdx___frontmatter___poster_pdf___size'
+  | 'childMdx___frontmatter___poster_pdf___prettySize'
+  | 'childMdx___frontmatter___poster_pdf___modifiedTime'
+  | 'childMdx___frontmatter___poster_pdf___accessTime'
+  | 'childMdx___frontmatter___poster_pdf___changeTime'
+  | 'childMdx___frontmatter___poster_pdf___birthTime'
+  | 'childMdx___frontmatter___poster_pdf___root'
+  | 'childMdx___frontmatter___poster_pdf___dir'
+  | 'childMdx___frontmatter___poster_pdf___base'
+  | 'childMdx___frontmatter___poster_pdf___ext'
+  | 'childMdx___frontmatter___poster_pdf___name'
+  | 'childMdx___frontmatter___poster_pdf___relativeDirectory'
+  | 'childMdx___frontmatter___poster_pdf___dev'
+  | 'childMdx___frontmatter___poster_pdf___mode'
+  | 'childMdx___frontmatter___poster_pdf___nlink'
+  | 'childMdx___frontmatter___poster_pdf___uid'
+  | 'childMdx___frontmatter___poster_pdf___gid'
+  | 'childMdx___frontmatter___poster_pdf___rdev'
+  | 'childMdx___frontmatter___poster_pdf___ino'
+  | 'childMdx___frontmatter___poster_pdf___atimeMs'
+  | 'childMdx___frontmatter___poster_pdf___mtimeMs'
+  | 'childMdx___frontmatter___poster_pdf___ctimeMs'
+  | 'childMdx___frontmatter___poster_pdf___atime'
+  | 'childMdx___frontmatter___poster_pdf___mtime'
+  | 'childMdx___frontmatter___poster_pdf___ctime'
+  | 'childMdx___frontmatter___poster_pdf___birthtime'
+  | 'childMdx___frontmatter___poster_pdf___birthtimeMs'
+  | 'childMdx___frontmatter___poster_pdf___blksize'
+  | 'childMdx___frontmatter___poster_pdf___blocks'
+  | 'childMdx___frontmatter___poster_pdf___publicURL'
+  | 'childMdx___frontmatter___poster_pdf___childrenImageSharp'
+  | 'childMdx___frontmatter___poster_pdf___childrenMdx'
+  | 'childMdx___frontmatter___poster_pdf___id'
+  | 'childMdx___frontmatter___poster_pdf___children'
+  | 'childMdx___frontmatter___github_url'
+  | 'childMdx___frontmatter___format'
+  | 'childMdx___frontmatter___slug'
+  | 'childMdx___frontmatter___date'
+  | 'childMdx___gatsbyPath'
+  | 'childMdx___id'
+  | 'childMdx___parent___id'
+  | 'childMdx___parent___parent___id'
+  | 'childMdx___parent___parent___children'
+  | 'childMdx___parent___children'
+  | 'childMdx___parent___children___id'
+  | 'childMdx___parent___children___children'
+  | 'childMdx___parent___internal___content'
+  | 'childMdx___parent___internal___contentDigest'
+  | 'childMdx___parent___internal___description'
+  | 'childMdx___parent___internal___fieldOwners'
+  | 'childMdx___parent___internal___ignoreType'
+  | 'childMdx___parent___internal___mediaType'
+  | 'childMdx___parent___internal___owner'
+  | 'childMdx___parent___internal___type'
+  | 'childMdx___parent___internal___contentFilePath'
+  | 'childMdx___children'
+  | 'childMdx___children___id'
+  | 'childMdx___children___parent___id'
+  | 'childMdx___children___parent___children'
+  | 'childMdx___children___children'
+  | 'childMdx___children___children___id'
+  | 'childMdx___children___children___children'
+  | 'childMdx___children___internal___content'
+  | 'childMdx___children___internal___contentDigest'
+  | 'childMdx___children___internal___description'
+  | 'childMdx___children___internal___fieldOwners'
+  | 'childMdx___children___internal___ignoreType'
+  | 'childMdx___children___internal___mediaType'
+  | 'childMdx___children___internal___owner'
+  | 'childMdx___children___internal___type'
+  | 'childMdx___children___internal___contentFilePath'
+  | 'childMdx___internal___content'
+  | 'childMdx___internal___contentDigest'
+  | 'childMdx___internal___description'
+  | 'childMdx___internal___fieldOwners'
+  | 'childMdx___internal___ignoreType'
+  | 'childMdx___internal___mediaType'
+  | 'childMdx___internal___owner'
+  | 'childMdx___internal___type'
+  | 'childMdx___internal___contentFilePath'
   | 'id'
   | 'parent___id'
   | 'parent___parent___id'
@@ -1898,6 +1744,7 @@ export type FileFieldsEnum =
   | 'parent___parent___internal___mediaType'
   | 'parent___parent___internal___owner'
   | 'parent___parent___internal___type'
+  | 'parent___parent___internal___contentFilePath'
   | 'parent___children'
   | 'parent___children___id'
   | 'parent___children___parent___id'
@@ -1913,6 +1760,7 @@ export type FileFieldsEnum =
   | 'parent___children___internal___mediaType'
   | 'parent___children___internal___owner'
   | 'parent___children___internal___type'
+  | 'parent___children___internal___contentFilePath'
   | 'parent___internal___content'
   | 'parent___internal___contentDigest'
   | 'parent___internal___description'
@@ -1921,6 +1769,7 @@ export type FileFieldsEnum =
   | 'parent___internal___mediaType'
   | 'parent___internal___owner'
   | 'parent___internal___type'
+  | 'parent___internal___contentFilePath'
   | 'children'
   | 'children___id'
   | 'children___parent___id'
@@ -1937,6 +1786,7 @@ export type FileFieldsEnum =
   | 'children___parent___internal___mediaType'
   | 'children___parent___internal___owner'
   | 'children___parent___internal___type'
+  | 'children___parent___internal___contentFilePath'
   | 'children___children'
   | 'children___children___id'
   | 'children___children___parent___id'
@@ -1952,6 +1802,7 @@ export type FileFieldsEnum =
   | 'children___children___internal___mediaType'
   | 'children___children___internal___owner'
   | 'children___children___internal___type'
+  | 'children___children___internal___contentFilePath'
   | 'children___internal___content'
   | 'children___internal___contentDigest'
   | 'children___internal___description'
@@ -1960,6 +1811,7 @@ export type FileFieldsEnum =
   | 'children___internal___mediaType'
   | 'children___internal___owner'
   | 'children___internal___type'
+  | 'children___internal___contentFilePath'
   | 'internal___content'
   | 'internal___contentDigest'
   | 'internal___description'
@@ -1967,7 +1819,8 @@ export type FileFieldsEnum =
   | 'internal___ignoreType'
   | 'internal___mediaType'
   | 'internal___owner'
-  | 'internal___type';
+  | 'internal___type'
+  | 'internal___contentFilePath';
 
 export type FileGroupConnection = {
   totalCount: Scalars['Int'];
@@ -2112,6 +1965,7 @@ export type DirectoryFieldsEnum =
   | 'parent___parent___internal___mediaType'
   | 'parent___parent___internal___owner'
   | 'parent___parent___internal___type'
+  | 'parent___parent___internal___contentFilePath'
   | 'parent___children'
   | 'parent___children___id'
   | 'parent___children___parent___id'
@@ -2127,6 +1981,7 @@ export type DirectoryFieldsEnum =
   | 'parent___children___internal___mediaType'
   | 'parent___children___internal___owner'
   | 'parent___children___internal___type'
+  | 'parent___children___internal___contentFilePath'
   | 'parent___internal___content'
   | 'parent___internal___contentDigest'
   | 'parent___internal___description'
@@ -2135,6 +1990,7 @@ export type DirectoryFieldsEnum =
   | 'parent___internal___mediaType'
   | 'parent___internal___owner'
   | 'parent___internal___type'
+  | 'parent___internal___contentFilePath'
   | 'children'
   | 'children___id'
   | 'children___parent___id'
@@ -2151,6 +2007,7 @@ export type DirectoryFieldsEnum =
   | 'children___parent___internal___mediaType'
   | 'children___parent___internal___owner'
   | 'children___parent___internal___type'
+  | 'children___parent___internal___contentFilePath'
   | 'children___children'
   | 'children___children___id'
   | 'children___children___parent___id'
@@ -2166,6 +2023,7 @@ export type DirectoryFieldsEnum =
   | 'children___children___internal___mediaType'
   | 'children___children___internal___owner'
   | 'children___children___internal___type'
+  | 'children___children___internal___contentFilePath'
   | 'children___internal___content'
   | 'children___internal___contentDigest'
   | 'children___internal___description'
@@ -2174,6 +2032,7 @@ export type DirectoryFieldsEnum =
   | 'children___internal___mediaType'
   | 'children___internal___owner'
   | 'children___internal___type'
+  | 'children___internal___contentFilePath'
   | 'internal___content'
   | 'internal___contentDigest'
   | 'internal___description'
@@ -2181,7 +2040,8 @@ export type DirectoryFieldsEnum =
   | 'internal___ignoreType'
   | 'internal___mediaType'
   | 'internal___owner'
-  | 'internal___type';
+  | 'internal___type'
+  | 'internal___contentFilePath';
 
 export type DirectoryGroupConnection = {
   totalCount: Scalars['Int'];
@@ -2323,10 +2183,13 @@ export type SiteFieldsEnum =
   | 'siteMetadata___title'
   | 'siteMetadata___description'
   | 'siteMetadata___siteUrl'
+  | 'port'
+  | 'host'
   | 'polyfill'
   | 'pathPrefix'
   | 'jsxRuntime'
   | 'trailingSlash'
+  | 'graphqlTypegen'
   | 'id'
   | 'parent___id'
   | 'parent___parent___id'
@@ -2343,6 +2206,7 @@ export type SiteFieldsEnum =
   | 'parent___parent___internal___mediaType'
   | 'parent___parent___internal___owner'
   | 'parent___parent___internal___type'
+  | 'parent___parent___internal___contentFilePath'
   | 'parent___children'
   | 'parent___children___id'
   | 'parent___children___parent___id'
@@ -2358,6 +2222,7 @@ export type SiteFieldsEnum =
   | 'parent___children___internal___mediaType'
   | 'parent___children___internal___owner'
   | 'parent___children___internal___type'
+  | 'parent___children___internal___contentFilePath'
   | 'parent___internal___content'
   | 'parent___internal___contentDigest'
   | 'parent___internal___description'
@@ -2366,6 +2231,7 @@ export type SiteFieldsEnum =
   | 'parent___internal___mediaType'
   | 'parent___internal___owner'
   | 'parent___internal___type'
+  | 'parent___internal___contentFilePath'
   | 'children'
   | 'children___id'
   | 'children___parent___id'
@@ -2382,6 +2248,7 @@ export type SiteFieldsEnum =
   | 'children___parent___internal___mediaType'
   | 'children___parent___internal___owner'
   | 'children___parent___internal___type'
+  | 'children___parent___internal___contentFilePath'
   | 'children___children'
   | 'children___children___id'
   | 'children___children___parent___id'
@@ -2397,6 +2264,7 @@ export type SiteFieldsEnum =
   | 'children___children___internal___mediaType'
   | 'children___children___internal___owner'
   | 'children___children___internal___type'
+  | 'children___children___internal___contentFilePath'
   | 'children___internal___content'
   | 'children___internal___contentDigest'
   | 'children___internal___description'
@@ -2405,6 +2273,7 @@ export type SiteFieldsEnum =
   | 'children___internal___mediaType'
   | 'children___internal___owner'
   | 'children___internal___type'
+  | 'children___internal___contentFilePath'
   | 'internal___content'
   | 'internal___contentDigest'
   | 'internal___description'
@@ -2412,7 +2281,8 @@ export type SiteFieldsEnum =
   | 'internal___ignoreType'
   | 'internal___mediaType'
   | 'internal___owner'
-  | 'internal___type';
+  | 'internal___type'
+  | 'internal___contentFilePath';
 
 export type SiteGroupConnection = {
   totalCount: Scalars['Int'];
@@ -2458,10 +2328,13 @@ export type SiteGroupConnectionGroupArgs = {
 export type SiteFilterInput = {
   buildTime?: InputMaybe<DateQueryOperatorInput>;
   siteMetadata?: InputMaybe<SiteSiteMetadataFilterInput>;
+  port?: InputMaybe<IntQueryOperatorInput>;
+  host?: InputMaybe<StringQueryOperatorInput>;
   polyfill?: InputMaybe<BooleanQueryOperatorInput>;
   pathPrefix?: InputMaybe<StringQueryOperatorInput>;
   jsxRuntime?: InputMaybe<StringQueryOperatorInput>;
   trailingSlash?: InputMaybe<StringQueryOperatorInput>;
+  graphqlTypegen?: InputMaybe<BooleanQueryOperatorInput>;
   id?: InputMaybe<StringQueryOperatorInput>;
   parent?: InputMaybe<NodeFilterInput>;
   children?: InputMaybe<NodeFilterListInput>;
@@ -2542,6 +2415,7 @@ export type SiteFunctionFieldsEnum =
   | 'parent___parent___internal___mediaType'
   | 'parent___parent___internal___owner'
   | 'parent___parent___internal___type'
+  | 'parent___parent___internal___contentFilePath'
   | 'parent___children'
   | 'parent___children___id'
   | 'parent___children___parent___id'
@@ -2557,6 +2431,7 @@ export type SiteFunctionFieldsEnum =
   | 'parent___children___internal___mediaType'
   | 'parent___children___internal___owner'
   | 'parent___children___internal___type'
+  | 'parent___children___internal___contentFilePath'
   | 'parent___internal___content'
   | 'parent___internal___contentDigest'
   | 'parent___internal___description'
@@ -2565,6 +2440,7 @@ export type SiteFunctionFieldsEnum =
   | 'parent___internal___mediaType'
   | 'parent___internal___owner'
   | 'parent___internal___type'
+  | 'parent___internal___contentFilePath'
   | 'children'
   | 'children___id'
   | 'children___parent___id'
@@ -2581,6 +2457,7 @@ export type SiteFunctionFieldsEnum =
   | 'children___parent___internal___mediaType'
   | 'children___parent___internal___owner'
   | 'children___parent___internal___type'
+  | 'children___parent___internal___contentFilePath'
   | 'children___children'
   | 'children___children___id'
   | 'children___children___parent___id'
@@ -2596,6 +2473,7 @@ export type SiteFunctionFieldsEnum =
   | 'children___children___internal___mediaType'
   | 'children___children___internal___owner'
   | 'children___children___internal___type'
+  | 'children___children___internal___contentFilePath'
   | 'children___internal___content'
   | 'children___internal___contentDigest'
   | 'children___internal___description'
@@ -2604,6 +2482,7 @@ export type SiteFunctionFieldsEnum =
   | 'children___internal___mediaType'
   | 'children___internal___owner'
   | 'children___internal___type'
+  | 'children___internal___contentFilePath'
   | 'internal___content'
   | 'internal___contentDigest'
   | 'internal___description'
@@ -2611,7 +2490,8 @@ export type SiteFunctionFieldsEnum =
   | 'internal___ignoreType'
   | 'internal___mediaType'
   | 'internal___owner'
-  | 'internal___type';
+  | 'internal___type'
+  | 'internal___contentFilePath';
 
 export type SiteFunctionGroupConnection = {
   totalCount: Scalars['Int'];
@@ -2765,6 +2645,7 @@ export type SitePageFieldsEnum =
   | 'pluginCreator___parent___internal___mediaType'
   | 'pluginCreator___parent___internal___owner'
   | 'pluginCreator___parent___internal___type'
+  | 'pluginCreator___parent___internal___contentFilePath'
   | 'pluginCreator___children'
   | 'pluginCreator___children___id'
   | 'pluginCreator___children___parent___id'
@@ -2780,6 +2661,7 @@ export type SitePageFieldsEnum =
   | 'pluginCreator___children___internal___mediaType'
   | 'pluginCreator___children___internal___owner'
   | 'pluginCreator___children___internal___type'
+  | 'pluginCreator___children___internal___contentFilePath'
   | 'pluginCreator___internal___content'
   | 'pluginCreator___internal___contentDigest'
   | 'pluginCreator___internal___description'
@@ -2788,6 +2670,7 @@ export type SitePageFieldsEnum =
   | 'pluginCreator___internal___mediaType'
   | 'pluginCreator___internal___owner'
   | 'pluginCreator___internal___type'
+  | 'pluginCreator___internal___contentFilePath'
   | 'id'
   | 'parent___id'
   | 'parent___parent___id'
@@ -2804,6 +2687,7 @@ export type SitePageFieldsEnum =
   | 'parent___parent___internal___mediaType'
   | 'parent___parent___internal___owner'
   | 'parent___parent___internal___type'
+  | 'parent___parent___internal___contentFilePath'
   | 'parent___children'
   | 'parent___children___id'
   | 'parent___children___parent___id'
@@ -2819,6 +2703,7 @@ export type SitePageFieldsEnum =
   | 'parent___children___internal___mediaType'
   | 'parent___children___internal___owner'
   | 'parent___children___internal___type'
+  | 'parent___children___internal___contentFilePath'
   | 'parent___internal___content'
   | 'parent___internal___contentDigest'
   | 'parent___internal___description'
@@ -2827,6 +2712,7 @@ export type SitePageFieldsEnum =
   | 'parent___internal___mediaType'
   | 'parent___internal___owner'
   | 'parent___internal___type'
+  | 'parent___internal___contentFilePath'
   | 'children'
   | 'children___id'
   | 'children___parent___id'
@@ -2843,6 +2729,7 @@ export type SitePageFieldsEnum =
   | 'children___parent___internal___mediaType'
   | 'children___parent___internal___owner'
   | 'children___parent___internal___type'
+  | 'children___parent___internal___contentFilePath'
   | 'children___children'
   | 'children___children___id'
   | 'children___children___parent___id'
@@ -2858,6 +2745,7 @@ export type SitePageFieldsEnum =
   | 'children___children___internal___mediaType'
   | 'children___children___internal___owner'
   | 'children___children___internal___type'
+  | 'children___children___internal___contentFilePath'
   | 'children___internal___content'
   | 'children___internal___contentDigest'
   | 'children___internal___description'
@@ -2866,6 +2754,7 @@ export type SitePageFieldsEnum =
   | 'children___internal___mediaType'
   | 'children___internal___owner'
   | 'children___internal___type'
+  | 'children___internal___contentFilePath'
   | 'internal___content'
   | 'internal___contentDigest'
   | 'internal___description'
@@ -2873,7 +2762,8 @@ export type SitePageFieldsEnum =
   | 'internal___ignoreType'
   | 'internal___mediaType'
   | 'internal___owner'
-  | 'internal___type';
+  | 'internal___type'
+  | 'internal___contentFilePath';
 
 export type SitePageGroupConnection = {
   totalCount: Scalars['Int'];
@@ -3006,6 +2896,7 @@ export type SitePluginFieldsEnum =
   | 'parent___parent___internal___mediaType'
   | 'parent___parent___internal___owner'
   | 'parent___parent___internal___type'
+  | 'parent___parent___internal___contentFilePath'
   | 'parent___children'
   | 'parent___children___id'
   | 'parent___children___parent___id'
@@ -3021,6 +2912,7 @@ export type SitePluginFieldsEnum =
   | 'parent___children___internal___mediaType'
   | 'parent___children___internal___owner'
   | 'parent___children___internal___type'
+  | 'parent___children___internal___contentFilePath'
   | 'parent___internal___content'
   | 'parent___internal___contentDigest'
   | 'parent___internal___description'
@@ -3029,6 +2921,7 @@ export type SitePluginFieldsEnum =
   | 'parent___internal___mediaType'
   | 'parent___internal___owner'
   | 'parent___internal___type'
+  | 'parent___internal___contentFilePath'
   | 'children'
   | 'children___id'
   | 'children___parent___id'
@@ -3045,6 +2938,7 @@ export type SitePluginFieldsEnum =
   | 'children___parent___internal___mediaType'
   | 'children___parent___internal___owner'
   | 'children___parent___internal___type'
+  | 'children___parent___internal___contentFilePath'
   | 'children___children'
   | 'children___children___id'
   | 'children___children___parent___id'
@@ -3060,6 +2954,7 @@ export type SitePluginFieldsEnum =
   | 'children___children___internal___mediaType'
   | 'children___children___internal___owner'
   | 'children___children___internal___type'
+  | 'children___children___internal___contentFilePath'
   | 'children___internal___content'
   | 'children___internal___contentDigest'
   | 'children___internal___description'
@@ -3068,6 +2963,7 @@ export type SitePluginFieldsEnum =
   | 'children___internal___mediaType'
   | 'children___internal___owner'
   | 'children___internal___type'
+  | 'children___internal___contentFilePath'
   | 'internal___content'
   | 'internal___contentDigest'
   | 'internal___description'
@@ -3075,7 +2971,8 @@ export type SitePluginFieldsEnum =
   | 'internal___ignoreType'
   | 'internal___mediaType'
   | 'internal___owner'
-  | 'internal___type';
+  | 'internal___type'
+  | 'internal___contentFilePath';
 
 export type SitePluginGroupConnection = {
   totalCount: Scalars['Int'];
@@ -3186,6 +3083,7 @@ export type SiteBuildMetadataFieldsEnum =
   | 'parent___parent___internal___mediaType'
   | 'parent___parent___internal___owner'
   | 'parent___parent___internal___type'
+  | 'parent___parent___internal___contentFilePath'
   | 'parent___children'
   | 'parent___children___id'
   | 'parent___children___parent___id'
@@ -3201,6 +3099,7 @@ export type SiteBuildMetadataFieldsEnum =
   | 'parent___children___internal___mediaType'
   | 'parent___children___internal___owner'
   | 'parent___children___internal___type'
+  | 'parent___children___internal___contentFilePath'
   | 'parent___internal___content'
   | 'parent___internal___contentDigest'
   | 'parent___internal___description'
@@ -3209,6 +3108,7 @@ export type SiteBuildMetadataFieldsEnum =
   | 'parent___internal___mediaType'
   | 'parent___internal___owner'
   | 'parent___internal___type'
+  | 'parent___internal___contentFilePath'
   | 'children'
   | 'children___id'
   | 'children___parent___id'
@@ -3225,6 +3125,7 @@ export type SiteBuildMetadataFieldsEnum =
   | 'children___parent___internal___mediaType'
   | 'children___parent___internal___owner'
   | 'children___parent___internal___type'
+  | 'children___parent___internal___contentFilePath'
   | 'children___children'
   | 'children___children___id'
   | 'children___children___parent___id'
@@ -3240,6 +3141,7 @@ export type SiteBuildMetadataFieldsEnum =
   | 'children___children___internal___mediaType'
   | 'children___children___internal___owner'
   | 'children___children___internal___type'
+  | 'children___children___internal___contentFilePath'
   | 'children___internal___content'
   | 'children___internal___contentDigest'
   | 'children___internal___description'
@@ -3248,6 +3150,7 @@ export type SiteBuildMetadataFieldsEnum =
   | 'children___internal___mediaType'
   | 'children___internal___owner'
   | 'children___internal___type'
+  | 'children___internal___contentFilePath'
   | 'internal___content'
   | 'internal___contentDigest'
   | 'internal___description'
@@ -3255,7 +3158,8 @@ export type SiteBuildMetadataFieldsEnum =
   | 'internal___ignoreType'
   | 'internal___mediaType'
   | 'internal___owner'
-  | 'internal___type';
+  | 'internal___type'
+  | 'internal___contentFilePath';
 
 export type SiteBuildMetadataGroupConnection = {
   totalCount: Scalars['Int'];
@@ -3308,540 +3212,6 @@ export type SiteBuildMetadataFilterInput = {
 
 export type SiteBuildMetadataSortInput = {
   fields?: InputMaybe<Array<InputMaybe<SiteBuildMetadataFieldsEnum>>>;
-  order?: InputMaybe<Array<InputMaybe<SortOrderEnum>>>;
-};
-
-export type MdxConnection = {
-  totalCount: Scalars['Int'];
-  edges: Array<MdxEdge>;
-  nodes: Array<Mdx>;
-  pageInfo: PageInfo;
-  distinct: Array<Scalars['String']>;
-  max?: Maybe<Scalars['Float']>;
-  min?: Maybe<Scalars['Float']>;
-  sum?: Maybe<Scalars['Float']>;
-  group: Array<MdxGroupConnection>;
-};
-
-
-export type MdxConnectionDistinctArgs = {
-  field: MdxFieldsEnum;
-};
-
-
-export type MdxConnectionMaxArgs = {
-  field: MdxFieldsEnum;
-};
-
-
-export type MdxConnectionMinArgs = {
-  field: MdxFieldsEnum;
-};
-
-
-export type MdxConnectionSumArgs = {
-  field: MdxFieldsEnum;
-};
-
-
-export type MdxConnectionGroupArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  limit?: InputMaybe<Scalars['Int']>;
-  field: MdxFieldsEnum;
-};
-
-export type MdxEdge = {
-  next?: Maybe<Mdx>;
-  node: Mdx;
-  previous?: Maybe<Mdx>;
-};
-
-export type MdxFieldsEnum =
-  | 'rawBody'
-  | 'fileAbsolutePath'
-  | 'frontmatter___title'
-  | 'frontmatter___date'
-  | 'frontmatter___hero_image___sourceInstanceName'
-  | 'frontmatter___hero_image___absolutePath'
-  | 'frontmatter___hero_image___relativePath'
-  | 'frontmatter___hero_image___extension'
-  | 'frontmatter___hero_image___size'
-  | 'frontmatter___hero_image___prettySize'
-  | 'frontmatter___hero_image___modifiedTime'
-  | 'frontmatter___hero_image___accessTime'
-  | 'frontmatter___hero_image___changeTime'
-  | 'frontmatter___hero_image___birthTime'
-  | 'frontmatter___hero_image___root'
-  | 'frontmatter___hero_image___dir'
-  | 'frontmatter___hero_image___base'
-  | 'frontmatter___hero_image___ext'
-  | 'frontmatter___hero_image___name'
-  | 'frontmatter___hero_image___relativeDirectory'
-  | 'frontmatter___hero_image___dev'
-  | 'frontmatter___hero_image___mode'
-  | 'frontmatter___hero_image___nlink'
-  | 'frontmatter___hero_image___uid'
-  | 'frontmatter___hero_image___gid'
-  | 'frontmatter___hero_image___rdev'
-  | 'frontmatter___hero_image___ino'
-  | 'frontmatter___hero_image___atimeMs'
-  | 'frontmatter___hero_image___mtimeMs'
-  | 'frontmatter___hero_image___ctimeMs'
-  | 'frontmatter___hero_image___atime'
-  | 'frontmatter___hero_image___mtime'
-  | 'frontmatter___hero_image___ctime'
-  | 'frontmatter___hero_image___birthtime'
-  | 'frontmatter___hero_image___birthtimeMs'
-  | 'frontmatter___hero_image___blksize'
-  | 'frontmatter___hero_image___blocks'
-  | 'frontmatter___hero_image___publicURL'
-  | 'frontmatter___hero_image___childrenMdx'
-  | 'frontmatter___hero_image___childrenMdx___rawBody'
-  | 'frontmatter___hero_image___childrenMdx___fileAbsolutePath'
-  | 'frontmatter___hero_image___childrenMdx___slug'
-  | 'frontmatter___hero_image___childrenMdx___body'
-  | 'frontmatter___hero_image___childrenMdx___excerpt'
-  | 'frontmatter___hero_image___childrenMdx___headings'
-  | 'frontmatter___hero_image___childrenMdx___html'
-  | 'frontmatter___hero_image___childrenMdx___mdxAST'
-  | 'frontmatter___hero_image___childrenMdx___tableOfContents'
-  | 'frontmatter___hero_image___childrenMdx___timeToRead'
-  | 'frontmatter___hero_image___childrenMdx___gatsbyPath'
-  | 'frontmatter___hero_image___childrenMdx___id'
-  | 'frontmatter___hero_image___childrenMdx___children'
-  | 'frontmatter___hero_image___childMdx___rawBody'
-  | 'frontmatter___hero_image___childMdx___fileAbsolutePath'
-  | 'frontmatter___hero_image___childMdx___slug'
-  | 'frontmatter___hero_image___childMdx___body'
-  | 'frontmatter___hero_image___childMdx___excerpt'
-  | 'frontmatter___hero_image___childMdx___headings'
-  | 'frontmatter___hero_image___childMdx___html'
-  | 'frontmatter___hero_image___childMdx___mdxAST'
-  | 'frontmatter___hero_image___childMdx___tableOfContents'
-  | 'frontmatter___hero_image___childMdx___timeToRead'
-  | 'frontmatter___hero_image___childMdx___gatsbyPath'
-  | 'frontmatter___hero_image___childMdx___id'
-  | 'frontmatter___hero_image___childMdx___children'
-  | 'frontmatter___hero_image___childrenImageSharp'
-  | 'frontmatter___hero_image___childrenImageSharp___gatsbyImageData'
-  | 'frontmatter___hero_image___childrenImageSharp___id'
-  | 'frontmatter___hero_image___childrenImageSharp___children'
-  | 'frontmatter___hero_image___childImageSharp___gatsbyImageData'
-  | 'frontmatter___hero_image___childImageSharp___id'
-  | 'frontmatter___hero_image___childImageSharp___children'
-  | 'frontmatter___hero_image___id'
-  | 'frontmatter___hero_image___parent___id'
-  | 'frontmatter___hero_image___parent___children'
-  | 'frontmatter___hero_image___children'
-  | 'frontmatter___hero_image___children___id'
-  | 'frontmatter___hero_image___children___children'
-  | 'frontmatter___hero_image___internal___content'
-  | 'frontmatter___hero_image___internal___contentDigest'
-  | 'frontmatter___hero_image___internal___description'
-  | 'frontmatter___hero_image___internal___fieldOwners'
-  | 'frontmatter___hero_image___internal___ignoreType'
-  | 'frontmatter___hero_image___internal___mediaType'
-  | 'frontmatter___hero_image___internal___owner'
-  | 'frontmatter___hero_image___internal___type'
-  | 'frontmatter___hero_image_alt'
-  | 'frontmatter___hero_image_credit_text'
-  | 'frontmatter___hero_image_credit_link'
-  | 'frontmatter___author'
-  | 'frontmatter___publication_url'
-  | 'frontmatter___publication_date'
-  | 'frontmatter___conference'
-  | 'frontmatter___thumbnail___sourceInstanceName'
-  | 'frontmatter___thumbnail___absolutePath'
-  | 'frontmatter___thumbnail___relativePath'
-  | 'frontmatter___thumbnail___extension'
-  | 'frontmatter___thumbnail___size'
-  | 'frontmatter___thumbnail___prettySize'
-  | 'frontmatter___thumbnail___modifiedTime'
-  | 'frontmatter___thumbnail___accessTime'
-  | 'frontmatter___thumbnail___changeTime'
-  | 'frontmatter___thumbnail___birthTime'
-  | 'frontmatter___thumbnail___root'
-  | 'frontmatter___thumbnail___dir'
-  | 'frontmatter___thumbnail___base'
-  | 'frontmatter___thumbnail___ext'
-  | 'frontmatter___thumbnail___name'
-  | 'frontmatter___thumbnail___relativeDirectory'
-  | 'frontmatter___thumbnail___dev'
-  | 'frontmatter___thumbnail___mode'
-  | 'frontmatter___thumbnail___nlink'
-  | 'frontmatter___thumbnail___uid'
-  | 'frontmatter___thumbnail___gid'
-  | 'frontmatter___thumbnail___rdev'
-  | 'frontmatter___thumbnail___ino'
-  | 'frontmatter___thumbnail___atimeMs'
-  | 'frontmatter___thumbnail___mtimeMs'
-  | 'frontmatter___thumbnail___ctimeMs'
-  | 'frontmatter___thumbnail___atime'
-  | 'frontmatter___thumbnail___mtime'
-  | 'frontmatter___thumbnail___ctime'
-  | 'frontmatter___thumbnail___birthtime'
-  | 'frontmatter___thumbnail___birthtimeMs'
-  | 'frontmatter___thumbnail___blksize'
-  | 'frontmatter___thumbnail___blocks'
-  | 'frontmatter___thumbnail___publicURL'
-  | 'frontmatter___thumbnail___childrenMdx'
-  | 'frontmatter___thumbnail___childrenMdx___rawBody'
-  | 'frontmatter___thumbnail___childrenMdx___fileAbsolutePath'
-  | 'frontmatter___thumbnail___childrenMdx___slug'
-  | 'frontmatter___thumbnail___childrenMdx___body'
-  | 'frontmatter___thumbnail___childrenMdx___excerpt'
-  | 'frontmatter___thumbnail___childrenMdx___headings'
-  | 'frontmatter___thumbnail___childrenMdx___html'
-  | 'frontmatter___thumbnail___childrenMdx___mdxAST'
-  | 'frontmatter___thumbnail___childrenMdx___tableOfContents'
-  | 'frontmatter___thumbnail___childrenMdx___timeToRead'
-  | 'frontmatter___thumbnail___childrenMdx___gatsbyPath'
-  | 'frontmatter___thumbnail___childrenMdx___id'
-  | 'frontmatter___thumbnail___childrenMdx___children'
-  | 'frontmatter___thumbnail___childMdx___rawBody'
-  | 'frontmatter___thumbnail___childMdx___fileAbsolutePath'
-  | 'frontmatter___thumbnail___childMdx___slug'
-  | 'frontmatter___thumbnail___childMdx___body'
-  | 'frontmatter___thumbnail___childMdx___excerpt'
-  | 'frontmatter___thumbnail___childMdx___headings'
-  | 'frontmatter___thumbnail___childMdx___html'
-  | 'frontmatter___thumbnail___childMdx___mdxAST'
-  | 'frontmatter___thumbnail___childMdx___tableOfContents'
-  | 'frontmatter___thumbnail___childMdx___timeToRead'
-  | 'frontmatter___thumbnail___childMdx___gatsbyPath'
-  | 'frontmatter___thumbnail___childMdx___id'
-  | 'frontmatter___thumbnail___childMdx___children'
-  | 'frontmatter___thumbnail___childrenImageSharp'
-  | 'frontmatter___thumbnail___childrenImageSharp___gatsbyImageData'
-  | 'frontmatter___thumbnail___childrenImageSharp___id'
-  | 'frontmatter___thumbnail___childrenImageSharp___children'
-  | 'frontmatter___thumbnail___childImageSharp___gatsbyImageData'
-  | 'frontmatter___thumbnail___childImageSharp___id'
-  | 'frontmatter___thumbnail___childImageSharp___children'
-  | 'frontmatter___thumbnail___id'
-  | 'frontmatter___thumbnail___parent___id'
-  | 'frontmatter___thumbnail___parent___children'
-  | 'frontmatter___thumbnail___children'
-  | 'frontmatter___thumbnail___children___id'
-  | 'frontmatter___thumbnail___children___children'
-  | 'frontmatter___thumbnail___internal___content'
-  | 'frontmatter___thumbnail___internal___contentDigest'
-  | 'frontmatter___thumbnail___internal___description'
-  | 'frontmatter___thumbnail___internal___fieldOwners'
-  | 'frontmatter___thumbnail___internal___ignoreType'
-  | 'frontmatter___thumbnail___internal___mediaType'
-  | 'frontmatter___thumbnail___internal___owner'
-  | 'frontmatter___thumbnail___internal___type'
-  | 'frontmatter___paper_pdf___sourceInstanceName'
-  | 'frontmatter___paper_pdf___absolutePath'
-  | 'frontmatter___paper_pdf___relativePath'
-  | 'frontmatter___paper_pdf___extension'
-  | 'frontmatter___paper_pdf___size'
-  | 'frontmatter___paper_pdf___prettySize'
-  | 'frontmatter___paper_pdf___modifiedTime'
-  | 'frontmatter___paper_pdf___accessTime'
-  | 'frontmatter___paper_pdf___changeTime'
-  | 'frontmatter___paper_pdf___birthTime'
-  | 'frontmatter___paper_pdf___root'
-  | 'frontmatter___paper_pdf___dir'
-  | 'frontmatter___paper_pdf___base'
-  | 'frontmatter___paper_pdf___ext'
-  | 'frontmatter___paper_pdf___name'
-  | 'frontmatter___paper_pdf___relativeDirectory'
-  | 'frontmatter___paper_pdf___dev'
-  | 'frontmatter___paper_pdf___mode'
-  | 'frontmatter___paper_pdf___nlink'
-  | 'frontmatter___paper_pdf___uid'
-  | 'frontmatter___paper_pdf___gid'
-  | 'frontmatter___paper_pdf___rdev'
-  | 'frontmatter___paper_pdf___ino'
-  | 'frontmatter___paper_pdf___atimeMs'
-  | 'frontmatter___paper_pdf___mtimeMs'
-  | 'frontmatter___paper_pdf___ctimeMs'
-  | 'frontmatter___paper_pdf___atime'
-  | 'frontmatter___paper_pdf___mtime'
-  | 'frontmatter___paper_pdf___ctime'
-  | 'frontmatter___paper_pdf___birthtime'
-  | 'frontmatter___paper_pdf___birthtimeMs'
-  | 'frontmatter___paper_pdf___blksize'
-  | 'frontmatter___paper_pdf___blocks'
-  | 'frontmatter___paper_pdf___publicURL'
-  | 'frontmatter___paper_pdf___childrenMdx'
-  | 'frontmatter___paper_pdf___childrenMdx___rawBody'
-  | 'frontmatter___paper_pdf___childrenMdx___fileAbsolutePath'
-  | 'frontmatter___paper_pdf___childrenMdx___slug'
-  | 'frontmatter___paper_pdf___childrenMdx___body'
-  | 'frontmatter___paper_pdf___childrenMdx___excerpt'
-  | 'frontmatter___paper_pdf___childrenMdx___headings'
-  | 'frontmatter___paper_pdf___childrenMdx___html'
-  | 'frontmatter___paper_pdf___childrenMdx___mdxAST'
-  | 'frontmatter___paper_pdf___childrenMdx___tableOfContents'
-  | 'frontmatter___paper_pdf___childrenMdx___timeToRead'
-  | 'frontmatter___paper_pdf___childrenMdx___gatsbyPath'
-  | 'frontmatter___paper_pdf___childrenMdx___id'
-  | 'frontmatter___paper_pdf___childrenMdx___children'
-  | 'frontmatter___paper_pdf___childMdx___rawBody'
-  | 'frontmatter___paper_pdf___childMdx___fileAbsolutePath'
-  | 'frontmatter___paper_pdf___childMdx___slug'
-  | 'frontmatter___paper_pdf___childMdx___body'
-  | 'frontmatter___paper_pdf___childMdx___excerpt'
-  | 'frontmatter___paper_pdf___childMdx___headings'
-  | 'frontmatter___paper_pdf___childMdx___html'
-  | 'frontmatter___paper_pdf___childMdx___mdxAST'
-  | 'frontmatter___paper_pdf___childMdx___tableOfContents'
-  | 'frontmatter___paper_pdf___childMdx___timeToRead'
-  | 'frontmatter___paper_pdf___childMdx___gatsbyPath'
-  | 'frontmatter___paper_pdf___childMdx___id'
-  | 'frontmatter___paper_pdf___childMdx___children'
-  | 'frontmatter___paper_pdf___childrenImageSharp'
-  | 'frontmatter___paper_pdf___childrenImageSharp___gatsbyImageData'
-  | 'frontmatter___paper_pdf___childrenImageSharp___id'
-  | 'frontmatter___paper_pdf___childrenImageSharp___children'
-  | 'frontmatter___paper_pdf___childImageSharp___gatsbyImageData'
-  | 'frontmatter___paper_pdf___childImageSharp___id'
-  | 'frontmatter___paper_pdf___childImageSharp___children'
-  | 'frontmatter___paper_pdf___id'
-  | 'frontmatter___paper_pdf___parent___id'
-  | 'frontmatter___paper_pdf___parent___children'
-  | 'frontmatter___paper_pdf___children'
-  | 'frontmatter___paper_pdf___children___id'
-  | 'frontmatter___paper_pdf___children___children'
-  | 'frontmatter___paper_pdf___internal___content'
-  | 'frontmatter___paper_pdf___internal___contentDigest'
-  | 'frontmatter___paper_pdf___internal___description'
-  | 'frontmatter___paper_pdf___internal___fieldOwners'
-  | 'frontmatter___paper_pdf___internal___ignoreType'
-  | 'frontmatter___paper_pdf___internal___mediaType'
-  | 'frontmatter___paper_pdf___internal___owner'
-  | 'frontmatter___paper_pdf___internal___type'
-  | 'frontmatter___poster_pdf___sourceInstanceName'
-  | 'frontmatter___poster_pdf___absolutePath'
-  | 'frontmatter___poster_pdf___relativePath'
-  | 'frontmatter___poster_pdf___extension'
-  | 'frontmatter___poster_pdf___size'
-  | 'frontmatter___poster_pdf___prettySize'
-  | 'frontmatter___poster_pdf___modifiedTime'
-  | 'frontmatter___poster_pdf___accessTime'
-  | 'frontmatter___poster_pdf___changeTime'
-  | 'frontmatter___poster_pdf___birthTime'
-  | 'frontmatter___poster_pdf___root'
-  | 'frontmatter___poster_pdf___dir'
-  | 'frontmatter___poster_pdf___base'
-  | 'frontmatter___poster_pdf___ext'
-  | 'frontmatter___poster_pdf___name'
-  | 'frontmatter___poster_pdf___relativeDirectory'
-  | 'frontmatter___poster_pdf___dev'
-  | 'frontmatter___poster_pdf___mode'
-  | 'frontmatter___poster_pdf___nlink'
-  | 'frontmatter___poster_pdf___uid'
-  | 'frontmatter___poster_pdf___gid'
-  | 'frontmatter___poster_pdf___rdev'
-  | 'frontmatter___poster_pdf___ino'
-  | 'frontmatter___poster_pdf___atimeMs'
-  | 'frontmatter___poster_pdf___mtimeMs'
-  | 'frontmatter___poster_pdf___ctimeMs'
-  | 'frontmatter___poster_pdf___atime'
-  | 'frontmatter___poster_pdf___mtime'
-  | 'frontmatter___poster_pdf___ctime'
-  | 'frontmatter___poster_pdf___birthtime'
-  | 'frontmatter___poster_pdf___birthtimeMs'
-  | 'frontmatter___poster_pdf___blksize'
-  | 'frontmatter___poster_pdf___blocks'
-  | 'frontmatter___poster_pdf___publicURL'
-  | 'frontmatter___poster_pdf___childrenMdx'
-  | 'frontmatter___poster_pdf___childrenMdx___rawBody'
-  | 'frontmatter___poster_pdf___childrenMdx___fileAbsolutePath'
-  | 'frontmatter___poster_pdf___childrenMdx___slug'
-  | 'frontmatter___poster_pdf___childrenMdx___body'
-  | 'frontmatter___poster_pdf___childrenMdx___excerpt'
-  | 'frontmatter___poster_pdf___childrenMdx___headings'
-  | 'frontmatter___poster_pdf___childrenMdx___html'
-  | 'frontmatter___poster_pdf___childrenMdx___mdxAST'
-  | 'frontmatter___poster_pdf___childrenMdx___tableOfContents'
-  | 'frontmatter___poster_pdf___childrenMdx___timeToRead'
-  | 'frontmatter___poster_pdf___childrenMdx___gatsbyPath'
-  | 'frontmatter___poster_pdf___childrenMdx___id'
-  | 'frontmatter___poster_pdf___childrenMdx___children'
-  | 'frontmatter___poster_pdf___childMdx___rawBody'
-  | 'frontmatter___poster_pdf___childMdx___fileAbsolutePath'
-  | 'frontmatter___poster_pdf___childMdx___slug'
-  | 'frontmatter___poster_pdf___childMdx___body'
-  | 'frontmatter___poster_pdf___childMdx___excerpt'
-  | 'frontmatter___poster_pdf___childMdx___headings'
-  | 'frontmatter___poster_pdf___childMdx___html'
-  | 'frontmatter___poster_pdf___childMdx___mdxAST'
-  | 'frontmatter___poster_pdf___childMdx___tableOfContents'
-  | 'frontmatter___poster_pdf___childMdx___timeToRead'
-  | 'frontmatter___poster_pdf___childMdx___gatsbyPath'
-  | 'frontmatter___poster_pdf___childMdx___id'
-  | 'frontmatter___poster_pdf___childMdx___children'
-  | 'frontmatter___poster_pdf___childrenImageSharp'
-  | 'frontmatter___poster_pdf___childrenImageSharp___gatsbyImageData'
-  | 'frontmatter___poster_pdf___childrenImageSharp___id'
-  | 'frontmatter___poster_pdf___childrenImageSharp___children'
-  | 'frontmatter___poster_pdf___childImageSharp___gatsbyImageData'
-  | 'frontmatter___poster_pdf___childImageSharp___id'
-  | 'frontmatter___poster_pdf___childImageSharp___children'
-  | 'frontmatter___poster_pdf___id'
-  | 'frontmatter___poster_pdf___parent___id'
-  | 'frontmatter___poster_pdf___parent___children'
-  | 'frontmatter___poster_pdf___children'
-  | 'frontmatter___poster_pdf___children___id'
-  | 'frontmatter___poster_pdf___children___children'
-  | 'frontmatter___poster_pdf___internal___content'
-  | 'frontmatter___poster_pdf___internal___contentDigest'
-  | 'frontmatter___poster_pdf___internal___description'
-  | 'frontmatter___poster_pdf___internal___fieldOwners'
-  | 'frontmatter___poster_pdf___internal___ignoreType'
-  | 'frontmatter___poster_pdf___internal___mediaType'
-  | 'frontmatter___poster_pdf___internal___owner'
-  | 'frontmatter___poster_pdf___internal___type'
-  | 'frontmatter___github_url'
-  | 'frontmatter___format'
-  | 'slug'
-  | 'body'
-  | 'excerpt'
-  | 'headings'
-  | 'headings___value'
-  | 'headings___depth'
-  | 'html'
-  | 'mdxAST'
-  | 'tableOfContents'
-  | 'timeToRead'
-  | 'wordCount___paragraphs'
-  | 'wordCount___sentences'
-  | 'wordCount___words'
-  | 'gatsbyPath'
-  | 'id'
-  | 'parent___id'
-  | 'parent___parent___id'
-  | 'parent___parent___parent___id'
-  | 'parent___parent___parent___children'
-  | 'parent___parent___children'
-  | 'parent___parent___children___id'
-  | 'parent___parent___children___children'
-  | 'parent___parent___internal___content'
-  | 'parent___parent___internal___contentDigest'
-  | 'parent___parent___internal___description'
-  | 'parent___parent___internal___fieldOwners'
-  | 'parent___parent___internal___ignoreType'
-  | 'parent___parent___internal___mediaType'
-  | 'parent___parent___internal___owner'
-  | 'parent___parent___internal___type'
-  | 'parent___children'
-  | 'parent___children___id'
-  | 'parent___children___parent___id'
-  | 'parent___children___parent___children'
-  | 'parent___children___children'
-  | 'parent___children___children___id'
-  | 'parent___children___children___children'
-  | 'parent___children___internal___content'
-  | 'parent___children___internal___contentDigest'
-  | 'parent___children___internal___description'
-  | 'parent___children___internal___fieldOwners'
-  | 'parent___children___internal___ignoreType'
-  | 'parent___children___internal___mediaType'
-  | 'parent___children___internal___owner'
-  | 'parent___children___internal___type'
-  | 'parent___internal___content'
-  | 'parent___internal___contentDigest'
-  | 'parent___internal___description'
-  | 'parent___internal___fieldOwners'
-  | 'parent___internal___ignoreType'
-  | 'parent___internal___mediaType'
-  | 'parent___internal___owner'
-  | 'parent___internal___type'
-  | 'children'
-  | 'children___id'
-  | 'children___parent___id'
-  | 'children___parent___parent___id'
-  | 'children___parent___parent___children'
-  | 'children___parent___children'
-  | 'children___parent___children___id'
-  | 'children___parent___children___children'
-  | 'children___parent___internal___content'
-  | 'children___parent___internal___contentDigest'
-  | 'children___parent___internal___description'
-  | 'children___parent___internal___fieldOwners'
-  | 'children___parent___internal___ignoreType'
-  | 'children___parent___internal___mediaType'
-  | 'children___parent___internal___owner'
-  | 'children___parent___internal___type'
-  | 'children___children'
-  | 'children___children___id'
-  | 'children___children___parent___id'
-  | 'children___children___parent___children'
-  | 'children___children___children'
-  | 'children___children___children___id'
-  | 'children___children___children___children'
-  | 'children___children___internal___content'
-  | 'children___children___internal___contentDigest'
-  | 'children___children___internal___description'
-  | 'children___children___internal___fieldOwners'
-  | 'children___children___internal___ignoreType'
-  | 'children___children___internal___mediaType'
-  | 'children___children___internal___owner'
-  | 'children___children___internal___type'
-  | 'children___internal___content'
-  | 'children___internal___contentDigest'
-  | 'children___internal___description'
-  | 'children___internal___fieldOwners'
-  | 'children___internal___ignoreType'
-  | 'children___internal___mediaType'
-  | 'children___internal___owner'
-  | 'children___internal___type'
-  | 'internal___content'
-  | 'internal___contentDigest'
-  | 'internal___description'
-  | 'internal___fieldOwners'
-  | 'internal___ignoreType'
-  | 'internal___mediaType'
-  | 'internal___owner'
-  | 'internal___type';
-
-export type MdxGroupConnection = {
-  totalCount: Scalars['Int'];
-  edges: Array<MdxEdge>;
-  nodes: Array<Mdx>;
-  pageInfo: PageInfo;
-  distinct: Array<Scalars['String']>;
-  max?: Maybe<Scalars['Float']>;
-  min?: Maybe<Scalars['Float']>;
-  sum?: Maybe<Scalars['Float']>;
-  group: Array<MdxGroupConnection>;
-  field: Scalars['String'];
-  fieldValue?: Maybe<Scalars['String']>;
-};
-
-
-export type MdxGroupConnectionDistinctArgs = {
-  field: MdxFieldsEnum;
-};
-
-
-export type MdxGroupConnectionMaxArgs = {
-  field: MdxFieldsEnum;
-};
-
-
-export type MdxGroupConnectionMinArgs = {
-  field: MdxFieldsEnum;
-};
-
-
-export type MdxGroupConnectionSumArgs = {
-  field: MdxFieldsEnum;
-};
-
-
-export type MdxGroupConnectionGroupArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  limit?: InputMaybe<Scalars['Int']>;
-  field: MdxFieldsEnum;
-};
-
-export type MdxSortInput = {
-  fields?: InputMaybe<Array<InputMaybe<MdxFieldsEnum>>>;
   order?: InputMaybe<Array<InputMaybe<SortOrderEnum>>>;
 };
 
@@ -3939,6 +3309,7 @@ export type ImageSharpFieldsEnum =
   | 'parent___parent___internal___mediaType'
   | 'parent___parent___internal___owner'
   | 'parent___parent___internal___type'
+  | 'parent___parent___internal___contentFilePath'
   | 'parent___children'
   | 'parent___children___id'
   | 'parent___children___parent___id'
@@ -3954,6 +3325,7 @@ export type ImageSharpFieldsEnum =
   | 'parent___children___internal___mediaType'
   | 'parent___children___internal___owner'
   | 'parent___children___internal___type'
+  | 'parent___children___internal___contentFilePath'
   | 'parent___internal___content'
   | 'parent___internal___contentDigest'
   | 'parent___internal___description'
@@ -3962,6 +3334,7 @@ export type ImageSharpFieldsEnum =
   | 'parent___internal___mediaType'
   | 'parent___internal___owner'
   | 'parent___internal___type'
+  | 'parent___internal___contentFilePath'
   | 'children'
   | 'children___id'
   | 'children___parent___id'
@@ -3978,6 +3351,7 @@ export type ImageSharpFieldsEnum =
   | 'children___parent___internal___mediaType'
   | 'children___parent___internal___owner'
   | 'children___parent___internal___type'
+  | 'children___parent___internal___contentFilePath'
   | 'children___children'
   | 'children___children___id'
   | 'children___children___parent___id'
@@ -3993,6 +3367,7 @@ export type ImageSharpFieldsEnum =
   | 'children___children___internal___mediaType'
   | 'children___children___internal___owner'
   | 'children___children___internal___type'
+  | 'children___children___internal___contentFilePath'
   | 'children___internal___content'
   | 'children___internal___contentDigest'
   | 'children___internal___description'
@@ -4001,6 +3376,7 @@ export type ImageSharpFieldsEnum =
   | 'children___internal___mediaType'
   | 'children___internal___owner'
   | 'children___internal___type'
+  | 'children___internal___contentFilePath'
   | 'internal___content'
   | 'internal___contentDigest'
   | 'internal___description'
@@ -4008,7 +3384,8 @@ export type ImageSharpFieldsEnum =
   | 'internal___ignoreType'
   | 'internal___mediaType'
   | 'internal___owner'
-  | 'internal___type';
+  | 'internal___type'
+  | 'internal___contentFilePath';
 
 export type ImageSharpGroupConnection = {
   totalCount: Scalars['Int'];
@@ -4056,27 +3433,433 @@ export type ImageSharpSortInput = {
   order?: InputMaybe<Array<InputMaybe<SortOrderEnum>>>;
 };
 
+export type MdxConnection = {
+  totalCount: Scalars['Int'];
+  edges: Array<MdxEdge>;
+  nodes: Array<Mdx>;
+  pageInfo: PageInfo;
+  distinct: Array<Scalars['String']>;
+  max?: Maybe<Scalars['Float']>;
+  min?: Maybe<Scalars['Float']>;
+  sum?: Maybe<Scalars['Float']>;
+  group: Array<MdxGroupConnection>;
+};
+
+
+export type MdxConnectionDistinctArgs = {
+  field: MdxFieldsEnum;
+};
+
+
+export type MdxConnectionMaxArgs = {
+  field: MdxFieldsEnum;
+};
+
+
+export type MdxConnectionMinArgs = {
+  field: MdxFieldsEnum;
+};
+
+
+export type MdxConnectionSumArgs = {
+  field: MdxFieldsEnum;
+};
+
+
+export type MdxConnectionGroupArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  field: MdxFieldsEnum;
+};
+
+export type MdxEdge = {
+  next?: Maybe<Mdx>;
+  node: Mdx;
+  previous?: Maybe<Mdx>;
+};
+
+export type MdxFieldsEnum =
+  | 'excerpt'
+  | 'tableOfContents'
+  | 'body'
+  | 'frontmatter___title'
+  | 'frontmatter___author'
+  | 'frontmatter___publication_url'
+  | 'frontmatter___publication_date'
+  | 'frontmatter___conference'
+  | 'frontmatter___thumbnail___sourceInstanceName'
+  | 'frontmatter___thumbnail___absolutePath'
+  | 'frontmatter___thumbnail___relativePath'
+  | 'frontmatter___thumbnail___extension'
+  | 'frontmatter___thumbnail___size'
+  | 'frontmatter___thumbnail___prettySize'
+  | 'frontmatter___thumbnail___modifiedTime'
+  | 'frontmatter___thumbnail___accessTime'
+  | 'frontmatter___thumbnail___changeTime'
+  | 'frontmatter___thumbnail___birthTime'
+  | 'frontmatter___thumbnail___root'
+  | 'frontmatter___thumbnail___dir'
+  | 'frontmatter___thumbnail___base'
+  | 'frontmatter___thumbnail___ext'
+  | 'frontmatter___thumbnail___name'
+  | 'frontmatter___thumbnail___relativeDirectory'
+  | 'frontmatter___thumbnail___dev'
+  | 'frontmatter___thumbnail___mode'
+  | 'frontmatter___thumbnail___nlink'
+  | 'frontmatter___thumbnail___uid'
+  | 'frontmatter___thumbnail___gid'
+  | 'frontmatter___thumbnail___rdev'
+  | 'frontmatter___thumbnail___ino'
+  | 'frontmatter___thumbnail___atimeMs'
+  | 'frontmatter___thumbnail___mtimeMs'
+  | 'frontmatter___thumbnail___ctimeMs'
+  | 'frontmatter___thumbnail___atime'
+  | 'frontmatter___thumbnail___mtime'
+  | 'frontmatter___thumbnail___ctime'
+  | 'frontmatter___thumbnail___birthtime'
+  | 'frontmatter___thumbnail___birthtimeMs'
+  | 'frontmatter___thumbnail___blksize'
+  | 'frontmatter___thumbnail___blocks'
+  | 'frontmatter___thumbnail___publicURL'
+  | 'frontmatter___thumbnail___childrenImageSharp'
+  | 'frontmatter___thumbnail___childrenImageSharp___gatsbyImageData'
+  | 'frontmatter___thumbnail___childrenImageSharp___id'
+  | 'frontmatter___thumbnail___childrenImageSharp___children'
+  | 'frontmatter___thumbnail___childImageSharp___gatsbyImageData'
+  | 'frontmatter___thumbnail___childImageSharp___id'
+  | 'frontmatter___thumbnail___childImageSharp___children'
+  | 'frontmatter___thumbnail___childrenMdx'
+  | 'frontmatter___thumbnail___childrenMdx___excerpt'
+  | 'frontmatter___thumbnail___childrenMdx___tableOfContents'
+  | 'frontmatter___thumbnail___childrenMdx___body'
+  | 'frontmatter___thumbnail___childrenMdx___gatsbyPath'
+  | 'frontmatter___thumbnail___childrenMdx___id'
+  | 'frontmatter___thumbnail___childrenMdx___children'
+  | 'frontmatter___thumbnail___childMdx___excerpt'
+  | 'frontmatter___thumbnail___childMdx___tableOfContents'
+  | 'frontmatter___thumbnail___childMdx___body'
+  | 'frontmatter___thumbnail___childMdx___gatsbyPath'
+  | 'frontmatter___thumbnail___childMdx___id'
+  | 'frontmatter___thumbnail___childMdx___children'
+  | 'frontmatter___thumbnail___id'
+  | 'frontmatter___thumbnail___parent___id'
+  | 'frontmatter___thumbnail___parent___children'
+  | 'frontmatter___thumbnail___children'
+  | 'frontmatter___thumbnail___children___id'
+  | 'frontmatter___thumbnail___children___children'
+  | 'frontmatter___thumbnail___internal___content'
+  | 'frontmatter___thumbnail___internal___contentDigest'
+  | 'frontmatter___thumbnail___internal___description'
+  | 'frontmatter___thumbnail___internal___fieldOwners'
+  | 'frontmatter___thumbnail___internal___ignoreType'
+  | 'frontmatter___thumbnail___internal___mediaType'
+  | 'frontmatter___thumbnail___internal___owner'
+  | 'frontmatter___thumbnail___internal___type'
+  | 'frontmatter___thumbnail___internal___contentFilePath'
+  | 'frontmatter___paper_pdf___sourceInstanceName'
+  | 'frontmatter___paper_pdf___absolutePath'
+  | 'frontmatter___paper_pdf___relativePath'
+  | 'frontmatter___paper_pdf___extension'
+  | 'frontmatter___paper_pdf___size'
+  | 'frontmatter___paper_pdf___prettySize'
+  | 'frontmatter___paper_pdf___modifiedTime'
+  | 'frontmatter___paper_pdf___accessTime'
+  | 'frontmatter___paper_pdf___changeTime'
+  | 'frontmatter___paper_pdf___birthTime'
+  | 'frontmatter___paper_pdf___root'
+  | 'frontmatter___paper_pdf___dir'
+  | 'frontmatter___paper_pdf___base'
+  | 'frontmatter___paper_pdf___ext'
+  | 'frontmatter___paper_pdf___name'
+  | 'frontmatter___paper_pdf___relativeDirectory'
+  | 'frontmatter___paper_pdf___dev'
+  | 'frontmatter___paper_pdf___mode'
+  | 'frontmatter___paper_pdf___nlink'
+  | 'frontmatter___paper_pdf___uid'
+  | 'frontmatter___paper_pdf___gid'
+  | 'frontmatter___paper_pdf___rdev'
+  | 'frontmatter___paper_pdf___ino'
+  | 'frontmatter___paper_pdf___atimeMs'
+  | 'frontmatter___paper_pdf___mtimeMs'
+  | 'frontmatter___paper_pdf___ctimeMs'
+  | 'frontmatter___paper_pdf___atime'
+  | 'frontmatter___paper_pdf___mtime'
+  | 'frontmatter___paper_pdf___ctime'
+  | 'frontmatter___paper_pdf___birthtime'
+  | 'frontmatter___paper_pdf___birthtimeMs'
+  | 'frontmatter___paper_pdf___blksize'
+  | 'frontmatter___paper_pdf___blocks'
+  | 'frontmatter___paper_pdf___publicURL'
+  | 'frontmatter___paper_pdf___childrenImageSharp'
+  | 'frontmatter___paper_pdf___childrenImageSharp___gatsbyImageData'
+  | 'frontmatter___paper_pdf___childrenImageSharp___id'
+  | 'frontmatter___paper_pdf___childrenImageSharp___children'
+  | 'frontmatter___paper_pdf___childImageSharp___gatsbyImageData'
+  | 'frontmatter___paper_pdf___childImageSharp___id'
+  | 'frontmatter___paper_pdf___childImageSharp___children'
+  | 'frontmatter___paper_pdf___childrenMdx'
+  | 'frontmatter___paper_pdf___childrenMdx___excerpt'
+  | 'frontmatter___paper_pdf___childrenMdx___tableOfContents'
+  | 'frontmatter___paper_pdf___childrenMdx___body'
+  | 'frontmatter___paper_pdf___childrenMdx___gatsbyPath'
+  | 'frontmatter___paper_pdf___childrenMdx___id'
+  | 'frontmatter___paper_pdf___childrenMdx___children'
+  | 'frontmatter___paper_pdf___childMdx___excerpt'
+  | 'frontmatter___paper_pdf___childMdx___tableOfContents'
+  | 'frontmatter___paper_pdf___childMdx___body'
+  | 'frontmatter___paper_pdf___childMdx___gatsbyPath'
+  | 'frontmatter___paper_pdf___childMdx___id'
+  | 'frontmatter___paper_pdf___childMdx___children'
+  | 'frontmatter___paper_pdf___id'
+  | 'frontmatter___paper_pdf___parent___id'
+  | 'frontmatter___paper_pdf___parent___children'
+  | 'frontmatter___paper_pdf___children'
+  | 'frontmatter___paper_pdf___children___id'
+  | 'frontmatter___paper_pdf___children___children'
+  | 'frontmatter___paper_pdf___internal___content'
+  | 'frontmatter___paper_pdf___internal___contentDigest'
+  | 'frontmatter___paper_pdf___internal___description'
+  | 'frontmatter___paper_pdf___internal___fieldOwners'
+  | 'frontmatter___paper_pdf___internal___ignoreType'
+  | 'frontmatter___paper_pdf___internal___mediaType'
+  | 'frontmatter___paper_pdf___internal___owner'
+  | 'frontmatter___paper_pdf___internal___type'
+  | 'frontmatter___paper_pdf___internal___contentFilePath'
+  | 'frontmatter___poster_pdf___sourceInstanceName'
+  | 'frontmatter___poster_pdf___absolutePath'
+  | 'frontmatter___poster_pdf___relativePath'
+  | 'frontmatter___poster_pdf___extension'
+  | 'frontmatter___poster_pdf___size'
+  | 'frontmatter___poster_pdf___prettySize'
+  | 'frontmatter___poster_pdf___modifiedTime'
+  | 'frontmatter___poster_pdf___accessTime'
+  | 'frontmatter___poster_pdf___changeTime'
+  | 'frontmatter___poster_pdf___birthTime'
+  | 'frontmatter___poster_pdf___root'
+  | 'frontmatter___poster_pdf___dir'
+  | 'frontmatter___poster_pdf___base'
+  | 'frontmatter___poster_pdf___ext'
+  | 'frontmatter___poster_pdf___name'
+  | 'frontmatter___poster_pdf___relativeDirectory'
+  | 'frontmatter___poster_pdf___dev'
+  | 'frontmatter___poster_pdf___mode'
+  | 'frontmatter___poster_pdf___nlink'
+  | 'frontmatter___poster_pdf___uid'
+  | 'frontmatter___poster_pdf___gid'
+  | 'frontmatter___poster_pdf___rdev'
+  | 'frontmatter___poster_pdf___ino'
+  | 'frontmatter___poster_pdf___atimeMs'
+  | 'frontmatter___poster_pdf___mtimeMs'
+  | 'frontmatter___poster_pdf___ctimeMs'
+  | 'frontmatter___poster_pdf___atime'
+  | 'frontmatter___poster_pdf___mtime'
+  | 'frontmatter___poster_pdf___ctime'
+  | 'frontmatter___poster_pdf___birthtime'
+  | 'frontmatter___poster_pdf___birthtimeMs'
+  | 'frontmatter___poster_pdf___blksize'
+  | 'frontmatter___poster_pdf___blocks'
+  | 'frontmatter___poster_pdf___publicURL'
+  | 'frontmatter___poster_pdf___childrenImageSharp'
+  | 'frontmatter___poster_pdf___childrenImageSharp___gatsbyImageData'
+  | 'frontmatter___poster_pdf___childrenImageSharp___id'
+  | 'frontmatter___poster_pdf___childrenImageSharp___children'
+  | 'frontmatter___poster_pdf___childImageSharp___gatsbyImageData'
+  | 'frontmatter___poster_pdf___childImageSharp___id'
+  | 'frontmatter___poster_pdf___childImageSharp___children'
+  | 'frontmatter___poster_pdf___childrenMdx'
+  | 'frontmatter___poster_pdf___childrenMdx___excerpt'
+  | 'frontmatter___poster_pdf___childrenMdx___tableOfContents'
+  | 'frontmatter___poster_pdf___childrenMdx___body'
+  | 'frontmatter___poster_pdf___childrenMdx___gatsbyPath'
+  | 'frontmatter___poster_pdf___childrenMdx___id'
+  | 'frontmatter___poster_pdf___childrenMdx___children'
+  | 'frontmatter___poster_pdf___childMdx___excerpt'
+  | 'frontmatter___poster_pdf___childMdx___tableOfContents'
+  | 'frontmatter___poster_pdf___childMdx___body'
+  | 'frontmatter___poster_pdf___childMdx___gatsbyPath'
+  | 'frontmatter___poster_pdf___childMdx___id'
+  | 'frontmatter___poster_pdf___childMdx___children'
+  | 'frontmatter___poster_pdf___id'
+  | 'frontmatter___poster_pdf___parent___id'
+  | 'frontmatter___poster_pdf___parent___children'
+  | 'frontmatter___poster_pdf___children'
+  | 'frontmatter___poster_pdf___children___id'
+  | 'frontmatter___poster_pdf___children___children'
+  | 'frontmatter___poster_pdf___internal___content'
+  | 'frontmatter___poster_pdf___internal___contentDigest'
+  | 'frontmatter___poster_pdf___internal___description'
+  | 'frontmatter___poster_pdf___internal___fieldOwners'
+  | 'frontmatter___poster_pdf___internal___ignoreType'
+  | 'frontmatter___poster_pdf___internal___mediaType'
+  | 'frontmatter___poster_pdf___internal___owner'
+  | 'frontmatter___poster_pdf___internal___type'
+  | 'frontmatter___poster_pdf___internal___contentFilePath'
+  | 'frontmatter___github_url'
+  | 'frontmatter___format'
+  | 'frontmatter___slug'
+  | 'frontmatter___date'
+  | 'gatsbyPath'
+  | 'id'
+  | 'parent___id'
+  | 'parent___parent___id'
+  | 'parent___parent___parent___id'
+  | 'parent___parent___parent___children'
+  | 'parent___parent___children'
+  | 'parent___parent___children___id'
+  | 'parent___parent___children___children'
+  | 'parent___parent___internal___content'
+  | 'parent___parent___internal___contentDigest'
+  | 'parent___parent___internal___description'
+  | 'parent___parent___internal___fieldOwners'
+  | 'parent___parent___internal___ignoreType'
+  | 'parent___parent___internal___mediaType'
+  | 'parent___parent___internal___owner'
+  | 'parent___parent___internal___type'
+  | 'parent___parent___internal___contentFilePath'
+  | 'parent___children'
+  | 'parent___children___id'
+  | 'parent___children___parent___id'
+  | 'parent___children___parent___children'
+  | 'parent___children___children'
+  | 'parent___children___children___id'
+  | 'parent___children___children___children'
+  | 'parent___children___internal___content'
+  | 'parent___children___internal___contentDigest'
+  | 'parent___children___internal___description'
+  | 'parent___children___internal___fieldOwners'
+  | 'parent___children___internal___ignoreType'
+  | 'parent___children___internal___mediaType'
+  | 'parent___children___internal___owner'
+  | 'parent___children___internal___type'
+  | 'parent___children___internal___contentFilePath'
+  | 'parent___internal___content'
+  | 'parent___internal___contentDigest'
+  | 'parent___internal___description'
+  | 'parent___internal___fieldOwners'
+  | 'parent___internal___ignoreType'
+  | 'parent___internal___mediaType'
+  | 'parent___internal___owner'
+  | 'parent___internal___type'
+  | 'parent___internal___contentFilePath'
+  | 'children'
+  | 'children___id'
+  | 'children___parent___id'
+  | 'children___parent___parent___id'
+  | 'children___parent___parent___children'
+  | 'children___parent___children'
+  | 'children___parent___children___id'
+  | 'children___parent___children___children'
+  | 'children___parent___internal___content'
+  | 'children___parent___internal___contentDigest'
+  | 'children___parent___internal___description'
+  | 'children___parent___internal___fieldOwners'
+  | 'children___parent___internal___ignoreType'
+  | 'children___parent___internal___mediaType'
+  | 'children___parent___internal___owner'
+  | 'children___parent___internal___type'
+  | 'children___parent___internal___contentFilePath'
+  | 'children___children'
+  | 'children___children___id'
+  | 'children___children___parent___id'
+  | 'children___children___parent___children'
+  | 'children___children___children'
+  | 'children___children___children___id'
+  | 'children___children___children___children'
+  | 'children___children___internal___content'
+  | 'children___children___internal___contentDigest'
+  | 'children___children___internal___description'
+  | 'children___children___internal___fieldOwners'
+  | 'children___children___internal___ignoreType'
+  | 'children___children___internal___mediaType'
+  | 'children___children___internal___owner'
+  | 'children___children___internal___type'
+  | 'children___children___internal___contentFilePath'
+  | 'children___internal___content'
+  | 'children___internal___contentDigest'
+  | 'children___internal___description'
+  | 'children___internal___fieldOwners'
+  | 'children___internal___ignoreType'
+  | 'children___internal___mediaType'
+  | 'children___internal___owner'
+  | 'children___internal___type'
+  | 'children___internal___contentFilePath'
+  | 'internal___content'
+  | 'internal___contentDigest'
+  | 'internal___description'
+  | 'internal___fieldOwners'
+  | 'internal___ignoreType'
+  | 'internal___mediaType'
+  | 'internal___owner'
+  | 'internal___type'
+  | 'internal___contentFilePath';
+
+export type MdxGroupConnection = {
+  totalCount: Scalars['Int'];
+  edges: Array<MdxEdge>;
+  nodes: Array<Mdx>;
+  pageInfo: PageInfo;
+  distinct: Array<Scalars['String']>;
+  max?: Maybe<Scalars['Float']>;
+  min?: Maybe<Scalars['Float']>;
+  sum?: Maybe<Scalars['Float']>;
+  group: Array<MdxGroupConnection>;
+  field: Scalars['String'];
+  fieldValue?: Maybe<Scalars['String']>;
+};
+
+
+export type MdxGroupConnectionDistinctArgs = {
+  field: MdxFieldsEnum;
+};
+
+
+export type MdxGroupConnectionMaxArgs = {
+  field: MdxFieldsEnum;
+};
+
+
+export type MdxGroupConnectionMinArgs = {
+  field: MdxFieldsEnum;
+};
+
+
+export type MdxGroupConnectionSumArgs = {
+  field: MdxFieldsEnum;
+};
+
+
+export type MdxGroupConnectionGroupArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  field: MdxFieldsEnum;
+};
+
+export type MdxSortInput = {
+  fields?: InputMaybe<Array<InputMaybe<MdxFieldsEnum>>>;
+  order?: InputMaybe<Array<InputMaybe<SortOrderEnum>>>;
+};
+
 export type CvQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CvQuery = { file?: { publicURL?: string | null } | null };
 
-export type InfoQueryVariables = Exact<{ [key: string]: never; }>;
+export type IndexPageQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type InfoQuery = { intro?: { body: string, frontmatter?: { publication_date?: any | null, date?: any | null } | null } | null, pubs: { nodes: Array<{ id: string, slug?: string | null, frontmatter?: { title: string, author?: string | null, conference?: string | null, github_url?: string | null, thumbnail?: { childImageSharp?: { gatsbyImageData: any } | null } | null, paper_pdf?: { publicURL?: string | null } | null, poster_pdf?: { publicURL?: string | null } | null } | null }> } };
+export type IndexPageQuery = { allMdx: { nodes: Array<{ id: string, frontmatter?: { title?: string | null, author?: string | null, conference?: string | null, github_url?: string | null, slug?: string | null, thumbnail?: { childImageSharp?: { gatsbyImageData: any } | null } | null, paper_pdf?: { publicURL?: string | null } | null, poster_pdf?: { publicURL?: string | null } | null } | null }> } };
 
 export type PublicationIndexQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PublicationIndexQuery = { allMdx: { nodes: Array<{ id: string, slug?: string | null, frontmatter?: { title: string, author?: string | null, conference?: string | null, format?: string | null } | null }> } };
+export type PublicationIndexQuery = { allMdx: { nodes: Array<{ id: string, frontmatter?: { title?: string | null, author?: string | null, conference?: string | null, format?: string | null, slug?: string | null } | null }> } };
 
 export type PublicationQueryVariables = Exact<{
   id?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type PublicationQuery = { mdx?: { id: string, slug?: string | null, body: string, frontmatter?: { author?: string | null, conference?: string | null, publication_date?: any | null, publication_url?: string | null, title: string, github_url?: string | null, paper_pdf?: { publicURL?: string | null } | null, poster_pdf?: { publicURL?: string | null } | null } | null } | null };
+export type PublicationQuery = { mdx?: { id: string, frontmatter?: { author?: string | null, conference?: string | null, publication_date?: any | null, publication_url?: string | null, title?: string | null, github_url?: string | null, paper_pdf?: { publicURL?: string | null } | null, poster_pdf?: { publicURL?: string | null } | null } | null } | null };
 
 export type GatsbyImageSharpFixedFragment = { base64?: string | null, width: number, height: number, src: string, srcSet: string };
 

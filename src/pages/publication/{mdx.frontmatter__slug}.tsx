@@ -1,8 +1,6 @@
 import { graphql } from "gatsby";
-import { MDXRenderer } from "gatsby-plugin-mdx";
 import { PublicationQuery } from "graphql-types";
 import React from "react";
-import PubItem from "../../components/PubItem";
 import PageLayout from "../../components/PageLayout";
 import HighlightedText from "../../components/HighlightedText";
 import { AiFillGithub, AiOutlineFilePdf, AiOutlineLink } from "react-icons/ai";
@@ -12,7 +10,7 @@ type Props = {
   data: PublicationQuery;
 };
 
-function PublicationPost({ data }: Props) {
+function PublicationPost({ data: { mdx }, children }: Props) {
   const {
     title,
     author,
@@ -21,7 +19,7 @@ function PublicationPost({ data }: Props) {
     publication_url,
     paper_pdf,
     github_url,
-  } = data.mdx.frontmatter;
+  } = mdx.frontmatter;
   return (
     <PageLayout>
       <div className="text-3xl">{title}</div>
@@ -60,7 +58,7 @@ function PublicationPost({ data }: Props) {
         )}
       </div>
       <div className="mb-2">{conference}</div>
-      <MDXRenderer>{data.mdx.body}</MDXRenderer>
+      {children}
       <div className="mt-2">
         <Utterances repo="wooogler/sangwook-lee" />
       </div>
@@ -72,8 +70,6 @@ export const query = graphql`
   query Publication($id: String) {
     mdx(id: { eq: $id }) {
       id
-      slug
-      body
       frontmatter {
         author
         conference

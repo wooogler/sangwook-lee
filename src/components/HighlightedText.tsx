@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 type Props = {
   text: string;
@@ -6,14 +6,16 @@ type Props = {
 };
 
 function HighlightedText({ text, query }: Props) {
-  if (query !== '' && text && text.includes(query)) {
-    const parts = text.split(new RegExp(`(${query})`, 'gi'));
+  if (query !== "" && text && text.includes(query)) {
+    const parts = text.split(new RegExp(`(${query})`, "gi"));
 
     return (
-      <span>
+      <span className="text-sm mt-1">
         {parts.map((part, index) =>
           part.toLowerCase() === query.toLowerCase() ? (
-            <strong key={index}>{part}</strong>
+            <strong className="text-blue-700" key={index}>
+              {part}
+            </strong>
           ) : (
             <span>{part}</span>
           )

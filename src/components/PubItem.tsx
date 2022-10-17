@@ -35,14 +35,11 @@ function PubItem({ slug, title, author, conference, thumbnail }: Props) {
         </div>
       )}
       <div className="flex flex-1 flex-col mb-4 text-gray-600">
-        <Link
-          to={`/publication/${slug}`}
-          className="text-lg hover:text-blue-500"
-        >
-          {title}
+        <Link to={`/publication/${slug}`}>
+          <div className="font-extrabold hover:text-blue-500">{title}</div>
         </Link>
         <HighlightedText text={author} query="Sangwook Lee" />
-        <div>{conference}</div>
+        <div className="italic text-sm mt-1">{conference}</div>
       </div>
     </div>
   );

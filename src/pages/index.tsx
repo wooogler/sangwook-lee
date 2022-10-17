@@ -1,14 +1,14 @@
 import { graphql, Link, useStaticQuery } from "gatsby";
-import { MDXRenderer } from "gatsby-plugin-mdx";
 import React from "react";
 import PageLayout from "../components/PageLayout";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import PubItem from "../components/PubItem";
-import { InfoQuery } from "graphql-types";
+import { IndexPageQuery } from "graphql-types";
+import ExpItem from "../components/ExpItem";
 
 type Props = {
-  data: InfoQuery;
+  data: IndexPageQuery;
 };
 dayjs.extend(localizedFormat);
 
@@ -17,24 +17,22 @@ function IndexPage({ data }: Props) {
     <PageLayout>
       <div className="prose">
         <div className="text-2xl mb-2">Introduction</div>
-        <MDXRenderer>{data.intro.body}</MDXRenderer>
-        <div className="text-xs text-slate-600">
-          Last Update: {dayjs(data.intro.frontmatter.date).format("ll")}
-        </div>
+        <div>Introduction</div>
+        <div className="text-xs text-slate-600">Last Update: 2022.10.16</div>
       </div>
 
       <div className="border-t border-gray-200 mt-4"></div>
       <div className="flex mt-4 mb-2 items-end prose">
-        <div className="text-2xl">Recent Publications</div>
+        <div className="text-2xl">Publications</div>
         {/* <Link to='/publication' className='ml-2 hover:text-blue-500'>
           (see all)
         </Link> */}
       </div>
 
       <div>
-        {data.pubs.nodes.map((node) => (
+        {data.allMdx.nodes.map((node) => (
           <PubItem
-            slug={node.slug}
+            slug={node.frontmatter.slug}
             thumbnail={node.frontmatter.thumbnail}
             title={node.frontmatter.title}
             author={node.frontmatter.author}
@@ -49,26 +47,18 @@ function IndexPage({ data }: Props) {
         <div className="text-2xl">Research Experiences</div>
       </div>
       <div className="text-gray-600">
-        <div>
-          <div>
-            Research Intern at HCI+D Lab, Dept. of Communication, Seoul National
-            University, Korea (Jul. 2017 ~ Aug. 2017)
-          </div>
-          <div className="text-sm">
-            Participate in a study about sexual harassment prevention system for
-            online games.
-          </div>
-        </div>
-        <div className="mt-4">
-          <div>
-            Visiting Researcher at Kixlab, School of Computing, KAIST, Korea
-            (Sep. 2020 ~ Jun. 2021)
-          </div>
-          <div className="text-sm">
-            Doing a research about a system that supports moderator to configure
-            the automated moderation bot.
-          </div>
-        </div>
+        <ExpItem
+          title="Visiting Researcher at Kixlab, School of Computing, KAIST, Korea
+          (Sep. 2020 ~ Jun. 2021)"
+          content="Doing a research about a system that supports moderator to configure
+          the automated moderation bot."
+        />
+        <ExpItem
+          title="Research Intern at HCI+D Lab, Dept. of Communication, Seoul National
+            University, Korea (Jul. 2017 ~ Aug. 2017)"
+          content="Participate in a study about sexual harassment prevention system for
+            online games."
+        />
       </div>
 
       <div className="border-t border-gray-200 mt-4"></div>
@@ -98,21 +88,13 @@ function IndexPage({ data }: Props) {
 }
 
 export const query = graphql`
-  query Info {
-    intro: mdx(slug: { eq: "intro" }) {
-      body
-      frontmatter {
-        publication_date
-        date
-      }
-    }
-    pubs: allMdx(
-      filter: { fileAbsolutePath: { regex: "/publication/" } }
+  query IndexPage {
+    allMdx(
+      filter: { internal: { contentFilePath: { regex: "/publication/" } } }
       sort: { fields: frontmatter___publication_date, order: DESC }
     ) {
       nodes {
         id
-        slug
         frontmatter {
           title
           author
@@ -135,6 +117,7 @@ export const query = graphql`
             publicURL
           }
           github_url
+          slug
         }
       }
     }
